@@ -15,16 +15,23 @@
     "@react-navigation/stack": "^6.3.16",
     "expo": "~48.0.10",
     "expo-status-bar": "~1.4.4",
+    "hex-rgb": "^5.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.71.6",
+<<<<<<< HEAD
     "react-native-elements": "^3.4.3",
+=======
+    "react-native-custom-switch": "^1.0.7",
+>>>>>>> ff3f503204a538ec5855be02c0f85b992c761fe2
     "react-native-navigation": "^7.32.1",
     "react-native-navigation-container": "^1.0.6",
     "react-native-web": "~0.18.10"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "react-native-svg": "^13.9.0",
+    "react-native-svg-transformer": "^1.0.0"
   },
   "private": true
 }
