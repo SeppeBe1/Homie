@@ -1,11 +1,21 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Button } from 'react-native';
 import { Header, Avatar } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+
 
 
 export default function Homescreen({navigation}) {
+
   return (
-    <View>
+    <View 
+      style={{
+        backgroundColor: '#160635',
+        height: 215,
+        width: '100%',
+      }}
+    >
       <Header
         containerStyle={styles.headerContainer}
         leftComponent={<Avatar
@@ -15,9 +25,32 @@ export default function Homescreen({navigation}) {
             uri:
               'https://i.redd.it/lmwqtxhw9st41.jpg',
           }}
+          containerStyle={{ width: 46, height: 46 }}
         />}
-        centerComponent={{ text: 'My App', style: { color: '#fff', fontSize: 20 } }}
-        rightComponent={{ icon: 'cog', type: 'font-awesome', color: '#fff' }}
+        centerComponent={
+          <View 
+          style={{
+            display: 'flex', 
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%'
+          }}
+          >
+            <Button title="Casa Magdalena" onPress={() => navigation.navigate('Homeaccount')}  />
+          </View>
+        }
+        rightComponent={
+          <View 
+            style={{
+              display: 'flex', 
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%'
+            }}
+          >
+            <Icon name="cog" color="white" size={24} onPress={() => alert('Settings')} />
+          </View>
+        }
       />
       <View>
         <Text>Home</Text>
@@ -29,6 +62,11 @@ export default function Homescreen({navigation}) {
 const styles = StyleSheet.create({
   headerContainer: {
     backgroundColor: '#160635',
-    height: 215,
+    paddingHorizontal: 24,
+    paddingVertical: 0,
+    border: 'none',
+    marginTop: 40,
   },
 });
+
+
