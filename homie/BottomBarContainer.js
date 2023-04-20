@@ -26,74 +26,48 @@ const Tab = createBottomTabNavigator();
 export default function BottomBarContainer() {
   return (
     <NavigationContainer>
-        <Tab.Navigator  tabBarOptions={{ showLabel: false }}
-        
-        screenOptions={({ route  }) => ({
-          tabBarIcon: ({ focused }) => {
-            let icon;
-  
-            if (route.name === 'Home') {
-              icon = focused
-                ? require('./assets/icons/home.png')
-                : require('./images/home.png');
-            } else if (route.name === 'Profile') {
-              icon = focused
-                ? require('./images/profile-focused.png')
-                : require('./images/profile.png');
-            }
-  
-            return <Image source={icon} />;
-          },
-        })}
-        >
+        <Tab.Navigator screenOptions={{headerShown: false}} tabBarOptions={{
+        showLabel: false}}>
 
         <Tab.Screen name={Homename} component={Homescreen}
-            options={{
-              tabBarIcon: ({ focused, color, size }) => (
-                <Image
-                  source={require('./assets/icons/home.png')}
-                  style={{ width: size, height: size }}
-                  resizeMode="contain"
-                />
-              ),
-            }}
-        />
+          options={{
+            tabBarIcon: ({ focused, color, size }) => (
+              <Image
+              source={ focused ? require('./assets/icons/homeFocused.png') : require('./assets/icons/home.png')} 
+              style={{ width: size, height: size }}
+              resizeMode="contain"
+            />
+            )}}/>
 
-        <Tab.Screen name={Costsplittername} component={Costsplitterscreen} 
+        <Tab.Screen name={Costsplittername} component={Costsplitterscreen}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={require('./assets/icons/community.png')}
-              style={{ width: size, height: size }}
-              resizeMode="contain"
-            />
-          ),
-        }}
-        />
+            source={ focused ? require('./assets/icons/communityFocused.png') : require('./assets/icons/community.png')} 
+            style={{ width: size, height: size }}
+            resizeMode="contain"
+          />
+          )}}/>
 
         <Tab.Screen name={Behomiename} component={Behomiescreen}
-         options={{
+        options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={require('./assets/icons/costsplit.png')}
-              style={{ width: size, height: size }}
-              resizeMode="contain"
-            />
-          ),
-        }}
-        />
+            source={ focused ? require('./assets/icons/costsplitFocused.png') : require('./assets/icons/costsplit.png')} 
+            style={{ width: size, height: size }}
+            resizeMode="contain"
+          />
+          )}}/>
 
         <Tab.Screen name={Calendarname} component={CalendarScreen}
-         options={{
+        options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={require('./assets/icons/calendar.png')}
-              style={{ width: size, height: size }}
-              resizeMode="contain"
-            />
-          ),
-        }}
-        />
+            source={ focused ? require('./assets/icons/calendarFocused.png') : require('./assets/icons/calendar.png')} 
+            style={{ width: 35, height: 35 }}
+            resizeMode="contain"
+          />
+          )}}/>
 
         </Tab.Navigator>
     </NavigationContainer>
