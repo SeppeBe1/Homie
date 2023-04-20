@@ -19,11 +19,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.71.6",
-<<<<<<< HEAD
-    "react-native-elements": "^3.4.3",
-=======
     "react-native-custom-switch": "^1.0.7",
->>>>>>> ff3f503204a538ec5855be02c0f85b992c761fe2
+    "react-native-elements": "^3.4.3",
     "react-native-navigation": "^7.32.1",
     "react-native-navigation-container": "^1.0.6",
     "react-native-web": "~0.18.10"
