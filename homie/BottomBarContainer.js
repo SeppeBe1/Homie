@@ -36,3 +36,7 @@ export default function BottomBarContainer() {
     </NavigationContainer>
   )
 }
+
+// const styles = StyleSheet.create({
+
+// })
