@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@expo/webpack-config": "^18.0.1",
+    "@fortawesome/fontawesome-free": "^6.4.0",
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "@fortawesome/react-native-fontawesome": "^0.3.0",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native-stack": "^6.9.12",
     "@react-navigation/stack": "^6.3.16",
@@ -23,6 +26,7 @@
     "react-native-elements": "^3.4.3",
     "react-native-navigation": "^7.32.1",
     "react-native-navigation-container": "^1.0.6",
+    "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.10"
   },
   "devDependencies": {
