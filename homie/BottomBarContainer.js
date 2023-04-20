@@ -44,7 +44,7 @@ export default function BottomBarContainer() {
             />
             )}}/>
 
-        <Tab.Screen name={Costsplittername} component={Costsplitterscreen}
+        <Tab.Screen name={Behomiename} component={Behomiescreen}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Image
@@ -54,7 +54,7 @@ export default function BottomBarContainer() {
           />
           )}}/>
 
-        <Tab.Screen name={Behomiename} component={Behomiescreen}
+        <Tab.Screen name={Costsplittername} component={Costsplitterscreen}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Image
