@@ -36,7 +36,7 @@ export default function Homescreen({navigation}) {
             height: '100%'
           }}
           >
-            <Button title="Casa Magdalena" onPress={() => navigation.navigate('Homeaccount')}  />
+            <Button title="Casa" onPress={() => navigation.navigate('Homeaccount')}  />
           </View>
         }
         rightComponent={
