@@ -13,8 +13,12 @@ import React, {useState, useEffect} from 'react'
 const loadFonts = async () => {
   await Font.loadAsync({
     'moon': require('../assets/fonts/Moon.otf'),
+    'manrope': require('../assets/fonts/Manrope.ttf'),
+    'novatica': require('../assets/fonts/Novatica.ttf'),
+    'novatica-bold': require('../assets/fonts/Novatica-Bold.ttf')
   });
 }
+
 export default function Behomiescreen({navigation}) {
 
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -33,7 +37,7 @@ export default function Behomiescreen({navigation}) {
     <View style={{ backgroundColor: '#160635', flex: 1 }}>
   <View style={styles.headerContainer}>
     <Text style={styles.heading}>
-      Homie Moments
+      Homie moments
     </Text>
     <View style={styles.iconContainer}>
       <Image source={calendarIcon} style={{width: 24, height: 24}}/>
@@ -44,11 +48,11 @@ export default function Behomiescreen({navigation}) {
     <View style={styles.details}>
       <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
       <Image source={like} style={{width: 20, height: 17}}/>
-      <Text style={{ color: '#fff', paddingLeft: 5 }}>2</Text>
+      <Text style={{ color: '#fff', fontFamily:'manrope', fontSize: '13px', paddingLeft: 5 }}>2</Text>
       </View>
-      <Text style={{ color: '#3BEDBF' }}>20 minutes ago</Text>
+      <Text style={{ color: '#3BEDBF', fontFamily:'manrope', fontSize: '13px' }}>20 minutes ago</Text>
     </View>
-    <Text style={{ color: '#fff' }}>Add a description...</Text>
+    <Text style={{ color: '#fff', fontFamily:'manrope', fontSize: '14px' }}>Add a description...</Text>
   </View>
   <View style={{ flex: 1 }}>
   <ScrollView style={styles.homiefeed}>
@@ -91,6 +95,8 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
     position: 'absolute',
+    fontFamily: 'novatica-bold', 
+    fontSize: '20px'
   },
   iconContainer: {
     justifyContent: 'flex-start',
