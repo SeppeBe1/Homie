@@ -1,49 +1,31 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, View, Text, Button, Image } from 'react-native';
 import { Header, Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {TabNavigator}  from '../TabNavigator';
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useNavigation } from '@react-navigation/native';
-
-
-
-//Screens
-
-import Costsplitterscreen from './Costsplitterscreen';
-import Behomiescreen from './BeHomiescreen';
-import CalendarScreen from './Calendarscreen';
-import Homeaccount from './Homeaccount';
-
-
-//Screen names
-
-const Homename = 'Home';
-const Costsplittername = 'Costsplitter';
-const Behomiename = 'Behomie';
-const Calendarname = 'Calendar';
-const Homeaccountname = 'Homeaccount';
-
-const Tab = createBottomTabNavigator();
-
-
-
-import myImage from '../assets/intersect.svg';
+// Load the font
+const loadFonts = async () => {
+  await Font.loadAsync({
+    'moon': require('../assets/fonts/Moon.otf'),
+  });
+}
 
 export default function Homescreen({navigation}) {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+    loadFonts().then(() => {
+      setFontsLoaded(true);
+    });
+  }, []);
+
+  if (!fontsLoaded) {
+    return null; // or a loading screen
+  }
 
   return (
-    <View>
-
-      <View 
-        style={{
-          backgroundColor: '#160635',
-          height: 215,
-          width: '100%',
-        }}
-      >
+    <View style={styles.container}>
+      <View style={styles.header}>
         <Header
           containerStyle={styles.headerContainer}
           leftComponent={<Avatar
@@ -68,7 +50,7 @@ export default function Homescreen({navigation}) {
             </View>
           }
           rightComponent={
-            <View 
+            <View
               style={{
                 display: 'flex', 
                 justifyContent: 'center',
@@ -81,15 +63,41 @@ export default function Homescreen({navigation}) {
           }
         />
       </View>
-      <Image source={myImage} style={{width: 100, height: 100}} />
-      <View>
-        {/* <BottomBarContainer/> */}
+      <View style={styles.imageContainer}>
+        <Image source={myImage} style={styles.image} />
+        <View style={{position:'absolute', left:110, top:35, zIndex: 10, width:130, height:100, display:'flex', alignItems:'center', justifyContent:'center'}}>
+          <Text style={{fontSize:'1rem', fontFamily:'moon', fontWeight:'bold', color:'#160635'}}>Welcome back Jade!</Text>
+        </View>
+      </View>
+      <View style={{marginTop: 80, paddingHorizontal: 24}}>
+        <View style={{display: 'flex', flexDirection:'row', justifyContent:'space-between'}}>
+          <Text style={{fontSize:'0.875rem', fontFamily:'moon', fontWeight:'bold'}}>Announcements</Text>
+          <View style={{display: 'flex', flexDirection:'row', alignItems:'center' }}>
+            <Text style={{fontSize:'0.875rem', fontFamily:'manrope', fontWeight:'regular', color:'#939393'}}>Add announcement</Text>     
+            <Image source={pen} style={{width: 20, height: 20, marginLeft: 7}}/>
+          </View>
+        </View>
+      </View>
+      <View style={{height: '100%', width:'100%', backgroundColor:'red', display:'flex', alignItems:'center', justifyContent:'center'}}>
+        <Text>Hey</Text>
       </View>
     </View>
   );
 }
 
+  
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+    position: 'relative',
+    height: '100%',
+    width: '100%',
+  },
+  header: {
+    backgroundColor: '#160635',
+    height: 215,
+    width: '100%',
+  },
   headerContainer: {
     backgroundColor: '#160635',
     paddingHorizontal: 24,
@@ -97,6 +105,18 @@ const styles = StyleSheet.create({
     border: 'none',
     marginTop: 40,
   },
+  imageContainer: {
+    position: 'absolute',
+    top: 100,
+    left: "-1px",
+    height: '200px',
+    width: '350px',
+  },
+  image: {
+    resizeMode: 'contain',
+    maxWidth: '80%',
+    height: '100%',
+  }
 });
 
 

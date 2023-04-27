@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native'
 import { Header, Button } from 'react-native-elements'
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import calendarIcon from '../assets/calendar.png'
 import like from '../assets/like.png'
 import emptylike from '../assets/emptylike.png'

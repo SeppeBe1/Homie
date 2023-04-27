@@ -1,23 +1,8 @@
 import { View, Text, Image } from 'react-native'
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useNavigation } from '@react-navigation/native';
 
 import { HomescreenStack, BehomiescreenStack, CostsplitterscreenStack, CalendarScreenStack } from "./StackNavigator";
-
-
-
-//Screens
-
-import Homescreen from './screens/Homescreen';
-import Costsplitterscreen from './screens/Costsplitterscreen';
-import Behomiescreen from './screens/BeHomiescreen';
-import CalendarScreen from './screens/Calendarscreen';
-import Homeaccount from './screens/Homeaccount';
-
-
-//Screen names
 
 const Homename = 'Home';
 const Costsplittername = 'Costsplitter';
