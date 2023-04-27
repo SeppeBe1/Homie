@@ -53,7 +53,7 @@ export default function Homescreen({navigation}) {
         </View>
       </View>
       <View style={{marginTop: 80, paddingHorizontal: 24}}>
-        <View style={{}}>
+        <View style={{display: 'flex', flexDirection:'row', justifyContent:'space-between'}}>
           <Text>Announcements</Text>
           <Text>Add announcement</Text>
         </View>
