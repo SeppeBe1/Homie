@@ -2,6 +2,9 @@ import React, {useState, useEffect} from 'react';
 import { StyleSheet, View, Text, Button, Image } from 'react-native';
 import { Header, Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import * as Font from 'expo-font';
+import myImage from '../assets/float.svg';
+import pen from '../assets/pentosquare.svg';
 
 // Load the font
 const loadFonts = async () => {
