@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/native-stack";
 
@@ -41,27 +47,29 @@ const CalendarScreen = ({ navigation }) => {
           <Text style={styles.buttonText}>See full calendar</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.weekcalender}>
-        {weekdays.map((weekday) => {
-          const dayNumber = startOfWeek.getDate() + weekdays.indexOf(weekday);
-          const date = new Date(
-            startOfWeek.getFullYear(),
-            startOfWeek.getMonth(),
-            dayNumber
-          );
-          const isToday = date.toDateString() === today.toDateString();
-          return (
-            <View key={weekday} style={[styles.day, isToday && styles.today]}>
-              <Text style={[styles.darkpurple, isToday && styles.todayText]}>
-                {dayNumber}
-              </Text>
-              <Text style={[styles.darkpurple, isToday && styles.todayText]}>
-                {weekday}
-              </Text>
-            </View>
-          );
-        })}
-      </View>
+      <ScrollView horizontal={true}>
+        <View style={styles.weekcalender}>
+          {weekdays.map((weekday) => {
+            const dayNumber = startOfWeek.getDate() + weekdays.indexOf(weekday);
+            const date = new Date(
+              startOfWeek.getFullYear(),
+              startOfWeek.getMonth(),
+              dayNumber
+            );
+            const isToday = date.toDateString() === today.toDateString();
+            return (
+              <View key={weekday} style={[styles.day, isToday && styles.today]}>
+                <Text style={[styles.darkpurple, isToday && styles.todayText]}>
+                  {dayNumber}
+                </Text>
+                <Text style={[styles.darkpurple, isToday && styles.todayText]}>
+                  {weekday}
+                </Text>
+              </View>
+            );
+          })}
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -86,7 +94,6 @@ const styles = StyleSheet.create({
   },
 
   weekcalender: {
-    flex: 1,
     flexDirection: "row",
     gap: 16,
     justifyContent: "center",
