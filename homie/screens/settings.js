@@ -116,12 +116,13 @@ const styles = StyleSheet.create({
   },
 
   arrowRight: {
-    height: 10,
-    width: 10,
+    height: 20,
+    width: 20,
   },
 
   hr:{
     height: 2,
     backgroundColor: '#E5CDF3',
+    marginTop:5,
   }
 })
