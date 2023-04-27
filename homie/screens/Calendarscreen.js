@@ -41,13 +41,23 @@ const CalendarScreen = ({ navigation }) => {
           <Text style={styles.buttonText}>See full calendar</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.row}>
+      <View style={styles.weekcalender}>
         {weekdays.map((weekday) => {
           const dayNumber = startOfWeek.getDate() + weekdays.indexOf(weekday);
+          const date = new Date(
+            startOfWeek.getFullYear(),
+            startOfWeek.getMonth(),
+            dayNumber
+          );
+          const isToday = date.toDateString() === today.toDateString();
           return (
-            <View key={weekday} style={styles.day}>
-              <Text>{dayNumber}</Text>
-              <Text>{weekday}</Text>
+            <View key={weekday} style={[styles.day, isToday && styles.today]}>
+              <Text style={[styles.darkpurple, isToday && styles.todayText]}>
+                {dayNumber}
+              </Text>
+              <Text style={[styles.darkpurple, isToday && styles.todayText]}>
+                {weekday}
+              </Text>
             </View>
           );
         })}
@@ -61,7 +71,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     backgroundColor: "#160635",
-    justifyContent: "center",
   },
   row: {
     flex: 1,
@@ -72,14 +81,26 @@ const styles = StyleSheet.create({
     paddingRight: 24,
   },
 
+  darkpurple: {
+    color: "#160635",
+  },
+
+  weekcalender: {
+    flex: 1,
+    flexDirection: "row",
+    gap: 16,
+    justifyContent: "center",
+  },
+
   button: {
     backgroundColor: "#B900F4",
     borderRadius: 35,
     width: 179,
     height: 40,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center", // Add this line
   },
+
   buttonText: {
     color: "#ffffff",
     fontSize: 14,
@@ -90,6 +111,15 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     backgroundColor: "#FFFFFF",
     color: "white",
+    width: "53px",
+    height: "64px",
+    borderRadius: "15px",
+    justifyContent: "center",
+    textAlign: "center",
+  },
+
+  today: {
+    backgroundColor: "#00B9F4",
   },
   heading: {
     paddingTop: 50,
