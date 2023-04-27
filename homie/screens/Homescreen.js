@@ -4,6 +4,30 @@ import { Header, Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {TabNavigator}  from '../TabNavigator';
 
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useNavigation } from '@react-navigation/native';
+
+
+
+//Screens
+
+import Costsplitterscreen from './Costsplitterscreen';
+import Behomiescreen from './BeHomiescreen';
+import CalendarScreen from './Calendarscreen';
+import Homeaccount from './Homeaccount';
+
+
+//Screen names
+
+const Homename = 'Home';
+const Costsplittername = 'Costsplitter';
+const Behomiename = 'Behomie';
+const Calendarname = 'Calendar';
+const Homeaccountname = 'Homeaccount';
+
+const Tab = createBottomTabNavigator();
+
 
 
 import myImage from '../assets/intersect.svg';
@@ -12,13 +36,13 @@ export default function Homescreen({navigation}) {
 
   return (
     <View>
-      {/* <TabNavigator/> */}
+
       <View 
         style={{
           backgroundColor: '#160635',
           height: 215,
           width: '100%',
-        }}w
+        }}
       >
         <Header
           containerStyle={styles.headerContainer}
@@ -40,7 +64,7 @@ export default function Homescreen({navigation}) {
               height: '100%'
             }}
             >
-              <Button title="Casa" onPress={() => navigation.navigate('Homeaccount')}  />
+              <Button title="Casa" onPress={() => navigation.navigate('homeaccount')}  />
             </View>
           }
           rightComponent={

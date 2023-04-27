@@ -4,6 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 
+import { HomescreenStack, BehomiescreenStack, CostsplitterscreenStack, CalendarScreenStack } from "./StackNavigator";
+
 
 
 //Screens
@@ -30,11 +32,10 @@ const Tab = createBottomTabNavigator();
 
  export function TabNavigator() {
   return (
-    <NavigationContainer independent={true} >
         <Tab.Navigator screenOptions={{headerShown: false}} tabBarOptions={{
         showLabel: false}}>
 
-          <Tab.Screen name={Homename} component={Homescreen}
+          <Tab.Screen name={Homename} component={HomescreenStack}
             options={{
               tabBarIcon: ({ focused, color, size }) => (
                 <Image
@@ -44,7 +45,7 @@ const Tab = createBottomTabNavigator();
               />
               )}}/>
 
-          <Tab.Screen name={Behomiename} component={Behomiescreen}
+          <Tab.Screen name={Behomiename} component={BehomiescreenStack}
           options={{
             tabBarIcon: ({ focused, color, size }) => (
               <Image
@@ -54,7 +55,7 @@ const Tab = createBottomTabNavigator();
             />
             )}}/>
 
-          <Tab.Screen name={Costsplittername} component={Costsplitterscreen}
+          <Tab.Screen name={Costsplittername} component={CostsplitterscreenStack}
           options={{
             tabBarIcon: ({ focused, color, size }) => (
               <Image
@@ -64,7 +65,7 @@ const Tab = createBottomTabNavigator();
             />
             )}}/>
 
-          <Tab.Screen name={Calendarname} component={CalendarScreen}
+          <Tab.Screen name={Calendarname} component={CalendarScreenStack}
           options={{
             tabBarIcon: ({ focused, color, size }) => (
               <Image
@@ -75,6 +76,5 @@ const Tab = createBottomTabNavigator();
             )}}/>
 
         </Tab.Navigator>
-        </NavigationContainer>
   )
 }
