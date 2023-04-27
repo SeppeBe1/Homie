@@ -1,11 +1,31 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, View, Text, Button, Image } from 'react-native';
 import { Header, Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import * as Font from 'expo-font';
 import myImage from '../assets/float.svg';
+import pen from '../assets/pentosquare.svg';
+
+// Load the font
+const loadFonts = async () => {
+  await Font.loadAsync({
+    'moon': require('../assets/fonts/Moon.otf'),
+  });
+}
 
 export default function Homescreen({navigation}) {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+    loadFonts().then(() => {
+      setFontsLoaded(true);
+    });
+  }, []);
+
+  if (!fontsLoaded) {
+    return null; // or a loading screen
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -49,19 +69,24 @@ export default function Homescreen({navigation}) {
       <View style={styles.imageContainer}>
         <Image source={myImage} style={styles.image} />
         <View style={{position:'absolute', left:120, top:35, zIndex: 10, width:120, height:100, display:'flex', alignItems:'center', justifyContent:'center'}}>
-          <Text style={{fontSize:'1rem'}}>Welcome back Jade!</Text>
+          <Text style={{fontSize:'1rem', fontFamily:'moon'}}>Welcome back Jade!</Text>
         </View>
       </View>
       <View style={{marginTop: 80, paddingHorizontal: 24}}>
         <View style={{display: 'flex', flexDirection:'row', justifyContent:'space-between'}}>
           <Text>Announcements</Text>
-          <Text>Add announcement</Text>
+          <View style={{display: 'flex', flexDirection:'row', alignItems:'center' }}>
+            <Text>Add announcement</Text>     
+            <Image source={pen} style={{width: 20, height: 20, marginLeft: 7}}/>
+          </View>
+          
         </View>
       </View>
     </View>
   );
 }
-
+  
+  
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
@@ -94,3 +119,5 @@ const styles = StyleSheet.create({
     height: '100%',
   }
 });
+  
+
