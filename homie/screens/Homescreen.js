@@ -4,7 +4,7 @@ import React from 'react'
 export default function Costsplitterscreen({navigation}) {
   return (
     <View>
-      <Text>Costsplitterscreen</Text>
+      <Text>Homescreen</Text>
     </View>
   )
 }
