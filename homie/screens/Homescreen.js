@@ -2,6 +2,8 @@ import React from 'react';
 import { StyleSheet, View, Text, Button, Image } from 'react-native';
 import { Header, Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {TabNavigator}  from '../TabNavigator';
+
 
 
 import myImage from '../assets/intersect.svg';
@@ -10,12 +12,13 @@ export default function Homescreen({navigation}) {
 
   return (
     <View>
+      {/* <TabNavigator/> */}
       <View 
         style={{
           backgroundColor: '#160635',
           height: 215,
           width: '100%',
-        }}
+        }}w
       >
         <Header
           containerStyle={styles.headerContainer}
@@ -49,12 +52,15 @@ export default function Homescreen({navigation}) {
                 height: '100%'
               }}
             >
-              <Icon name="cog" color="white" size={24} onPress={() => alert('Settings')} />
+              <Icon name="cog" color="white" size={24} onPress={() => {navigation.navigate({ name: 'settings' })}} />
             </View>
           }
         />
       </View>
       <Image source={myImage} style={{width: 100, height: 100}} />
+      <View>
+        {/* <BottomBarContainer/> */}
+      </View>
     </View>
   );
 }
