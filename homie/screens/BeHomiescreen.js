@@ -1,15 +1,34 @@
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native'
 import { Header, Button } from 'react-native-elements'
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import calendarIcon from '../assets/calendar.png'
 import like from '../assets/like.png'
 import emptylike from '../assets/emptylike.png'
+import * as Font from 'expo-font';
 
 import HomieMomentPost from '../compontents/HomieMomentPost';
 
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 
+// Load the font
+const loadFonts = async () => {
+  await Font.loadAsync({
+    'moon': require('../assets/fonts/Moon.otf'),
+  });
+}
 export default function Behomiescreen({navigation}) {
+
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+    loadFonts().then(() => {
+      setFontsLoaded(true);
+    });
+  }, []);
+
+  if (!fontsLoaded) {
+    return null; // or a loading screen
+  }
+
   return (
     <View style={{ backgroundColor: '#160635', flex: 1 }}>
   <View style={styles.headerContainer}>
@@ -35,10 +54,10 @@ export default function Behomiescreen({navigation}) {
   <ScrollView style={styles.homiefeed}>
     <View style={{ flexDirection:'row', justifyContent: 'space-between' }}>
       <TouchableOpacity style={styles.btnFull} onPress={() => console.log('Nearby pressed!')}>
-        <Text style={{ color:'#fff', fontWeight: 'bold', textTransform: 'uppercase'}}>Nearby</Text>
+        <Text style={{ color:'#fff', fontStyle: 'normal', fontWeight: '700', fontSize: '14px',  fontFamily:'moon'}}>Nearby</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.btnBorder} onPress={() => console.log('Discover pressed!')}>
-        <Text style={{ color:'#D9B2EE', fontWeight: 'bold', textTransform: 'uppercase'}}>Discover</Text>
+        <Text style={{ color:'#D9B2EE', fontStyle: 'normal', fontWeight: '700', fontSize: '14px',  fontFamily:'moon'}}>Discover</Text>
       </TouchableOpacity>
     </View>
     <HomieMomentPost />
@@ -71,7 +90,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     flex: 1,
     textAlign: 'center',
-    position: 'absolute'
+    position: 'absolute',
   },
   iconContainer: {
     justifyContent: 'flex-start',
@@ -107,7 +126,8 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     marginBottom: 40,
     marginTop: 10,
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily:'moon'
   }, 
 
   btnBorder: {
@@ -120,7 +140,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     marginTop: 10,
     paddingVertical: 15,
-    textAlign: 'center'
+    textAlign: 'center',
   }
 });
 
