@@ -68,19 +68,21 @@ export default function Homescreen({navigation}) {
       </View>
       <View style={styles.imageContainer}>
         <Image source={myImage} style={styles.image} />
-        <View style={{position:'absolute', left:120, top:35, zIndex: 10, width:120, height:100, display:'flex', alignItems:'center', justifyContent:'center'}}>
-          <Text style={{fontSize:'1rem', fontFamily:'moon'}}>Welcome back Jade!</Text>
+        <View style={{position:'absolute', left:110, top:35, zIndex: 10, width:130, height:100, display:'flex', alignItems:'center', justifyContent:'center'}}>
+          <Text style={{fontSize:'1rem', fontFamily:'moon', fontWeight:'bold', color:'#160635'}}>Welcome back Jade!</Text>
         </View>
       </View>
       <View style={{marginTop: 80, paddingHorizontal: 24}}>
         <View style={{display: 'flex', flexDirection:'row', justifyContent:'space-between'}}>
-          <Text>Announcements</Text>
+          <Text style={{fontSize:'0.875rem', fontFamily:'moon', fontWeight:'bold'}}>Announcements</Text>
           <View style={{display: 'flex', flexDirection:'row', alignItems:'center' }}>
-            <Text>Add announcement</Text>     
+            <Text style={{fontSize:'0.875rem', fontFamily:'manrope', fontWeight:'regular', color:'#939393'}}>Add announcement</Text>     
             <Image source={pen} style={{width: 20, height: 20, marginLeft: 7}}/>
           </View>
-          
         </View>
+      </View>
+      <View style={{height: '100%', width:'100%', backgroundColor:'red', display:'flex', alignItems:'center', justifyContent:'center'}}>
+        <Text>Hey</Text>
       </View>
     </View>
   );
