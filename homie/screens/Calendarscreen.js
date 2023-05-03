@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as Font from "expo-font";
 import MoonFont from "../assets/fonts/Moon.otf";
+import Manrope from "../assets/fonts/static/Manrope-Bold.ttf";
 import {
   View,
   Text,
@@ -20,6 +21,9 @@ import boy2 from "../assets/boy2.jpg";
 const loadFonts = async () => {
   await Font.loadAsync({
     moon: MoonFont,
+  });
+  await Font.loadAsync({
+    moon: Manrope,
   });
 };
 
@@ -172,7 +176,7 @@ const CalendarScreen = ({ navigation }) => {
               paddingHorizontal: 11,
               paddingVertical: 8,
               borderRadius: 10,
-              alignItems: "center",
+              alignItems: "flex-end",
               gap: 29,
             }}
           >
@@ -185,7 +189,7 @@ const CalendarScreen = ({ navigation }) => {
               <Text>{event.day}</Text>
               <Text>{event.month}</Text>
             </View>
-            <Text>{event.title}</Text>
+            <Text style={styles.h3black}>{event.title}</Text>
             <Image
               source={event.image}
               style={{
@@ -228,7 +232,7 @@ const CalendarScreen = ({ navigation }) => {
       >
         {tasks.map((task) => (
           <View
-            key={event.name}
+            key={task.name}
             style={{
               marginHorizontal: 24,
               display: "flex",
@@ -239,6 +243,7 @@ const CalendarScreen = ({ navigation }) => {
               borderRadius: 10,
               alignItems: "center",
               gap: 29,
+              alignItems: "flex-end",
             }}
           >
             <View
@@ -250,7 +255,7 @@ const CalendarScreen = ({ navigation }) => {
               <Text>{task.day}</Text>
               <Text>{task.month}</Text>
             </View>
-            <Text>{task.name}</Text>
+            <Text style={styles.h3black}>{task.name}</Text>
           </View>
         ))}
       </View>
@@ -297,6 +302,8 @@ const styles = StyleSheet.create({
   },
 
   tasks: {
+    fontFamily: "manrope",
+    fontSize: 14,
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
@@ -316,6 +323,7 @@ const styles = StyleSheet.create({
   },
 
   weekcalender: {
+    fontFamily: "manrope",
     padding: 5,
     flexDirection: "row",
     gap: 16,
