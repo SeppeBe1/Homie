@@ -7,14 +7,14 @@ import {
   ScrollView,
   Image,
 } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/native-stack";
 
 import checkbox from "../assets/icons/Checkbox_empty.svg";
 import arrowright from "../assets/icons/Arrow-Right.svg";
+import girl from "../assets/girl.jpg";
+import boy from "../assets/boy.jpg";
+import boy2 from "../assets/boy2.jpg";
 
 const CalendarScreen = ({ navigation }) => {
-  const daysInWeek = 7;
   const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const today = new Date();
   const startOfWeek = new Date(
@@ -22,30 +22,36 @@ const CalendarScreen = ({ navigation }) => {
     today.getMonth(),
     today.getDate() - ((today.getDay() + 6) % 7)
   );
-  const endOfWeek = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate() - ((today.getDay() + 6) % 7) + 6
-  );
 
-  const handleSeeFullCalendar = () => {
-    // handle See Full Calendar button press
-  };
-
-  const [tasks, setTasks] = useState([
+  const events = [
     {
+      day: "12",
+      month: "dec",
+      title: "Houseparty in Casa",
+      image: girl,
+    },
+    {
+      day: "31",
+      month: "jan",
+      title: "Movie night at the park",
+      image: boy,
+    },
+  ];
+
+  const tasks = [
+    {
+      day: "12",
+      month: "dec",
       id: 1,
       name: "Taking out the dustbin",
     },
     {
       id: 2,
+      day: "31",
+      month: "jan",
       name: "Cleaning the kitchen",
     },
-    {
-      id: 3,
-      name: "Walking the dog",
-    },
-  ]);
+  ];
 
   return (
     <View style={{ backgroundColor: "#F5F5F5" }}>
@@ -99,7 +105,6 @@ const CalendarScreen = ({ navigation }) => {
           </View>
         </ScrollView>
       </View>
-
       <View style={styles.todo}>
         <Text style={{ paddingBottom: 12 }}>Your today tasks and events</Text>
         {tasks.map((task) => (
@@ -116,12 +121,133 @@ const CalendarScreen = ({ navigation }) => {
           </View>
         ))}
       </View>
+      <View style={{ marginTop: 20, paddingHorizontal: 24 }}>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text> Upcoming events </Text>
+          <TouchableOpacity style={styles.link}>
+            <Text style={styles.linkText}>All events</Text>
+            <Image
+              source={arrowright}
+              style={{ width: "10px", height: "6px" }}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
 
-      <View>
-        <Text> Upcoming events </Text>
-        <TouchableOpacity style={styles.link}>
-          <Text style={styles.linkText}>See full calendar</Text>
-          <Image source={arrowright} style={{ width: "10px", height: "6px" }} />
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 8,
+          marginTop: 8,
+        }}
+      >
+        {events.map((event) => (
+          <View
+            key={event.name}
+            style={{
+              marginHorizontal: 24,
+              display: "flex",
+              flexDirection: "row",
+              backgroundColor: "white",
+              paddingHorizontal: 11,
+              paddingVertical: 8,
+              borderRadius: 10,
+              alignItems: "center",
+              gap: 29,
+            }}
+          >
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <Text>{event.day}</Text>
+              <Text>{event.month}</Text>
+            </View>
+            <Text>{event.title}</Text>
+            <Image
+              source={event.image}
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 24,
+                alignSelf: "flex-end",
+                marginLeft: "auto",
+              }}
+            />
+          </View>
+        ))}
+      </View>
+      <View style={{ marginTop: 20, paddingHorizontal: 24 }}>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text> Upcoming tasks </Text>
+          <TouchableOpacity style={styles.link}>
+            <Text style={styles.linkText}>All tasks</Text>
+            <Image
+              source={arrowright}
+              style={{ width: "10px", height: "6px" }}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 8,
+          marginTop: 8,
+        }}
+      >
+        {tasks.map((task) => (
+          <View
+            key={event.name}
+            style={{
+              marginHorizontal: 24,
+              display: "flex",
+              flexDirection: "row",
+              backgroundColor: "white",
+              paddingHorizontal: 11,
+              paddingVertical: 8,
+              borderRadius: 10,
+              alignItems: "center",
+              gap: 29,
+            }}
+          >
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <Text>{task.day}</Text>
+              <Text>{task.month}</Text>
+            </View>
+            <Text>{task.name}</Text>
+          </View>
+        ))}
+      </View>
+
+      <View style={{ display: "flex", flexDirection: "row", margin: 24 }}>
+        <TouchableOpacity style={[styles.button, { flex: 1, marginRight: 16 }]}>
+          <Text style={styles.buttonText}>Add task</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.button, { flex: 1 }]}>
+          <Text style={styles.buttonText}>Add event</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -135,7 +261,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#160635",
     height: 244,
     justifyContent: "space-evenly",
-    gap: 19,
+    gap: 24,
   },
   row: {
     flex: 1,
@@ -168,7 +294,6 @@ const styles = StyleSheet.create({
     alignItems: "baseline",
     gap: 13,
     justifyContent: "flex-end",
-    paddingRight: "64px",
   },
 
   darkpurple: {
@@ -176,6 +301,7 @@ const styles = StyleSheet.create({
   },
 
   weekcalender: {
+    padding: 5,
     flexDirection: "row",
     gap: 16,
     justifyContent: "center",
