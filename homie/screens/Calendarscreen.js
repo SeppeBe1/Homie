@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import * as Font from "expo-font";
+import MoonFont from "../assets/fonts/Moon.otf";
 import {
   View,
   Text,
@@ -13,6 +15,13 @@ import arrowright from "../assets/icons/Arrow-Right.svg";
 import girl from "../assets/girl.jpg";
 import boy from "../assets/boy.jpg";
 import boy2 from "../assets/boy2.jpg";
+
+// Load the font
+const loadFonts = async () => {
+  await Font.loadAsync({
+    moon: MoonFont,
+  });
+};
 
 const CalendarScreen = ({ navigation }) => {
   const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -53,6 +62,10 @@ const CalendarScreen = ({ navigation }) => {
     },
   ];
 
+  useEffect(() => {
+    loadFonts();
+  }, []);
+
   return (
     <View style={{ backgroundColor: "#F5F5F5" }}>
       <View style={styles.container}>
@@ -60,7 +73,7 @@ const CalendarScreen = ({ navigation }) => {
           <Text style={styles.heading}>Planner</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.h2}>
+          <Text style={styles.h3}>
             {startOfWeek.toLocaleDateString("en-US", {
               month: "long",
               year: "numeric",
@@ -106,7 +119,7 @@ const CalendarScreen = ({ navigation }) => {
         </ScrollView>
       </View>
       <View style={styles.todo}>
-        <Text style={{ paddingBottom: 12 }}>Your today tasks and events</Text>
+        <Text style={styles.h3black}>Your today tasks and events</Text>
         {tasks.map((task) => (
           <View key={task.id} style={styles.tasks}>
             <View>
@@ -129,7 +142,7 @@ const CalendarScreen = ({ navigation }) => {
             justifyContent: "space-between",
           }}
         >
-          <Text> Upcoming events </Text>
+          <Text style={styles.h2}> Upcoming events </Text>
           <TouchableOpacity style={styles.link}>
             <Text style={styles.linkText}>All events</Text>
             <Image
@@ -194,7 +207,7 @@ const CalendarScreen = ({ navigation }) => {
             justifyContent: "space-between",
           }}
         >
-          <Text> Upcoming tasks </Text>
+          <Text style={styles.h2}> Upcoming tasks </Text>
           <TouchableOpacity style={styles.link}>
             <Text style={styles.linkText}>All tasks</Text>
             <Image
@@ -262,6 +275,8 @@ const styles = StyleSheet.create({
     height: 244,
     justifyContent: "space-evenly",
     gap: 24,
+    fontFamily: "moon",
+    fontWeight: "bold",
   },
   row: {
     flex: 1,
@@ -317,6 +332,8 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
+    fontFamily: "moon",
+    fontWeight: "bold",
     color: "#ffffff",
     fontSize: 14,
   },
@@ -347,9 +364,25 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
   },
-  h2: {
+  h3: {
+    fontFamily: "moon",
+    fontWeight: "bold",
     color: "#fff",
     fontSize: 14,
+  },
+  h3black: {
+    fontFamily: "moon",
+    fontWeight: "bold",
+    color: "#000000",
+    fontSize: 14,
+    paddingBottom: 12,
+  },
+
+  h2: {
+    fontFamily: "moon",
+    fontWeight: "bold",
+    color: "#000000",
+    fontSize: 15,
   },
 });
 
