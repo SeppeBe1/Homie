@@ -1,7 +1,19 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native'
+import { Header, Button } from 'react-native-elements'
+import arrowLeft from '../assets/icons/arrowLeft.svg'
+import editIcon from '../assets/icons/edit.svg'
+import emailIcon from '../assets/icons/email.svg'
+import phoneIcon from '../assets/icons/phone.svg'
+import passwordIcon from '../assets/icons/password.svg'
+import editFieldIcon from '../assets/icons/editField.svg'
+import statusAvailable from '../assets/icons/statusAvailable.svg'
+import statusBusy from '../assets/icons/statusBusy.svg'
+import statusNotdisturb from '../assets/icons/statusNotdisturb.svg'
+import dropdownIcon from '../assets/icons/dropdown.svg'
+
 import * as Font from 'expo-font';
 
+import React, {useState, useEffect} from 'react'
 
 // Load the font
 const loadFonts = async () => {
@@ -11,10 +23,9 @@ const loadFonts = async () => {
     novatica: require('../assets/fonts/Novatica.ttf'),
     novaticaBold: require('../assets/fonts/Novatica-Bold.ttf')
   });
-}
+};
 
-
-export default function Myprofilescreen() {
+export default function Myprofilescreen({navigation}) {
 
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
@@ -32,7 +43,7 @@ export default function Myprofilescreen() {
     <View>
 
 <View style={styles.topHeader}>
-    <TouchableOpacity onPress={() => console.log('Back clicked')}>
+    <TouchableOpacity onPress={() => navigation.goBack()}>
         <Image source={arrowLeft} style={{ width: 8, height: 15 }} />
     </TouchableOpacity>
     <View style={{ flex: 1, alignItems: 'center' }}>
@@ -50,7 +61,7 @@ export default function Myprofilescreen() {
     </View>
       <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
         <View>
-      <Text style={{ color: '#fff', fontFamily: 'novatica-bold', fontSize: '16px', textAlign: 'center' }}>Jade Apers</Text>
+      <Text style={{ color: '#fff', fontFamily: 'novaticaBold', fontSize: '16px', textAlign: 'center' }}>Jade Apers</Text>
       </View>
       </View>
       <TouchableOpacity onPress={() => console.log('Status clicked')} style={{ flexDirection: 'row', alignItems: 'center', position: 'absolute', top: 120, right: 130 }}>
@@ -102,8 +113,8 @@ export default function Myprofilescreen() {
 }
 
 
+
 const styles = StyleSheet.create({
-  
 
   topHeader:{
     backgroundColor: '#160635',
@@ -134,5 +145,4 @@ const styles = StyleSheet.create({
     alignItems:'flex-start',
     padding: 10
   }
-
 })

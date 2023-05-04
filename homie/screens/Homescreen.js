@@ -36,6 +36,7 @@ export default function Homescreen({ navigation }) {
           containerStyle={styles.headerContainer}
           leftComponent={
             <Avatar
+              onPress={() =>navigation.navigate("myprofilescreen")}
               size="medium"
               rounded
               source={{

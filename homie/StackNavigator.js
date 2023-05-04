@@ -9,6 +9,7 @@ import Costsplitter from './screens/Costsplitterscreen';
 import Calendar from './screens/Calendarscreen';
 import { View } from 'react-native';
 import Homeaccount from './screens/Homeaccount';
+import Myprofilescreen from './screens/MyProfilescreen';
 
 const Stack = createStackNavigator();
 
@@ -18,6 +19,7 @@ const HomescreenStack = () => {
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="settings" component={Settings} />
       <Stack.Screen name="homeaccount" component={Homeaccount} />
+      <Stack.Screen name="myprofilescreen" component={Myprofilescreen}/>
     </Stack.Navigator>
   );
 }

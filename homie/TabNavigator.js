@@ -9,6 +9,7 @@ const Costsplittername = 'Costsplitter';
 const Behomiename = 'Behomie';
 const Calendarname = 'Calendar';
 const Homeaccountname = 'Homeaccount';
+const Myprofilename = 'MyProfile';
 
 
 const Tab = createBottomTabNavigator();
