@@ -1,100 +1,82 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
-import { Header, Button } from "react-native-elements";
-import calendarIcon from "../assets/calendar.png";
-import like from "../assets/like.png";
-import emptylike from "../assets/emptylike.png";
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native'
+import { Header, Button } from 'react-native-elements'
+import calendarIcon from '../assets/calendar.png'
+import like from '../assets/like.png'
+import emptylike from '../assets/emptylike.png'
+import * as Font from 'expo-font';
 
 import HomieMomentPost from "../compontents/HomieMomentPost";
 
-import React from "react";
+import React, {useState, useEffect} from 'react'
 
-export default function Behomiescreen({ navigation }) {
+// Load the font
+const loadFonts = async () => {
+  await Font.loadAsync({
+    'moon': require('../assets/fonts/Moon.otf'),
+    'manrope': require('../assets/fonts/Manrope.ttf'),
+    'novatica': require('../assets/fonts/Novatica.ttf'),
+    'novatica-bold': require('../assets/fonts/Novatica-Bold.ttf')
+  });
+}
+
+export default function Behomiescreen({navigation}) {
+
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+    loadFonts().then(() => {
+      setFontsLoaded(true);
+    });
+  }, []);
+
+  if (!fontsLoaded) {
+    return null; // or a loading screen
+  }
+
   return (
-    <View style={{ backgroundColor: "#160635", flex: 1 }}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.heading}>Homie Moments</Text>
-        <View style={styles.iconContainer}>
-          <Image source={calendarIcon} style={{ width: 24, height: 24 }} />
-        </View>
-      </View>
-      <View style={{ flex: 1, alignItems: "center", color: "#fff" }}>
-        <Image
-          source={require("../assets/groupfoto.jpg")}
-          style={{
-            width: 160,
-            height: 220,
-            marginBottom: 5,
-            marginTop: "-20px",
-          }}
-        />
-        <View style={styles.details}>
-          <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
-            <Image source={like} style={{ width: 20, height: 17 }} />
-            <Text style={{ color: "#fff", paddingLeft: 5 }}>2</Text>
-          </View>
-          <Text style={{ color: "#3BEDBF" }}>20 minutes ago</Text>
-        </View>
-        <Text style={{ color: "#fff" }}>Add a description...</Text>
-      </View>
-      <View style={{ flex: 1 }}>
-        <ScrollView style={styles.homiefeed}>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <TouchableOpacity
-              style={styles.btnFull}
-              onPress={() => console.log("Nearby pressed!")}
-            >
-              <Text
-                style={{
-                  color: "#fff",
-                  fontWeight: "bold",
-                  textTransform: "uppercase",
-                }}
-              >
-                Nearby
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.btnBorder}
-              onPress={() => console.log("Discover pressed!")}
-            >
-              <Text
-                style={{
-                  color: "#D9B2EE",
-                  fontWeight: "bold",
-                  textTransform: "uppercase",
-                }}
-              >
-                Discover
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <HomieMomentPost />
-          <View style={{ justifyContent: "center" }}>
-            <Image
-              source={require("../assets/groupfoto.jpg")}
-              style={{ width: "100%", height: 440, marginBottom: 40 }}
-            />
-          </View>
-          <HomieMomentPost />
-          <View style={{ justifyContent: "center" }}>
-            <Image
-              source={require("../assets/groupfoto.jpg")}
-              style={{ width: "100%", height: 440, marginBottom: 40 }}
-            />
-          </View>
-        </ScrollView>
-      </View>
+    <View style={{ backgroundColor: '#160635', flex: 1 }}>
+  <View style={styles.headerContainer}>
+    <Text style={styles.heading}>
+      Homie moments
+    </Text>
+    <View style={styles.iconContainer}>
+      <Image source={calendarIcon} style={{width: 24, height: 24}}/>
     </View>
-  );
+  </View>
+  <View style={{ flex: 1,  alignItems: 'center', color: '#fff' }}>
+    <Image source={require('../assets/groupfoto.jpg')} style={{ width: 160, height: 220, marginBottom:5, marginTop: '-20px'}} />
+    <View style={styles.details}>
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+      <Image source={like} style={{width: 20, height: 17}}/>
+      <Text style={{ color: '#fff', fontFamily:'manrope', fontSize: '13px', paddingLeft: 5 }}>2</Text>
+      </View>
+      <Text style={{ color: '#3BEDBF', fontFamily:'manrope', fontSize: '13px' }}>20 minutes ago</Text>
+    </View>
+    <Text style={{ color: '#fff', fontFamily:'manrope', fontSize: '14px' }}>Add a description...</Text>
+  </View>
+  <View style={{ flex: 1 }}>
+  <ScrollView style={styles.homiefeed}>
+    <View style={{ flexDirection:'row', justifyContent: 'space-between' }}>
+      <TouchableOpacity style={styles.btnFull} onPress={() => console.log('Nearby pressed!')}>
+        <Text style={{ color:'#fff', fontStyle: 'normal', fontWeight: '700', fontSize: '14px',  fontFamily:'moon'}}>Nearby</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.btnBorder} onPress={() => console.log('Discover pressed!')}>
+        <Text style={{ color:'#D9B2EE', fontStyle: 'normal', fontWeight: '700', fontSize: '14px',  fontFamily:'moon'}}>Discover</Text>
+      </TouchableOpacity>
+    </View>
+    <HomieMomentPost />
+    <View style={{ justifyContent:'center' }}>
+      <Image source={require('../assets/groupfoto.jpg')} style={{ width: '100%', height: 440, marginBottom: 40 }} />
+    </View>
+    <HomieMomentPost />
+    <View style={{ justifyContent:'center' }}>
+      <Image source={require('../assets/groupfoto.jpg')} style={{ width: '100%', height: 440, marginBottom: 40 }} />
+    </View>
+  </ScrollView>
+  </View>
+  </View>
+
+  )
 }
 
 const styles = StyleSheet.create({
@@ -109,8 +91,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 20,
     flex: 1,
-    textAlign: "center",
-    position: "absolute",
+    textAlign: 'center',
+    position: 'absolute',
+    fontFamily: 'novatica-bold', 
+    fontSize: '20px'
   },
   iconContainer: {
     justifyContent: "flex-start",
@@ -146,8 +130,9 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     marginBottom: 40,
     marginTop: 10,
-    textAlign: "center",
-  },
+    textAlign: 'center',
+    fontFamily:'moon'
+  }, 
 
   btnBorder: {
     borderRadius: 35,
@@ -159,8 +144,8 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     marginTop: 10,
     paddingVertical: 15,
-    textAlign: "center",
-  },
+    textAlign: 'center',
+  }
 });
 
 /* import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native'
