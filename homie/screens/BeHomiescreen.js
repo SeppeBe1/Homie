@@ -1,130 +1,167 @@
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native'
-import { Header, Button } from 'react-native-elements'
-import calendarIcon from '../assets/calendar.png'
-import like from '../assets/like.png'
-import emptylike from '../assets/emptylike.png'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import { Header, Button } from "react-native-elements";
+import calendarIcon from "../assets/calendar.png";
+import like from "../assets/like.png";
+import emptylike from "../assets/emptylike.png";
 
-import HomieMomentPost from '../compontents/HomieMomentPost';
+import HomieMomentPost from "../compontents/HomieMomentPost";
 
-import React from 'react'
+import React from "react";
 
-export default function Behomiescreen({navigation}) {
+export default function Behomiescreen({ navigation }) {
   return (
-    <View style={{ backgroundColor: '#160635', flex: 1 }}>
-  <View style={styles.headerContainer}>
-    <Text style={styles.heading}>
-      Homie Moments
-    </Text>
-    <View style={styles.iconContainer}>
-      <Image source={calendarIcon} style={{width: 24, height: 24}}/>
-    </View>
-  </View>
-  <View style={{ flex: 1,  alignItems: 'center', color: '#fff' }}>
-    <Image source={require('../assets/groupfoto.jpg')} style={{ width: 160, height: 220, marginBottom:5, marginTop: '-20px'}} />
-    <View style={styles.details}>
-      <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-      <Image source={like} style={{width: 20, height: 17}}/>
-      <Text style={{ color: '#fff', paddingLeft: 5 }}>2</Text>
+    <View style={{ backgroundColor: "#160635", flex: 1 }}>
+      <View style={styles.headerContainer}>
+        <Text style={styles.heading}>Homie Moments</Text>
+        <View style={styles.iconContainer}>
+          <Image source={calendarIcon} style={{ width: 24, height: 24 }} />
+        </View>
       </View>
-      <Text style={{ color: '#3BEDBF' }}>20 minutes ago</Text>
+      <View style={{ flex: 1, alignItems: "center", color: "#fff" }}>
+        <Image
+          source={require("../assets/groupfoto.jpg")}
+          style={{
+            width: 160,
+            height: 220,
+            marginBottom: 5,
+            marginTop: "-20px",
+          }}
+        />
+        <View style={styles.details}>
+          <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
+            <Image source={like} style={{ width: 20, height: 17 }} />
+            <Text style={{ color: "#fff", paddingLeft: 5 }}>2</Text>
+          </View>
+          <Text style={{ color: "#3BEDBF" }}>20 minutes ago</Text>
+        </View>
+        <Text style={{ color: "#fff" }}>Add a description...</Text>
+      </View>
+      <View style={{ flex: 1 }}>
+        <ScrollView style={styles.homiefeed}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <TouchableOpacity
+              style={styles.btnFull}
+              onPress={() => console.log("Nearby pressed!")}
+            >
+              <Text
+                style={{
+                  color: "#fff",
+                  fontWeight: "bold",
+                  textTransform: "uppercase",
+                }}
+              >
+                Nearby
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.btnBorder}
+              onPress={() => console.log("Discover pressed!")}
+            >
+              <Text
+                style={{
+                  color: "#D9B2EE",
+                  fontWeight: "bold",
+                  textTransform: "uppercase",
+                }}
+              >
+                Discover
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <HomieMomentPost />
+          <View style={{ justifyContent: "center" }}>
+            <Image
+              source={require("../assets/groupfoto.jpg")}
+              style={{ width: "100%", height: 440, marginBottom: 40 }}
+            />
+          </View>
+          <HomieMomentPost />
+          <View style={{ justifyContent: "center" }}>
+            <Image
+              source={require("../assets/groupfoto.jpg")}
+              style={{ width: "100%", height: 440, marginBottom: 40 }}
+            />
+          </View>
+        </ScrollView>
+      </View>
     </View>
-    <Text style={{ color: '#fff' }}>Add a description...</Text>
-  </View>
-  <View style={{ flex: 1 }}>
-  <ScrollView style={styles.homiefeed}>
-    <View style={{ flexDirection:'row', justifyContent: 'space-between' }}>
-      <TouchableOpacity style={styles.btnFull} onPress={() => console.log('Nearby pressed!')}>
-        <Text style={{ color:'#fff', fontWeight: 'bold', textTransform: 'uppercase'}}>Nearby</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.btnBorder} onPress={() => console.log('Discover pressed!')}>
-        <Text style={{ color:'#D9B2EE', fontWeight: 'bold', textTransform: 'uppercase'}}>Discover</Text>
-      </TouchableOpacity>
-    </View>
-    <HomieMomentPost />
-    <View style={{ justifyContent:'center' }}>
-      <Image source={require('../assets/groupfoto.jpg')} style={{ width: '100%', height: 440, marginBottom: 40 }} />
-    </View>
-    <HomieMomentPost />
-    <View style={{ justifyContent:'center' }}>
-      <Image source={require('../assets/groupfoto.jpg')} style={{ width: '100%', height: 440, marginBottom: 40 }} />
-    </View>
-  </ScrollView>
-  </View>
-  </View>
-
-  )
+  );
 }
 
 const styles = StyleSheet.create({
-  
-
   headerContainer: {
-    backgroundColor: '#160635',
+    backgroundColor: "#160635",
     height: 150,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   heading: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 20,
     flex: 1,
-    textAlign: 'center',
-    position: 'absolute'
+    textAlign: "center",
+    position: "absolute",
   },
   iconContainer: {
-    justifyContent: 'flex-start',
-    alignItems: 'flex-end',
+    justifyContent: "flex-start",
+    alignItems: "flex-end",
     padding: 10,
     marginRight: 25,
     flex: 1,
   },
 
   details: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     width: 200,
     paddingHorizontal: 20,
-    margin: 10
+    margin: 10,
   },
 
   homiefeed: {
-    backgroundColor: '#fff', 
-    borderTopLeftRadius: 25, 
+    backgroundColor: "#fff",
+    borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     padding: 35,
-    marginTop: -30
+    marginTop: -30,
   },
 
-  btnFull:{
+  btnFull: {
     borderRadius: 35,
-    backgroundColor: '#D9B2EE', 
-    borderColor: '#D9B2EE',
-    borderStyle: 'solid',
-    borderWidth: 2, 
-    width: '48%',
+    backgroundColor: "#D9B2EE",
+    borderColor: "#D9B2EE",
+    borderStyle: "solid",
+    borderWidth: 2,
+    width: "48%",
     paddingVertical: 15,
     marginBottom: 40,
     marginTop: 10,
-    textAlign: 'center'
-  }, 
+    textAlign: "center",
+  },
 
   btnBorder: {
     borderRadius: 35,
-    backgroundColor: '#fff',
-    borderColor: '#D9B2EE',
-    borderStyle: 'solid',
-    borderWidth: 2, 
-    width:'48%',
+    backgroundColor: "#fff",
+    borderColor: "#D9B2EE",
+    borderStyle: "solid",
+    borderWidth: 2,
+    width: "48%",
     marginBottom: 40,
     marginTop: 10,
     paddingVertical: 15,
-    textAlign: 'center'
-  }
+    textAlign: "center",
+  },
 });
-
-
-
 
 /* import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native'
 import { Header, Avatar, Button } from 'react-native-elements'
