@@ -1,7 +1,33 @@
 import { View, Text } from 'react-native'
 import React from 'react'
+import * as Font from 'expo-font';
+
+
+// Load the font
+const loadFonts = async () => {
+  await Font.loadAsync({
+    moon: require('../assets/fonts/Moon.otf'),
+    manrope: require('../assets/fonts/Manrope.ttf'),
+    novatica: require('../assets/fonts/Novatica.ttf'),
+    novaticaBold: require('../assets/fonts/Novatica-Bold.ttf')
+  });
+}
+
 
 export default function Myprofilescreen() {
+
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+    loadFonts().then(() => {
+      setFontsLoaded(true);
+    });
+  }, []);
+
+  if (!fontsLoaded) {
+    return null; // or a loading screen
+  }
+
   return (
     <View>
 

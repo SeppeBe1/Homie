@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import * as Font from "expo-font";
-import MoonFont from "../assets/fonts/Moon.otf";
-import Manrope from "../assets/fonts/static/Manrope-Bold.ttf";
 import {
   View,
   Text,
@@ -20,12 +18,12 @@ import boy2 from "../assets/boy2.jpg";
 // Load the font
 const loadFonts = async () => {
   await Font.loadAsync({
-    moon: MoonFont,
+    moon: require('../assets/fonts/Moon.otf'),
+    manrope: require('../assets/fonts/Manrope.ttf'),
+    novatica: require('../assets/fonts/Novatica.ttf'),
+    novaticaBold: require('../assets/fonts/Novatica-Bold.ttf')
   });
-  await Font.loadAsync({
-    moon: Manrope,
-  });
-};
+}
 
 const CalendarScreen = ({ navigation }) => {
   const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];

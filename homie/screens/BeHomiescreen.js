@@ -12,10 +12,10 @@ import React, {useState, useEffect} from 'react'
 // Load the font
 const loadFonts = async () => {
   await Font.loadAsync({
-    'moon': require('../assets/fonts/Moon.otf'),
-    'manrope': require('../assets/fonts/Manrope.ttf'),
-    'novatica': require('../assets/fonts/Novatica.ttf'),
-    'novatica-bold': require('../assets/fonts/Novatica-Bold.ttf')
+    moon: require('../assets/fonts/Moon.otf'),
+    manrope: require('../assets/fonts/Manrope.ttf'),
+    novatica: require('../assets/fonts/Novatica.ttf'),
+    novaticaBold: require('../assets/fonts/Novatica-Bold.ttf')
   });
 }
 
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
     position: 'absolute',
-    fontFamily: 'novatica-bold', 
+    fontFamily: 'novaticaBold', 
     fontSize: '20px'
   },
   iconContainer: {

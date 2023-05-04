@@ -9,7 +9,10 @@ import pen from "../assets/pentosquare.svg";
 // Load the font
 const loadFonts = async () => {
   await Font.loadAsync({
-    moon: require("../assets/fonts/Moon.otf"),
+    moon: require('../assets/fonts/Moon.otf'),
+    manrope: require('../assets/fonts/Manrope.ttf'),
+    novatica: require('../assets/fonts/Novatica.ttf'),
+    novaticaBold: require('../assets/fonts/Novatica-Bold.ttf')
   });
 };
 
