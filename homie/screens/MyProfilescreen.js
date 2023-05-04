@@ -4,19 +4,109 @@ import React from 'react'
 export default function Myprofilescreen() {
   return (
     <View>
-      <Text>My Profile</Text>
-      <Button
-        title="Go back"
-        color="#841584"
-        />
-      <Text>Available</Text>
-      <Text>Busy</Text>
-      <Text>Do not disturb</Text>
-      <Text>Email address</Text>
-      <Text>jadeapers@telenet.be</Text>
-      <Text>Phonenumber</Text>
-      <Text>04 92 63 30 29</Text>
-      <Text>Password</Text>
+
+<View style={styles.topHeader}>
+    <TouchableOpacity onPress={() => console.log('Back clicked')}>
+        <Image source={arrowLeft} style={{ width: 8, height: 15 }} />
+    </TouchableOpacity>
+    <View style={{ flex: 1, alignItems: 'center' }}>
+    <View style={{ position: 'relative' }}>
+      <Image
+        source={require('../assets/profielfoto.svg')}
+        style={{ width: 88, height: 88, borderRadius: 50 }}
+      />
+      <TouchableOpacity
+        style={{ position: 'absolute', top: 0, right: 0 }}
+        onPress={() => console.log('Edit profile clicked')}
+      >
+        <Image source={editIcon} style={{ width: 20, height: 20 }} />
+      </TouchableOpacity>
     </View>
+      <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+        <View>
+      <Text style={{ color: '#fff', fontFamily: 'novatica-bold', fontSize: '16px', textAlign: 'center' }}>Jade Apers</Text>
+      </View>
+      </View>
+      <TouchableOpacity onPress={() => console.log('Status clicked')} style={{ flexDirection: 'row', alignItems: 'center', position: 'absolute', top: 120, right: 130 }}>
+        <Image source={statusAvailable} style={{ width: 11, height: 11, marginRight: 5 }} />
+        <Image source={dropdownIcon} style={{ width: 15, height: 8 }} />
+      </TouchableOpacity>
+  </View>
+  </View>
+    
+  <View style={{ backgroundColor: '#F2F2F2'}}>
+    <View style={styles.profileItemFirst}>
+      <View style={{ display: 'flex', flexDirection:'row', justifyContent:'space-between', alignItems:'center' }}>
+        <View style={styles.profileItemTitle}>
+          <Image source={emailIcon} style={{width: 20, height: 16, margin: 10}}/>
+          <Text style={{fontFamily: 'moon', fontWeight: 'bold', fontSize: '16px', color: '#160635', marginTop: 10, marginLeft: 10}}>Email address</Text>
+        </View>
+        <TouchableOpacity onPress={() => console.log('Edit email clicked')}>
+        <Image source={editFieldIcon} style={{width: 16, height: 16, marginRight: 10}}/>
+        </TouchableOpacity>
+      </View>
+      <Text style={{fontFamily: 'manrope', margin: '10px', fontSize: '16px'}}>jadeapers@hotmail.com</Text>
+    </View>
+    <View style={styles.profileItem}>
+    <View style={{ display: 'flex', flexDirection:'row', justifyContent:'space-between', alignItems:'center' }}>
+      <View style={styles.profileItemTitle}>
+      <Image source={phoneIcon} style={{width: 21, height: 21, margin: 10}}/>
+      <Text style={{fontFamily: 'moon', fontWeight: 'bold', fontSize: '16px', color: '#160635', marginTop: 10, marginLeft: 10}}>Phonenumber</Text>
+      </View>
+      <TouchableOpacity onPress={() => console.log('Edit email clicked')}>
+        <Image source={editFieldIcon} style={{width: 16, height: 16, marginRight: 10}}/>
+      </TouchableOpacity>
+      </View>
+      <Text style={{fontFamily: 'manrope', margin: '10px', fontSize: '16px'}}>+32 412 34 76 06</Text>
+    </View>
+    <View style={styles.profileItem}>
+    <View style={{ display: 'flex', flexDirection:'row', justifyContent:'space-between', alignItems:'center' }}>
+      <View style={styles.profileItemTitle}>
+      <Image source={passwordIcon} style={{width: 18, height: 20, margin: 10}}/>
+      <Text style={{fontFamily: 'moon', fontWeight: 'bold', fontSize: '16px', color: '#160635', marginTop: 10, marginLeft: 10}}>Password</Text>
+      </View>
+      <TouchableOpacity onPress={() => console.log('Edit email clicked')}>
+      <Image source={editFieldIcon} style={{width: 16, height: 16, marginRight: 10}}/>
+      </TouchableOpacity>
+      </View>
+    </View>
+  </View>
+  </View>
   )
 }
+
+
+const styles = StyleSheet.create({
+  
+
+  topHeader:{
+    backgroundColor: '#160635',
+    height: '225px', 
+    padding: '25px'
+  },
+
+  profileItemFirst: {
+    backgroundColor: '#fff',
+    padding: 10, 
+    borderRadius: 15,
+    marginHorizontal: '25px',
+    marginTop: '25px',
+    marginBottom: '5px'
+  },
+
+  profileItem: {
+    backgroundColor: '#fff',
+    padding: 10, 
+    borderRadius: 15,
+    marginHorizontal: '25px',
+    marginVertical: '5px'
+  },
+
+  profileItemTitle: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems:'flex-start',
+    padding: 10
+  }
+
+})
