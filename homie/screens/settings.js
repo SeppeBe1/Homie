@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, Switch, Picker, TouchableOpacity, Image } from 'react-native';
 import React, {useState, useEffect} from 'react'
 import arrowLeft from '../assets/icons/arrowLeft.svg'
+import mobile from '../assets/icons/mobile.svg'
 
 import * as Font from 'expo-font';
 
@@ -52,7 +53,7 @@ export default function Settingsscreen({navigation}) {
       </View>
       <View style={styles.body}>
        <View style={styles.h2Container}>
-        <Image source={require('../assets/icons/mobile.svg')} style={{ width: 14, height: 20 }}/>
+        <Image source={mobile} style={{ width: 14, height: 20 }}/>
         <Text style={styles.h2}>app preferences</Text>
       </View>
 
