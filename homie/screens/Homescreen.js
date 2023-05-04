@@ -74,7 +74,7 @@ export default function Homescreen({ navigation }) {
                 color="white"
                 size={24}
                 onPress={() => {
-                  navigation.navigate({ name: "settings" });
+                  navigation.navigate({ name: "settingsscreen" });
                 }}
               />
             </View>
