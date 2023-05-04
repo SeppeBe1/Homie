@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as Font from "expo-font";
 import MoonFont from "../assets/fonts/Moon.otf";
-import Manrope from "../assets/fonts/static/Manrope-Bold.ttf";
+
 import {
   View,
   Text,
