@@ -27,7 +27,7 @@ const loadFonts = async () => {
   });
 };
 
-const CalendarScreen = ({ navigation }) => {
+export default function Homescreen({ navigation }) {
   const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const today = new Date();
   const startOfWeek = new Date(
@@ -85,7 +85,7 @@ const CalendarScreen = ({ navigation }) => {
           </Text>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => handleSeeFullCalendar()}
+            onPress={() => navigation.navigate("FullCalenderScreen")}
           >
             <Text style={styles.buttonText}>See full calendar</Text>
           </TouchableOpacity>
@@ -133,7 +133,14 @@ const CalendarScreen = ({ navigation }) => {
               />
             </View>
             <View>
-              <Text>{task.name}</Text>
+              <Text
+                style={{
+                  fontFamily: "manrope",
+                  fontSize: 14,
+                }}
+              >
+                {task.name}
+              </Text>
             </View>
           </View>
         ))}
@@ -302,7 +309,7 @@ const CalendarScreen = ({ navigation }) => {
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -429,5 +436,3 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 });
-
-export default CalendarScreen;

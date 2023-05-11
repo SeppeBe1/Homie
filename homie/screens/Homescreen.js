@@ -9,10 +9,10 @@ import pen from "../assets/pentosquare.svg";
 // Load the font
 const loadFonts = async () => {
   await Font.loadAsync({
-    moon: require('../assets/fonts/Moon.otf'),
-    manrope: require('../assets/fonts/Manrope.ttf'),
-    novatica: require('../assets/fonts/Novatica.ttf'),
-    novaticaBold: require('../assets/fonts/Novatica-Bold.ttf')
+    moon: require("../assets/fonts/Moon.otf"),
+    manrope: require("../assets/fonts/Manrope.ttf"),
+    novatica: require("../assets/fonts/Novatica.ttf"),
+    novaticaBold: require("../assets/fonts/Novatica-Bold.ttf"),
   });
 };
 
@@ -36,7 +36,7 @@ export default function Homescreen({ navigation }) {
           containerStyle={styles.headerContainer}
           leftComponent={
             <Avatar
-              onPress={() =>navigation.navigate("myprofilescreen")}
+              onPress={() => navigation.navigate("myprofilescreen")}
               size="medium"
               rounded
               source={{
