@@ -10,7 +10,7 @@ const HomieMomentPost = () => {
           <Image source={require('../assets/groupfoto.jpg')} style={{ width: 58, height: 58, borderRadius:50 }} />
         </View>
         <View style={{ marginLeft: 15, flex: 1 }}>
-          <Text style={{ color: '#160635', fontFamily:'novatica-bold', fontSize: '16px' }}>Casa Frankie</Text>
+          <Text style={{ color: '#160635', fontFamily:'novaticaBold', fontSize: '16px' }}>Casa Frankie</Text>
           <Text style={{ fontFamily:'manrope', fontSize: '14px' }}>Time for dinner!</Text>
           <View style={{ flexDirection:'row'}}>
             <Text style={{ color:'#939393', paddingRight: 5, fontFamily:'manrope', fontSize: '13px' }}>Antwerpen</Text>
