@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
+    paddingTop: 20,
     gap: 18,
   },
   galleryImage: {

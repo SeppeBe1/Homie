@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   rule: {
-    fontFamily: "moon",
-    fontSize: 12,
+    fontFamily: "manrope",
+    fontSize: 16,
     color: "#333333",
   },
 });

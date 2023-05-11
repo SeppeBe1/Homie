@@ -72,24 +72,54 @@ const App = () => {
         <Text style={styles.h2}> Casa Magdalena </Text>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
-            style={styles.button}
+            style={[
+              styles.button,
+              currentView === "Residents" && styles.activeButton,
+            ]}
             onPress={() => switchView("Residents")}
           >
-            <Text style={styles.buttonText}>Residents</Text>
+            <Text
+              style={[
+                styles.buttonText,
+                currentView === "Residents" && styles.activeButtonText,
+              ]}
+            >
+              Residents
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.button}
+            style={[
+              styles.button,
+              currentView === "Photos" && styles.activeButton,
+            ]}
             onPress={() => switchView("Photos")}
           >
-            <Text style={styles.buttonText}>Photos</Text>
+            <Text
+              style={[
+                styles.buttonText,
+                currentView === "Photos" && styles.activeButtonText,
+              ]}
+            >
+              Photos
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.button}
+            style={[
+              styles.button,
+              currentView === "Houserules" && styles.activeButton,
+            ]}
             onPress={() => switchView("Houserules")}
           >
-            <Text style={styles.buttonText}>Houserules</Text>
+            <Text
+              style={[
+                styles.buttonText,
+                currentView === "Houserules" && styles.activeButtonText,
+              ]}
+            >
+              Houserules
+            </Text>
           </TouchableOpacity>
         </View>
         {renderView()}
@@ -145,15 +175,24 @@ const styles = StyleSheet.create({
     height: 50,
     width: 120,
     borderRadius: 30,
-    backgroundColor: "#D9B2EE",
+    backgroundColor: "#F2F2F2",
+    borderColor: "#D9B2EE",
+    borderWidth: 2,
     justifyContent: "center",
     alignItems: "center",
   },
+  activeButton: {
+    backgroundColor: "#D9B2EE",
+  },
+  activeButtonText: {
+    color: "#FFFFFF", // Update the text color for active button
+  },
+
   buttonText: {
-    color: "white",
     fontFamily: "Moon",
     fontWeight: "bold",
     fontSize: 14,
+    color: "#D9B2EE",
   },
 });
 
