@@ -18,12 +18,12 @@ import boy2 from "../assets/boy2.jpg";
 // Load the font
 const loadFonts = async () => {
   await Font.loadAsync({
-    moon: require('../assets/fonts/Moon.otf'),
-    manrope: require('../assets/fonts/Manrope.ttf'),
-    novatica: require('../assets/fonts/Novatica.ttf'),
-    novaticaBold: require('../assets/fonts/Novatica-Bold.ttf')
+    moon: require("../assets/fonts/Moon.otf"),
+    manrope: require("../assets/fonts/Manrope.ttf"),
+    novatica: require("../assets/fonts/Novatica.ttf"),
+    novaticaBold: require("../assets/fonts/Novatica-Bold.ttf"),
   });
-}
+};
 
 const CalendarScreen = ({ navigation }) => {
   const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
