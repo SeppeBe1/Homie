@@ -4,7 +4,7 @@ import MoonFont from "../assets/fonts/Moon.otf";
 import Novatica from "../assets/fonts/Novatica-Bold.woff";
 import Residents from "../compontents/Residents";
 import Photos from "../compontents/Photos";
-import HouseRules from "../compontents/HouseRules";
+import HouseRules from "../compontents/Houserules";
 
 import {
   View,
@@ -44,8 +44,8 @@ const App = () => {
         return <Residents />;
       case "Photos":
         return <Photos />;
-      case "HouseRules":
-        return <HouseRules />;
+      case "Houserules":
+        return <Houserules />;
       default:
         return null;
     }
@@ -60,7 +60,7 @@ const App = () => {
             <Image source={arrowback} style={{ width: 8, height: 15 }} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.link}>
-            <Text style={styles.text}>My house</Text>
+            <Text style={styles.h1}>My house</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.link}>
             <Image source={editpen} style={{ width: 24, height: 24 }} />
@@ -69,15 +69,33 @@ const App = () => {
       </View>
 
       <View style={styles.container}>
-        {renderView()}
+        <Text style={styles.h2}> Casa Magdalena </Text>
         <View style={styles.buttonContainer}>
-          <Button title="Residents" onPress={() => switchView("Residents")} />
-          <Button title="Photos" onPress={() => switchView("Photos")} />
-          <Button
-            title="House Rules"
-            onPress={() => switchView("HouseRules")}
-          />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => switchView("Residents")}
+          >
+            <Text style={styles.buttonText}>Residents</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => switchView("Photos")}
+          >
+            <Text style={styles.buttonText}>Photos</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => switchView("Houserules")}
+          >
+            <Text style={styles.buttonText}>Houserules</Text>
+          </TouchableOpacity>
         </View>
+        {renderView()}
+      </View>
+      <View>
+        <TouchableOpacity style={styles.leave}> Leave House </TouchableOpacity>
       </View>
     </View>
   );
@@ -104,7 +122,15 @@ const styles = StyleSheet.create({
   link: {
     fontFamily: "novatica",
   },
-  text: {
+
+  leave: {
+    textAlign: "center",
+    fontFamily: "manrope",
+    color: "#FF7A7A",
+    paddingTop: "29px",
+    textDecorationLine: "underline",
+  },
+  h1: {
     fontFamily: "novatica",
     fontSize: 20,
     color: "white",
@@ -113,6 +139,31 @@ const styles = StyleSheet.create({
     fontFamily: "novatica",
     fontSize: 16,
     color: "#160635",
+    paddingVertical: "30px",
+    textAlign: "center",
+  },
+  container: {
+    paddingHorizontal: "25px",
+  },
+
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 5,
+  },
+  button: {
+    height: 50,
+    width: 120,
+    borderRadius: 30,
+    backgroundColor: "#D9B2EE",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontFamily: "Moon",
+    fontWeight: "bold",
+    fontSize: 14,
   },
 });
 
