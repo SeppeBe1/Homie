@@ -1,5 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import * as Font from "expo-font";
+import MoonFont from "../assets/fonts/Moon.otf";
+import Novatica from "../assets/fonts/Novatica-Bold.woff";
+import Manrope from "../assets/fonts/Manrope-Bold.ttf";
+
 import {
   View,
   Text,
@@ -13,15 +17,13 @@ import checkbox from "../assets/icons/Checkbox_empty.svg";
 import arrowright from "../assets/icons/Arrow-Right.svg";
 import girl from "../assets/girl.jpg";
 import boy from "../assets/boy.jpg";
-import boy2 from "../assets/boy2.jpg";
 
 // Load the font
 const loadFonts = async () => {
   await Font.loadAsync({
-    moon: require("../assets/fonts/Moon.otf"),
-    manrope: require("../assets/fonts/Manrope.ttf"),
-    novatica: require("../assets/fonts/Novatica.ttf"),
-    novaticaBold: require("../assets/fonts/Novatica-Bold.ttf"),
+    moon: MoonFont,
+    novatica: Novatica,
+    manrope: Manrope,
   });
 };
 
@@ -37,13 +39,13 @@ const CalendarScreen = ({ navigation }) => {
   const events = [
     {
       day: "12",
-      month: "dec",
+      month: "Dec",
       title: "Houseparty in Casa",
       image: girl,
     },
     {
       day: "31",
-      month: "jan",
+      month: "Jan",
       title: "Movie night at the park",
       image: boy,
     },
@@ -52,14 +54,14 @@ const CalendarScreen = ({ navigation }) => {
   const tasks = [
     {
       day: "12",
-      month: "dec",
+      month: "Dec",
       id: 1,
       name: "Taking out the dustbin",
     },
     {
       id: 2,
       day: "31",
-      month: "jan",
+      month: "Jan",
       name: "Cleaning the kitchen",
     },
   ];
@@ -184,8 +186,24 @@ const CalendarScreen = ({ navigation }) => {
                 flexDirection: "column",
               }}
             >
-              <Text>{event.day}</Text>
-              <Text>{event.month}</Text>
+              <Text
+                style={{
+                  fontFamily: "novatica",
+                  fontWeight: "bold",
+                  fontSize: 20,
+                }}
+              >
+                {event.day}
+              </Text>
+              <Text
+                style={{
+                  fontFamily: "novatica",
+                  fontWeight: "bold",
+                  fontSize: 10,
+                }}
+              >
+                {event.month}
+              </Text>
             </View>
             <Text style={styles.h3black}>{event.title}</Text>
             <Image
@@ -250,8 +268,24 @@ const CalendarScreen = ({ navigation }) => {
                 flexDirection: "column",
               }}
             >
-              <Text>{task.day}</Text>
-              <Text>{task.month}</Text>
+              <Text
+                style={{
+                  fontFamily: "novatica",
+                  fontWeight: "bold",
+                  fontSize: 20,
+                }}
+              >
+                {task.day}
+              </Text>
+              <Text
+                style={{
+                  fontFamily: "novatica",
+                  fontWeight: "bold",
+                  fontSize: 10,
+                }}
+              >
+                {task.month}
+              </Text>
             </View>
             <Text style={styles.h3black}>{task.name}</Text>
           </View>
@@ -318,10 +352,12 @@ const styles = StyleSheet.create({
 
   darkpurple: {
     color: "#160635",
+    fontFamily: "manrope",
+    fontWeight: "bold",
+    fontSize: 15,
   },
 
   weekcalender: {
-    fontFamily: "manrope",
     padding: 5,
     flexDirection: "row",
     gap: 16,
@@ -369,6 +405,8 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 20,
     textAlign: "center",
+    fontFamily: "novatica",
+    fontWeight: "bold",
   },
   h3: {
     fontFamily: "moon",
