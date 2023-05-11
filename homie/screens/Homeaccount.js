@@ -4,7 +4,7 @@ import MoonFont from "../assets/fonts/Moon.otf";
 import Novatica from "../assets/fonts/Novatica-Bold.woff";
 import Residents from "../compontents/Residents";
 import Photos from "../compontents/Photos";
-import HouseRules from "../compontents/Houserules";
+import Houserules from "../compontents/Houserules";
 
 import {
   View,
