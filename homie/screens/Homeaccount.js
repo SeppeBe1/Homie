@@ -13,7 +13,6 @@ import {
   TouchableOpacity,
   Image,
   ImageBackground,
-  Button,
 } from "react-native";
 
 import arrowback from "../assets/icons/Arrow_back.svg";
