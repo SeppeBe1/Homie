@@ -94,9 +94,6 @@ const App = () => {
         </View>
         {renderView()}
       </View>
-      <View>
-        <TouchableOpacity style={styles.leave}> Leave House </TouchableOpacity>
-      </View>
     </View>
   );
 };
@@ -123,13 +120,6 @@ const styles = StyleSheet.create({
     fontFamily: "novatica",
   },
 
-  leave: {
-    textAlign: "center",
-    fontFamily: "manrope",
-    color: "#FF7A7A",
-    paddingTop: "29px",
-    textDecorationLine: "underline",
-  },
   h1: {
     fontFamily: "novatica",
     fontSize: 20,

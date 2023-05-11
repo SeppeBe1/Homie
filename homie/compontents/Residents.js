@@ -41,6 +41,12 @@ export default class Residents extends Component {
           </View>
         </View>
         {this.renderResidents()}
+        <View>
+          <TouchableOpacity style={styles.leave}>
+            {" "}
+            Leave House{" "}
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -51,8 +57,15 @@ const styles = StyleSheet.create({
     fontFamily: "moon",
     fontSize: 14,
     color: "#160635",
-    paddingVertical: 30,
+    paddingVertical: 40,
     fontWeight: "bold",
+  },
+  leave: {
+    textAlign: "center",
+    fontFamily: "manrope",
+    color: "#FF7A7A",
+    paddingTop: "29px",
+    textDecorationLine: "underline",
   },
   header: {
     flex: 1,
