@@ -1,22 +1,22 @@
 import { View, Text } from 'react-native'
 import React from 'react'
+import {TabNavigator}  from './TabNavigator';
+import {StackNavigator} from './StackNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import Login from './screens/login/Login'
+import { HomescreenStack, BehomiescreenStack, CostsplitterscreenStack, LoginscreenStack } from "./StackNavigator";
 
-import { LoginscreenStack, HomescreenStack } from "./StackNavigator";
-import Login from './screens/login/Login';
-import SignUp from './screens/login/SignUp';
 
 
 
 export default function App() {
-
-  const Stack = createStackNavigator();
   return (
-
     <NavigationContainer>
-      <LoginscreenStack/>
+      <LoginscreenStack />
     </NavigationContainer>
-);
-};
+
+  
+    )
+  }
 

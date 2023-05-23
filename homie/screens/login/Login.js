@@ -15,6 +15,8 @@ export default function Login({ navigation }) {
 
     const [isFocused, setIsFocused] = useState(false);
 
+    const Homename = 'TabNavigator';
+
     const handleFocus = () => {
       setIsFocused(true);
     };
@@ -26,7 +28,7 @@ export default function Login({ navigation }) {
     const handleLogin = () => {
       // Perform login logic here, e.g., API calls, validation, etc.
 
-      navigation.navigate("Home")
+      navigation.navigate('TabNavigator', { screen: Homename });
     
       console.log('Email:', email);
       console.log('Password:', password);

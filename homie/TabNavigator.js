@@ -2,7 +2,7 @@ import { View, Text, Image } from 'react-native'
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { HomescreenStack, BehomiescreenStack, CostsplitterscreenStack, CalendarScreenStack } from "./StackNavigator";
+import { HomescreenStack, BehomiescreenStack, CostsplitterscreenStack, CalendarScreenStack, LoginscreenStack } from "./StackNavigator";
 
 const Homename = 'Home';
 const Costsplittername = 'Costsplitter';
