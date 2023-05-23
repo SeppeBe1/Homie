@@ -12,23 +12,44 @@ export default function Login({ navigation }) {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    const [isFocused, setIsFocused] = useState(false);
+    const [color, setColor] = useState('white');
+    const [validation, setValidation] = useState(false);
 
     const Homename = 'TabNavigator';
 
-    const handleFocus = () => {
-      setIsFocused(true);
-    };
-  
-    const handleBlur = () => {
-      setIsFocused(false);
-    };
-
     const handleLogin = () => {
       // Perform login logic here, e.g., API calls, validation, etc.
+      fetch('http://localhost:3000/api/v1/users/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password,
+            }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Process the response data
+                console.log(data.status);
 
-      navigation.navigate('TabNavigator', { screen: Homename });
+                if(data.status == "failed"){
+                    const newColor = color === 'white' ? '#FF7A7A' : 'white';
+                    setColor(newColor);
+                    setValidation(true);
+
+                } else if(data.status == "succes"){
+                    navigation.navigate('TabNavigator', { screen: Homename });
+                }
+                // Perform any necessary actions after successful login
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error(error);
+            });
+
+      
     
       console.log('Email:', email);
       console.log('Password:', password);
@@ -44,23 +65,24 @@ export default function Login({ navigation }) {
         <View style={styles.body}>
             <Text style={styles.h2}>Login to your account</Text>
 
+            {validation && (
+                <Text style={styles.validation}>Email or password incorrect</Text>
+             )}
+
+
             <TextInput
-            style={[styles.input, isFocused && styles.focusedInput]}
+            style={[styles.input, { borderColor: color }]}
             placeholder="Email"
             onChangeText={text => setEmail(text)}
             value={email}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
             />
 
             <TextInput
-            style={[styles.input, isFocused && styles.focusedInput]}
+            style={[styles.input, { borderColor: color }]}
             placeholder="Password"
             secureTextEntry
             onChangeText={text => setPassword(text)}
             value={password}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
             />
 
             <Text style={styles.forgotPw} onPress={() => console.log("hallo")}>Forget password</Text>
@@ -111,6 +133,16 @@ const styles = StyleSheet.create({
         fontFamily: MoonFont,
         marginTop: 60,
         marginBottom: 40,
+      },
+
+      validation:{
+        color: "#FF7A7A",
+        fontSize: 16,
+        paddingBottom: 10,
+        marginTop: "-25px", 
+        textAlign: "center",
+
+
       },
 
       forgotPw:{

@@ -61,7 +61,7 @@ export default function SignUp({ navigation }) {
 
             <TextInput
             style={[styles.input, isFocused && styles.focusedInput]}
-            placeholder="Confirm passwprd"
+            placeholder="Confirm password"
             secureTextEntry
             onChangeText={text => setPassword(text)}
             value={confirmpassword}
