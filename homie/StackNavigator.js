@@ -10,8 +10,19 @@ import { View } from 'react-native';
 import Homeaccount from './screens/Homeaccount';
 import Myprofilescreen from './screens/MyProfilescreen';
 import Settingsscreen from './screens/settings';
+import Login from './screens/login/Login';
+import SignUp from './screens/login/SignUp';
 
 const Stack = createStackNavigator();
+
+const LoginscreenStack = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}} >
+      <Stack.Screen name="Login" component={Login} options={{tabBarVisible: true}} />
+      <Stack.Screen name="SignUp" component={SignUp} options={{tabBarVisible: true}} />
+    </Stack.Navigator>
+  );
+}
 
 const HomescreenStack = () => {
   return (
@@ -48,4 +59,4 @@ const CalendarScreenStack = () => {
   );
 }
 
-export { HomescreenStack, BehomiescreenStack, CostsplitterscreenStack, CalendarScreenStack };
+export { HomescreenStack, BehomiescreenStack, CostsplitterscreenStack, CalendarScreenStack, LoginscreenStack };
