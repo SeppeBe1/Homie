@@ -6,14 +6,16 @@ import logoHomie from "../../assets/logoHomie.svg";
 
 import MoonFont from "../../assets/fonts/Moon.otf";
 import Novatica from "../../assets/fonts/Novatica-Bold.woff";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SignUp({ navigation }) {
 
+  const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmpassword, setconfirmPassword] = useState('');
-
-    const [isFocused, setIsFocused] = useState(false);
+    const [color, setColor] = useState('white');
+    const [validation, setValidation] = useState(false);
 
     const handleFocus = () => {
       setIsFocused(true);
@@ -23,11 +25,50 @@ export default function SignUp({ navigation }) {
       setIsFocused(false);
     };
 
-    const handleLogin = () => {
+    const handleSignUp = () => {
       // Perform login logic here, e.g., API calls, validation, etc.
-      console.log('Email:', email);
-      console.log('Password:', password);
-      console.log('Confirm password:', password);
+      if (password !== confirmpassword) {
+        const newColor = color === 'white' ? '#FF7A7A' : 'white';
+        setColor(newColor);
+        setValidation(true);
+
+        return;
+      }
+
+      fetch('http://localhost:3000/api/v1/users/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: username,
+                email: email,
+                password: password,
+                confirmpassword: confirmpassword,
+            }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Process the response data
+                console.log(data.status);
+
+                if(data.status == "failed"){
+                    const newColor = color === 'white' ? '#FF7A7A' : 'white';
+                    setColor(newColor);
+                    setValidation(true);
+
+                } else if(data.status == "succes"){
+                    // navigation.navigate('TabNavigator', { screen: Homename });
+                    let token = data.data.token
+                    AsyncStorage.setItem('token', token);
+                    navigation.navigate("Login");
+                }
+                // Perform any necessary actions after successful login
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error(error);
+            });
     };
 
   return (
@@ -40,38 +81,43 @@ export default function SignUp({ navigation }) {
         <View style={styles.body}>
             <Text style={styles.h2}>Make an account</Text>
 
+            {validation && (
+                <Text style={styles.validation}>An error ocurred try a different email or password</Text>
+             )}
+
             <TextInput
-            style={[styles.input, isFocused && styles.focusedInput]}
-            placeholder="Email"
-            onChangeText={text => setEmail(text)}
-            value={email}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
+            style={[styles.input, { borderColor: color }]}
+            placeholder="Username"
+            onChangeText={text => setUsername(text)}
+            value={username}
             />
 
             <TextInput
-            style={[styles.input, isFocused && styles.focusedInput]}
+            style={[styles.input, { borderColor: color }]}
+            placeholder="Email"
+            onChangeText={text => setEmail(text)}
+            value={email}
+            />
+
+            <TextInput
+            style={[styles.input, { borderColor: color }]}
             placeholder="Password"
             secureTextEntry
             onChangeText={text => setPassword(text)}
             value={password}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
             />
 
             <TextInput
-            style={[styles.input, isFocused && styles.focusedInput]}
+            style={[styles.input, { borderColor: color }]}
             placeholder="Confirm password"
             secureTextEntry
-            onChangeText={text => setPassword(text)}
+            onChangeText={text => setconfirmPassword(text)}
             value={confirmpassword}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
             />
 
             <Text style={styles.forgotPw} onPress={() => console.log("hallo")}>Forget password</Text>
 
-            <TouchableOpacity style={styles.login} onPress={handleLogin}>
+            <TouchableOpacity style={styles.login} onPress={handleSignUp}>
             <Text style={styles.buttonText}>Sign up</Text>
             </TouchableOpacity>
 
@@ -117,6 +163,14 @@ const styles = StyleSheet.create({
         fontFamily: MoonFont,
         marginTop: 60,
         marginBottom: 40,
+      },
+
+      validation:{
+        color: "#FF7A7A",
+        fontSize: 16,
+        paddingBottom: 10,
+        marginTop: "-25px", 
+        textAlign: "center",
       },
 
       forgotPw:{

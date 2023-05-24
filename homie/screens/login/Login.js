@@ -6,11 +6,12 @@ import logoHomie from "../../assets/logoHomie.svg";
 
 import MoonFont from "../../assets/fonts/Moon.otf";
 import Novatica from "../../assets/fonts/Novatica-Bold.woff";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Login({ navigation }) {
 
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [color, setColor] = useState('white');
     const [validation, setValidation] = useState(false);
@@ -25,7 +26,7 @@ export default function Login({ navigation }) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                email: email,
+                username: username,
                 password: password,
             }),
             })
@@ -40,6 +41,8 @@ export default function Login({ navigation }) {
                     setValidation(true);
 
                 } else if(data.status == "succes"){
+                  let token = data.data.token;
+                  AsyncStorage.setItem('token', token);
                     navigation.navigate('TabNavigator', { screen: Homename });
                 }
                 // Perform any necessary actions after successful login
@@ -49,9 +52,7 @@ export default function Login({ navigation }) {
                 console.error(error);
             });
 
-      
-    
-      console.log('Email:', email);
+      console.log('Username:', username);
       console.log('Password:', password);
     };
 
@@ -66,15 +67,15 @@ export default function Login({ navigation }) {
             <Text style={styles.h2}>Login to your account</Text>
 
             {validation && (
-                <Text style={styles.validation}>Email or password incorrect</Text>
+                <Text style={styles.validation}>Username or password incorrect</Text>
              )}
 
 
             <TextInput
             style={[styles.input, { borderColor: color }]}
-            placeholder="Email"
-            onChangeText={text => setEmail(text)}
-            value={email}
+            placeholder="Username"
+            onChangeText={text => setUsername(text)}
+            value={username}
             />
 
             <TextInput
@@ -141,8 +142,6 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         marginTop: "-25px", 
         textAlign: "center",
-
-
       },
 
       forgotPw:{
