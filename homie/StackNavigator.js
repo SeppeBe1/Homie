@@ -7,6 +7,7 @@ import Homeaccount from "./screens/Homeaccount";
 import Myprofilescreen from "./screens/MyProfilescreen";
 import Settingsscreen from "./screens/settings";
 import FullCalenderScreen from "./screens/FullCalenderScreen";
+import EventsScreen from "./screens/EventsScreen";
 
 const Stack = createStackNavigator();
 
@@ -42,6 +43,7 @@ const CalendarScreenStack = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="calendar" component={Calendar} />
       <Stack.Screen name="FullCalenderScreen" component={FullCalenderScreen} />
+      <Stack.Screen name="EventsScreen" component={EventsScreen} />
     </Stack.Navigator>
   );
 };

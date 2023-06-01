@@ -172,7 +172,10 @@ export default function Homescreen({ navigation }) {
           }}
         >
           <Text style={styles.h2}> Upcoming events </Text>
-          <TouchableOpacity style={styles.link}>
+          <TouchableOpacity
+            style={styles.link}
+            onPress={() => navigation.navigate("EventsScreen")}
+          >
             <Text style={styles.linkText}>All events</Text>
             <Image
               source={arrowright}
@@ -431,7 +434,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     fontFamily: "novatica",
-    fontWeight: "bold",
   },
   h3: {
     fontFamily: "moon",
