@@ -15,6 +15,8 @@ import SignUp from "./screens/login/SignUp";
 import FullCalenderScreen from "./screens/FullCalenderScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 const Homename = "Home";
+import EventsScreen from "./screens/EventsScreen";
+import TasksScreen from "./screens/TasksScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -73,6 +75,8 @@ const CalendarScreenStack = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="calendar" component={Calendar} />
       <Stack.Screen name="FullCalenderScreen" component={FullCalenderScreen} />
+      <Stack.Screen name="EventsScreen" component={EventsScreen} />
+      <Stack.Screen name="TasksScreen" component={TasksScreen} />
     </Stack.Navigator>
   );
 };

@@ -30,6 +30,7 @@ const loadFonts = async () => {
 export default function Homescreen({ navigation }) {
   const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const today = new Date();
+
   const startOfWeek = new Date(
     today.getFullYear(),
     today.getMonth(),
@@ -92,15 +93,32 @@ export default function Homescreen({ navigation }) {
         </View>
         <ScrollView horizontal={true}>
           <View style={styles.weekcalender}>
-            {weekdays.map((weekday) => {
-              const dayNumber =
-                startOfWeek.getDate() + weekdays.indexOf(weekday);
+            {weekdays.map((weekday, index) => {
+              const dayNumber = startOfWeek.getDate() + index;
               const date = new Date(
                 startOfWeek.getFullYear(),
                 startOfWeek.getMonth(),
                 dayNumber
               );
-              const isToday = date.toDateString() === today.toDateString();
+              const isLastDayOfMonth =
+                dayNumber >
+                new Date(
+                  startOfWeek.getFullYear(),
+                  startOfWeek.getMonth() + 1,
+                  0
+                ).getDate();
+
+              if (isLastDayOfMonth) {
+                startOfWeek.setMonth(startOfWeek.getMonth() + 1);
+                startOfWeek.setDate(1);
+              }
+
+              const newDayNumber = isLastDayOfMonth ? 1 : dayNumber;
+              const isToday =
+                newDayNumber === today.getDate() &&
+                startOfWeek.getMonth() === today.getMonth() &&
+                startOfWeek.getFullYear() === today.getFullYear();
+
               return (
                 <View
                   key={weekday}
@@ -109,7 +127,7 @@ export default function Homescreen({ navigation }) {
                   <Text
                     style={[styles.darkpurple, isToday && styles.todayText]}
                   >
-                    {dayNumber}
+                    {newDayNumber}
                   </Text>
                   <Text
                     style={[styles.darkpurple, isToday && styles.todayText]}
@@ -154,7 +172,10 @@ export default function Homescreen({ navigation }) {
           }}
         >
           <Text style={styles.h2}> Upcoming events </Text>
-          <TouchableOpacity style={styles.link}>
+          <TouchableOpacity
+            style={styles.link}
+            onPress={() => navigation.navigate("EventsScreen")}
+          >
             <Text style={styles.linkText}>All events</Text>
             <Image
               source={arrowright}
@@ -235,7 +256,10 @@ export default function Homescreen({ navigation }) {
           }}
         >
           <Text style={styles.h2}> Upcoming tasks </Text>
-          <TouchableOpacity style={styles.link}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("TasksScreen")}
+            style={styles.link}
+          >
             <Text style={styles.linkText}>All tasks</Text>
             <Image
               source={arrowright}
@@ -413,7 +437,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     fontFamily: "novatica",
-    fontWeight: "bold",
   },
   h3: {
     fontFamily: "moon",
