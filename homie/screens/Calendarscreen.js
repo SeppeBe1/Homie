@@ -256,7 +256,10 @@ export default function Homescreen({ navigation }) {
           }}
         >
           <Text style={styles.h2}> Upcoming tasks </Text>
-          <TouchableOpacity style={styles.link}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("TasksScreen")}
+            style={styles.link}
+          >
             <Text style={styles.linkText}>All tasks</Text>
             <Image
               source={arrowright}

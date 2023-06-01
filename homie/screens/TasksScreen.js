@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import arrowLeft from "../assets/icons/arrowLeft.svg";
-import fun from "../assets/undraw_having_fun_re_vj4h 1.svg";
-import Event from "../compontents/Event";
+import tasks from "../assets/completed_tasks.svg";
+import Task from "../compontents/Task";
 
 import MoonFont from "../assets/fonts/Moon.otf";
 import Novatica from "../assets/fonts/Novatica-Bold.woff";
@@ -11,25 +11,13 @@ import Manrope from "../assets/fonts/Manrope-Bold.ttf";
 
 export default function FullCalenderScreen() {
   const navigation = useNavigation();
-  const events = [
-    {
-      date: { day: "12", month: "DEC" },
-      title: "Houseparty in Casa",
-      description: "A little party killed nobody",
-      image: require("../assets/girl.jpg"),
-    },
-    {
-      date: { day: "15", month: "DEC" },
-      title: "Outdoor Concert",
-      description: "Live music under the stars",
-      image: require("../assets/boy.jpg"),
-    },
-    {
-      date: { day: "18", month: "DEC" },
-      title: "Art Exhibition",
-      description: "Explore stunning artworks",
-      image: require("../assets/boy.jpg"),
-    },
+
+  // Define an array of tasks
+  const tasksArray = [
+    { description: "Task 1", image: require("../assets/girl.jpg") },
+    { description: "Task 2", image: require("../assets/girl.jpg") },
+    { description: "Task 3", image: require("../assets/girl.jpg") },
+    { description: "Task 4", image: require("../assets/girl.jpg") },
   ];
 
   return (
@@ -42,7 +30,11 @@ export default function FullCalenderScreen() {
           }}
         >
           <View
-            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+            style={{
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
             <View
               style={{
@@ -64,31 +56,34 @@ export default function FullCalenderScreen() {
                   flex: 1, // Take up remaining space
                 }}
               >
-                All planned events
+                All tasks
               </Text>
               <View style={{ width: 8, height: 15 }} />{" "}
               {/* Placeholder for spacing */}
             </View>
 
             <Image
-              source={fun}
+              source={tasks}
               style={{ width: 110, height: 100, marginTop: 20 }}
             />
             <TouchableOpacity style={[styles.button]}>
-              <Text style={styles.buttonText}>Plan an event</Text>
+              <Text style={styles.buttonText}>Add a task</Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
-      {events.map((event, index) => (
-        <Event
-          key={index}
-          date={event.date}
-          title={event.title}
-          description={event.description}
-          image={event.image}
-        />
-      ))}
+      <View>
+        <Text style={styles.headingText}>Your tasks</Text>
+        {tasksArray.map((task, index) => (
+          <Task key={index} description={task.description} image={task.image} />
+        ))}
+      </View>
+      <View>
+        <Text style={styles.headingText}>All tasks</Text>
+        {tasksArray.map((task, index) => (
+          <Task key={index} description={task.description} image={task.image} />
+        ))}
+      </View>
     </View>
   );
 }
@@ -97,7 +92,14 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: "#160635",
     height: 292,
-    paddingTop: 57,
+    paddingTop: 50,
+  },
+  headingText: {
+    fontFamily: "moon",
+    fontWeight: "bold",
+    fontSize: 15,
+    padding: 24,
+    paddingBottom: 10,
   },
 
   button: {
