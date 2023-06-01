@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as Font from "expo-font";
 import MoonFont from "../assets/fonts/Moon.otf";
 import Novatica from "../assets/fonts/Novatica-Bold.woff";
+import Manrope from "../assets/fonts/Manrope-Bold.ttf";
 import Residents from "../compontents/Residents";
 import Photos from "../compontents/Photos";
 import Houserules from "../compontents/Houserules";
@@ -23,6 +24,7 @@ const loadFonts = async () => {
   await Font.loadAsync({
     moon: MoonFont,
     novatica: Novatica,
+    manrope: Manrope,
   });
 };
 
@@ -152,11 +154,13 @@ const styles = StyleSheet.create({
   h1: {
     fontFamily: "novatica",
     fontSize: 20,
+    fontWeight: "bold",
     color: "white",
   },
   h2: {
     fontFamily: "novatica",
     fontSize: 16,
+    fontWeight: "bold",
     color: "#160635",
     paddingVertical: "30px",
     textAlign: "center",
