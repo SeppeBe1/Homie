@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
 
   h1: {
     fontFamily: "novatica",
+    fontWeight: "700",
     fontSize: 20,
     fontWeight: "bold",
     color: "white",

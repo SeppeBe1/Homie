@@ -5,7 +5,8 @@ import like from '../assets/like.png'
 import emptylike from '../assets/emptylike.png'
 import * as Font from 'expo-font';
 
-import HomieMomentPost from "../compontents/HomieMomentPost";
+import Nearby from "../compontents/Nearby";
+import Discover from '../compontents/Discover';
 
 import React, {useState, useEffect} from 'react'
 
@@ -18,20 +19,30 @@ const loadFonts = async () => {
     novaticaBold: require('../assets/fonts/Novatica-Bold.ttf')
   });
 }
+;
 
 export default function Behomiescreen({navigation}) {
 
-  const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [currentView, setCurrentView] = useState("Nearby");
+
+  const switchView = (view) => {
+    setCurrentView(view);
+  };
 
   useEffect(() => {
-    loadFonts().then(() => {
-      setFontsLoaded(true);
-    });
+    loadFonts();
   }, []);
 
-  if (!fontsLoaded) {
-    return null; // or a loading screen
-  }
+  const renderView = () => {
+    switch (currentView) {
+      case "Nearby":
+        return <Nearby />;
+      case "Discover":
+        return <Discover />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <View style={{ backgroundColor: '#160635', flex: 1 }}>
@@ -57,21 +68,45 @@ export default function Behomiescreen({navigation}) {
   <View style={{ flex: 1 }}>
   <ScrollView style={styles.homiefeed}>
     <View style={{ flexDirection:'row', justifyContent: 'space-between' }}>
-      <TouchableOpacity style={styles.btnFull} onPress={() => console.log('Nearby pressed!')}>
-        <Text style={{ color:'#fff', fontStyle: 'normal', fontWeight: '700', fontSize: '14px',  fontFamily:'moon'}}>Nearby</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.btnBorder} onPress={() => console.log('Discover pressed!')}>
-        <Text style={{ color:'#D9B2EE', fontStyle: 'normal', fontWeight: '700', fontSize: '14px',  fontFamily:'moon'}}>Discover</Text>
-      </TouchableOpacity>
-    </View>
-    <HomieMomentPost />
-    <View style={{ justifyContent:'center' }}>
-      <Image source={require('../assets/groupfoto.jpg')} style={{ width: '100%', height: 440, marginBottom: 40 }} />
-    </View>
-    <HomieMomentPost />
-    <View style={{ justifyContent:'center' }}>
-      <Image source={require('../assets/groupfoto.jpg')} style={{ width: '100%', height: 440, marginBottom: 40 }} />
-    </View>
+        
+          <TouchableOpacity
+            style={[
+              styles.btnBorder,
+              currentView === "Nearby" && styles.btnFull,
+            ]}
+            onPress={() => switchView("Nearby")}
+          >
+            <Text
+              style={[
+                styles.btnTextActive,
+                currentView === "Nearby" && styles.btnTextPassive,
+              ]}
+            >
+              Nearby
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.btnBorder,
+              currentView === "Discover" && styles.btnFull,
+            ]}
+            onPress={() => switchView("Discover")}
+          >
+            <Text
+              style={[
+                styles.btnTextActive,
+                currentView === "Discover" && styles.btnTextPassive,
+              ]}
+            >
+              Discover
+            </Text>
+          </TouchableOpacity>
+
+
+      </View>
+      {renderView()}
+
   </ScrollView>
   </View>
   </View>
@@ -145,8 +180,22 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingVertical: 15,
     textAlign: 'center',
+  }, 
+
+  btnTextActive: {
+    color:'#D9B2EE', 
+    fontStyle: 'normal', 
+    fontWeight: '700', 
+    fontSize: '14px',  
+    fontFamily:'moon'
+  }, 
+
+  btnTextPassive: {
+    color:'#fff', fontStyle: 'normal', fontWeight: '700', fontSize: '14px',  
+    fontFamily:'moon'
   }
 });
+
 
 /* import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native'
 import { Header, Avatar, Button } from 'react-native-elements'
