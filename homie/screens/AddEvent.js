@@ -18,6 +18,7 @@ import * as ImagePicker from "expo-image-picker";
 import MoonFont from "../assets/fonts/Moon.otf";
 import Novatica from "../assets/fonts/Novatica-Bold.woff";
 import Manrope from "../assets/fonts/Manrope-Bold.ttf";
+import { color } from "react-native-reanimated";
 
 export default function AddEvent() {
   const navigation = useNavigation();
@@ -106,13 +107,18 @@ export default function AddEvent() {
           </View>
         </TouchableOpacity>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Type a nice note for your coming homies"
-          value={eventNote}
-          onChangeText={setEventNote}
-        />
-        <Image source={{ uri: eventPicture }} style={styles.picture} />
+        <View>
+          <Text style={{ fontFamily: "manrope", paddingVertical: 10 }}>
+            Send a nice invitation to your homies....
+          </Text>
+          <TextInput
+            style={styles.inputBig}
+            placeholder="Type a note"
+            value={eventNote}
+            onChangeText={setEventNote}
+          />
+          <Image source={{ uri: eventPicture }} style={styles.picture} />
+        </View>
       </View>
 
       <View style={styles.buttoncontainer}>
@@ -205,6 +211,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   text: {
+    fontFamily: "manrope",
+    fontSize: 16,
+    color: "#A5A5A5",
+  },
+
+  inputBig: {
+    flex: 1,
+    flexDirection: "column",
+    height: 113,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 10,
+    backgroundColor: "white",
+    borderColor: "transparent",
     fontFamily: "manrope",
     fontSize: 16,
     color: "#A5A5A5",
