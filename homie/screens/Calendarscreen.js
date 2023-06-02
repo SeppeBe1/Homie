@@ -17,6 +17,8 @@ import checkbox from "../assets/icons/Checkbox_empty.svg";
 import arrowright from "../assets/icons/Arrow-Right.svg";
 import girl from "../assets/girl.jpg";
 import boy from "../assets/boy.jpg";
+import AddTask from "./AddTask";
+import AddEvent from "./AddEvent";
 
 // Load the font
 const loadFonts = async () => {
@@ -324,10 +326,16 @@ export default function Homescreen({ navigation }) {
       </View>
 
       <View style={{ display: "flex", flexDirection: "row", margin: 24 }}>
-        <TouchableOpacity style={[styles.button, { flex: 1, marginRight: 16 }]}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate(AddTask)}
+          style={[styles.button, { flex: 1, marginRight: 16 }]}
+        >
           <Text style={styles.buttonText}>Add task</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, { flex: 1 }]}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate(AddEvent)}
+          style={[styles.button, { flex: 1 }]}
+        >
           <Text style={styles.buttonText}>Add event</Text>
         </TouchableOpacity>
       </View>

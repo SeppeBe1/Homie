@@ -9,6 +9,8 @@ import Settingsscreen from "./screens/settings";
 import FullCalenderScreen from "./screens/FullCalenderScreen";
 import EventsScreen from "./screens/EventsScreen";
 import TasksScreen from "./screens/TasksScreen";
+import AddTask from "./screens/AddTask";
+import AddEvent from "./screens/AddEvent";
 
 const Stack = createStackNavigator();
 
@@ -46,6 +48,8 @@ const CalendarScreenStack = () => {
       <Stack.Screen name="FullCalenderScreen" component={FullCalenderScreen} />
       <Stack.Screen name="EventsScreen" component={EventsScreen} />
       <Stack.Screen name="TasksScreen" component={TasksScreen} />
+      <Stack.Screen name="AddTask" component={AddTask} />
+      <Stack.Screen name="AddEvent" component={AddEvent} />
     </Stack.Navigator>
   );
 };
