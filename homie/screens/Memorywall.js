@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   Dimensions,
+  Modal,
 } from 'react-native';
 
 import arrowLeft from '../assets/icons/arrowLeft.svg';
@@ -34,6 +35,8 @@ export default function Memorywall({ navigation }) {
 
   const [currentDate, setCurrentDate] = useState(new Date());
   const [screenWidth, setScreenWidth] = useState(Dimensions.get('window').width);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     const updateScreenWidth = () => {
@@ -73,7 +76,7 @@ export default function Memorywall({ navigation }) {
     const daysArray = getDaysInMonth(year, monthIndex);
 
     const renderDaysOfWeek = () => {
-      const daysOfWeek = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
+      const daysOfWeek = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
       return (
         <View style={styles.weekContainer}>
           {daysOfWeek.map((day) => (
@@ -85,7 +88,7 @@ export default function Memorywall({ navigation }) {
       );
     };
 
-    const renderCalendarDays = () => {
+       const renderCalendarDays = () => {
       const firstDayOfMonth = new Date(year, monthIndex, 1);
       const firstDayOfWeek = firstDayOfMonth.getDay(); // 0 is Sunday, 1 is Monday, etc.
       const emptyCells = Array(firstDayOfWeek).fill(null);
@@ -120,17 +123,24 @@ export default function Memorywall({ navigation }) {
                 const borderRadius = isPastDate ? 15 : 0;
 
                 return (
-                  <View
+                  <TouchableOpacity
                     key={cellIndex}
                     style={[
-                      styles.dateContainer, {backgroundColor, borderRadius}
+                      styles.dateContainer,
+                      { backgroundColor, borderRadius },
                     ]}
+                    onPress={() => {
+                      setSelectedImageIndex(cellIndex);
+                      setIsModalVisible(true);
+                    }}
                   >
                     {cell && isPastDate && (
                       <ImageBackground
                         source={require('../assets/grouppicture.jpg')}
-                        style={[styles.dateImage, {overflow: 'hidden', borderRadius},
-                      ]}
+                        style={[
+                          styles.dateImage,
+                          { overflow: 'hidden', borderRadius },
+                        ]}
                       >
                         <Text
                           style={[
@@ -143,15 +153,14 @@ export default function Memorywall({ navigation }) {
                       </ImageBackground>
                     )}
 
-                  {cell && !isPastDate && (
-                    <View style={styles.dateContent}>
-                      <Text style={[styles.day, styles.futureDay]}>
-                        {cell.getDate()}
-                      </Text>
-                    </View>
-                  )}
-
-                  </View>
+                    {cell && !isPastDate && (
+                      <View style={styles.dateContent}>
+                        <Text style={[styles.day, styles.futureDay]}>
+                          {cell.getDate()}
+                        </Text>
+                      </View>
+                    )}
+                  </TouchableOpacity>
                 );
               })}
             </View>
@@ -179,19 +188,20 @@ export default function Memorywall({ navigation }) {
     new Date(currentYear, currentMonth - 7, 1),
     new Date(currentYear, currentMonth - 8, 1),
     new Date(currentYear, currentMonth - 9, 1),
-
-
   ];
 
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.arrowContainer}>
-        <Image source={arrowLeft} style={{ width: 8, height: 15 }} />
-      </TouchableOpacity>
-      <Text style={styles.heading}>Memorywall</Text>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.arrowContainer}
+        >
+          <Image source={arrowLeft} style={{ width: 8, height: 15 }} />
+        </TouchableOpacity>
+        <Text style={styles.heading}>Memorywall</Text>
       </View>
-      <ScrollView style={{borderTopLeftRadius: '25px',  borderTopRightRadius: '25px'}}>
+      <ScrollView style={{ borderTopLeftRadius: 25, borderTopRightRadius: 25 }}>
         {monthsToShow.map((month, index) => (
           <View key={index} style={styles.calendarContainer}>
             <Text style={styles.month}>
@@ -204,6 +214,26 @@ export default function Memorywall({ navigation }) {
           </View>
         ))}
       </ScrollView>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={() => setIsModalVisible(false)}
+      >
+        <View style={styles.modal}>
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => setIsModalVisible(false)}
+          >
+            <Text style={styles.closeButtonText}>X</Text>
+
+          </TouchableOpacity>
+          <Image
+            source={require('../assets/grouppicture.jpg')}
+            style={[styles.modalImage, {borderRadius: 20}]}
+          />
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -239,7 +269,7 @@ const styles = StyleSheet.create({
   calendarContainer: {
     paddingHorizontal: 20,
     paddingVertical: 20,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   month: {
     fontFamily: 'moon',
@@ -247,7 +277,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'left',
     color: '#160635',
-    fontWeight:'bold',
+    fontWeight: 'bold',
   },
   weekContainer: {
     flexDirection: 'row',
@@ -266,19 +296,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     aspectRatio: 1,
-    marginBottom: '5px',
-    width: '38px', 
-    height: '58px',
-    borderRadius: '15px',
+    marginBottom: 5,
+    width: 38,
+    height: 58,
+    borderRadius: 15,
   },
   dateImage: {
     flex: 1,
     resizeMode: 'contain',
     justifyContent: 'center',
     alignItems: 'center',
-    width: '38px',
-    height: '58px',
-    borderRadius: '15px',
+    width: 38,
+    height: 58,
+    borderRadius: 15,
   },
   day: {
     fontFamily: 'manrope',
@@ -292,6 +322,34 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: '15px',
+    borderRadius: 15,
+  },
+  modal: {
+    flex: 1,
+    backgroundColor: '#16063580',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '38px'
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  closeButtonText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  modalImage: {
+    width: '316px',
+    height: '548px',
+    borderRadius: '20px'
   },
 });
