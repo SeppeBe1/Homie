@@ -19,6 +19,7 @@ import girl from "../assets/girl.jpg";
 import boy from "../assets/boy.jpg";
 import AddTask from "./AddTask";
 import AddEvent from "./AddEvent";
+import EventDetails from "./EventDetails.js";
 
 // Load the font
 const loadFonts = async () => {
@@ -27,6 +28,11 @@ const loadFonts = async () => {
     novatica: Novatica,
     manrope: Manrope,
   });
+};
+
+const handleEventPress = (event) => {
+  // Navigate to the detail page for the selected event
+  navigation.navigate("EventDetails", { event });
 };
 
 export default function Homescreen({ navigation }) {
@@ -196,57 +202,61 @@ export default function Homescreen({ navigation }) {
         }}
       >
         {events.map((event) => (
-          <View
+          <TouchableOpacity
             key={event.name}
-            style={{
-              marginHorizontal: 24,
-              display: "flex",
-              flexDirection: "row",
-              backgroundColor: "white",
-              paddingHorizontal: 11,
-              paddingVertical: 8,
-              borderRadius: 10,
-              alignItems: "flex-end",
-              gap: 29,
-            }}
+            onPress={() => navigation.navigate("EventDetails")}
           >
             <View
               style={{
+                marginHorizontal: 24,
                 display: "flex",
-                flexDirection: "column",
+                flexDirection: "row",
+                backgroundColor: "white",
+                paddingHorizontal: 11,
+                paddingVertical: 8,
+                borderRadius: 10,
+                alignItems: "flex-end",
+                gap: 29,
               }}
             >
-              <Text
+              <View
                 style={{
-                  fontFamily: "novatica",
-                  fontWeight: "bold",
-                  fontSize: 20,
+                  display: "flex",
+                  flexDirection: "column",
                 }}
               >
-                {event.day}
-              </Text>
-              <Text
+                <Text
+                  style={{
+                    fontFamily: "novatica",
+                    fontWeight: "bold",
+                    fontSize: 20,
+                  }}
+                >
+                  {event.day}
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: "novatica",
+                    fontWeight: "bold",
+                    fontSize: 10,
+                  }}
+                >
+                  {event.month}
+                </Text>
+              </View>
+              <Text style={styles.h3black}>{event.title}</Text>
+              <Image
+                source={event.image}
                 style={{
-                  fontFamily: "novatica",
-                  fontWeight: "bold",
-                  fontSize: 10,
+                  width: 40,
+                  height: 40,
+                  borderRadius: 24,
+                  alignSelf: "flex-end",
+                  marginLeft: "auto",
                 }}
-              >
-                {event.month}
-              </Text>
+              />
             </View>
-            <Text style={styles.h3black}>{event.title}</Text>
-            <Image
-              source={event.image}
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 24,
-                alignSelf: "flex-end",
-                marginLeft: "auto",
-              }}
-            />
-          </View>
+          </TouchableOpacity>
         ))}
       </View>
       <View style={{ marginTop: 20, paddingHorizontal: 24 }}>

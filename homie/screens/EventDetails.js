@@ -43,7 +43,7 @@ export default function EventDetails() {
         <Image source={users} style={styles.userImage} />
       </View>
       <View style={{ paddingHorizontal: "25px" }}>
-        <Text>
+        <Text style={{ fontFamily: "manrope" }}>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
           gravida tempus hendrerit. Proin finibus volutpat justo et condimentum.
           Etiam quam ex, finibus id interdum quis, aliquam ut ex. Maecenas
