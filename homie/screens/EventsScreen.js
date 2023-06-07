@@ -4,6 +4,7 @@ import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import arrowLeft from "../assets/icons/arrowLeft.svg";
 import fun from "../assets/undraw_having_fun_re_vj4h 1.svg";
 import Event from "../compontents/Event";
+import AddEvent from "./AddEvent";
 
 import MoonFont from "../assets/fonts/Moon.otf";
 import Novatica from "../assets/fonts/Novatica-Bold.woff";
@@ -74,7 +75,10 @@ export default function FullCalenderScreen() {
               source={fun}
               style={{ width: 110, height: 100, marginTop: 20 }}
             />
-            <TouchableOpacity style={[styles.button]}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(AddEvent)}
+              style={[styles.button]}
+            >
               <Text style={styles.buttonText}>Plan an event</Text>
             </TouchableOpacity>
           </View>

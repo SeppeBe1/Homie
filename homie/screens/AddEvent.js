@@ -101,21 +101,21 @@ export default function AddEvent() {
 
       <View style={styles.container}>
         <TextInput
-          style={styles.input}
+          style={styles.inputSmall}
           placeholder="Name of event"
           value={eventName}
           onChangeText={setEventName}
         />
 
         <TextInput
-          style={styles.input}
+          style={styles.inputSmall}
           placeholder="Description"
           value={eventDescription}
           onChangeText={setEventDescription}
         />
 
         <TextInput
-          style={styles.input}
+          style={styles.inputSmall}
           placeholder="Location of event"
           value={eventLocation}
           onChangeText={setEventLocation}
@@ -124,7 +124,7 @@ export default function AddEvent() {
         <CustomDatePicker />
 
         <TextInput
-          style={styles.input}
+          style={styles.inputSmall}
           placeholder="Start hour"
           value={eventHour}
           onChangeText={setEventHour}
@@ -179,8 +179,9 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
   },
-  input: {
+  inputSmall: {
     height: 56,
+    width: "100%",
     borderColor: "gray",
     borderWidth: 1,
     marginBottom: 10,
@@ -215,6 +216,7 @@ const styles = StyleSheet.create({
   },
   inputPicture: {
     flex: 1,
+    height: 56,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -229,6 +231,8 @@ const styles = StyleSheet.create({
     fontFamily: "manrope",
     fontSize: 16,
     color: "#A5A5A5",
+    height: 55,
+    paddingTop: 15,
   },
   inputBig: {
     height: 115,

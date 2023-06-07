@@ -49,7 +49,7 @@ export default function AddTask() {
           onChange={(date) => setStartDate(date)}
           dateFormat="dd/MM/yyyy"
           placeholderText="Choose Date"
-          className="datepicker-web"
+          className="datepickerWeb"
           style={{
             fontFamily: "moon",
             zIndex: 20000000,
@@ -95,7 +95,7 @@ export default function AddTask() {
 
       <View style={styles.container}>
         <TextInput
-          style={styles.input}
+          style={styles.inputSmall}
           placeholder="Name of event"
           value={eventName}
           onChangeText={setEventName}
@@ -159,8 +159,9 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
   },
-  input: {
+  inputSmall: {
     height: 56,
+    width: "100%",
     borderColor: "gray",
     borderWidth: 1,
     marginBottom: 10,
@@ -232,6 +233,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   datePickerContainer: {
+    fontFamily: "moon",
+    zIndex: 20000000,
+    border: "none",
+    width: "340px",
+    height: "55px",
+    borderRadius: "10px",
+    color: "#A5A5A5",
+  },
+  datepickerWeb: {
     fontFamily: "moon",
     zIndex: 20000000,
     border: "none",
