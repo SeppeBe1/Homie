@@ -4,6 +4,7 @@ import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import arrowLeft from "../assets/icons/arrowLeft.svg";
 import tasks from "../assets/completed_tasks.svg";
 import Task from "../compontents/Task";
+import AddTask from "./AddTask";
 
 import MoonFont from "../assets/fonts/Moon.otf";
 import Novatica from "../assets/fonts/Novatica-Bold.woff";
@@ -66,7 +67,10 @@ export default function FullCalenderScreen() {
               source={tasks}
               style={{ width: 110, height: 100, marginTop: 20 }}
             />
-            <TouchableOpacity style={[styles.button]}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(AddTask)}
+              style={[styles.button]}
+            >
               <Text style={styles.buttonText}>Add a task</Text>
             </TouchableOpacity>
           </View>

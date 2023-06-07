@@ -5,6 +5,8 @@ import arrowLeft from "../assets/icons/arrowLeft.svg";
 import MoonFont from "../assets/fonts/Moon.otf";
 import Novatica from "../assets/fonts/Novatica-Bold.woff";
 import Manrope from "../assets/fonts/Manrope-Bold.ttf";
+import AddTask from "./AddTask";
+import AddEvent from "./AddEvent";
 
 export default function FullCalenderScreen() {
   const navigation = useNavigation();
@@ -174,10 +176,16 @@ export default function FullCalenderScreen() {
           marginLeft: 190,
         }}
       >
-        <TouchableOpacity style={[styles.button, { flex: 1, marginRight: 12 }]}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate(AddTask)}
+          style={[styles.button, { flex: 1, marginRight: 12 }]}
+        >
           <Text style={styles.buttonText}>Add task</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, { flex: 1 }]}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate(AddEvent)}
+          style={[styles.button, { flex: 1 }]}
+        >
           <Text style={styles.buttonText}>Add event</Text>
         </TouchableOpacity>
       </View>
