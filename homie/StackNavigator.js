@@ -10,8 +10,8 @@ import { View } from "react-native";
 import Homeaccount from "./screens/Homeaccount";
 import Myprofilescreen from "./screens/MyProfilescreen";
 import Settingsscreen from "./screens/settings";
-import Login from "./screens/login/Login";
-import SignUp from "./screens/login/SignUp";
+// import Login from "./screens/login/Login";
+// import SignUp from "./screens/login/SignUp";
 import FullCalenderScreen from "./screens/FullCalenderScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 const Homename = "Home";
@@ -27,7 +27,7 @@ const Tab = createBottomTabNavigator();
 const LoginscreenStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen
+      {/* <Stack.Screen
         name="Login"
         component={Login}
         options={{ tabBarVisible: true }}
@@ -36,7 +36,7 @@ const LoginscreenStack = () => {
         name="SignUp"
         component={SignUp}
         options={{ tabBarVisible: true }}
-      />
+      /> */}
       <Stack.Screen
         name="TabNavigator"
         component={TabNavigator}
