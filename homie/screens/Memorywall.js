@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 
 import arrowLeft from '../assets/icons/arrowLeft.svg';
+import sharebtn from '../assets/icons/share.svg';
+import closebtn from '../assets/icons/cross.svg';
 
 import * as Font from 'expo-font';
 
@@ -136,7 +138,7 @@ export default function Memorywall({ navigation }) {
                   >
                     {cell && isPastDate && (
                       <ImageBackground
-                        source={require('../assets/grouppicture.jpg')}
+                        source={require('../assets/party.png')}
                         style={[
                           styles.dateImage,
                           { overflow: 'hidden', borderRadius },
@@ -222,15 +224,20 @@ export default function Memorywall({ navigation }) {
       >
         <View style={styles.modal}>
           <TouchableOpacity
+            style={styles.shareButton}
+            onPress={() => console.log('open share buttons')}
+          >
+            <Image source={sharebtn} style={{ width: 18, height: 20 }} />
+          </TouchableOpacity>
+          <TouchableOpacity
             style={styles.closeButton}
             onPress={() => setIsModalVisible(false)}
           >
-            <Text style={styles.closeButtonText}>X</Text>
-
+            <Image source={closebtn} style={{ width: 28, height: 28 }} />
           </TouchableOpacity>
           <Image
-            source={require('../assets/grouppicture.jpg')}
-            style={[styles.modalImage, {borderRadius: 20}]}
+            source={require('../assets/party.png')}
+            style={[styles.modalImage, { borderRadius: 20 }]}
           />
         </View>
       </Modal>
@@ -333,19 +340,19 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    top: 20,
-    right: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    top: 187,
+    right: 63,
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: 1,
   },
-  closeButtonText: {
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: 'bold',
+  shareButton: {
+    position: 'absolute',
+    left: 63,
+    top: 192,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1,
   },
   modalImage: {
     width: '316px',
