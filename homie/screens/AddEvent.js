@@ -55,6 +55,11 @@ export default function AddEvent() {
     hideDatePicker();
   };
 
+  const isEventNameFilled = eventName !== "";
+  const isEventDescriptionFilled = eventDescription !== "";
+  const isEventLocationFilled = eventLocation !== "";
+  const isEventHourFilled = eventHour !== "";
+
   const CustomDatePicker = () => {
     if (Platform.OS === "web") {
       return (
@@ -101,21 +106,30 @@ export default function AddEvent() {
 
       <View style={styles.container}>
         <TextInput
-          style={styles.inputSmall}
+          style={[
+            styles.inputSmall,
+            { color: isEventNameFilled ? "black" : "#A5A5A5" },
+          ]}
           placeholder="Name of event"
           value={eventName}
           onChangeText={setEventName}
         />
 
         <TextInput
-          style={styles.inputSmall}
+          style={[
+            styles.inputSmall,
+            { color: isEventDescriptionFilled ? "black" : "#A5A5A5" },
+          ]}
           placeholder="Description"
           value={eventDescription}
           onChangeText={setEventDescription}
         />
 
         <TextInput
-          style={styles.inputSmall}
+          style={[
+            styles.inputSmall,
+            { color: isEventLocationFilled ? "black" : "#A5A5A5" },
+          ]}
           placeholder="Location of event"
           value={eventLocation}
           onChangeText={setEventLocation}
@@ -124,7 +138,10 @@ export default function AddEvent() {
         <CustomDatePicker />
 
         <TextInput
-          style={styles.inputSmall}
+          style={[
+            styles.inputSmall,
+            { color: isEventHourFilled ? "black" : "#A5A5A5" },
+          ]}
           placeholder="Start hour"
           value={eventHour}
           onChangeText={setEventHour}
@@ -191,7 +208,6 @@ const styles = StyleSheet.create({
     borderColor: "transparent",
     fontFamily: "manrope",
     fontSize: 16,
-    color: "#A5A5A5",
   },
   button: {
     backgroundColor: "#B900F4",
@@ -241,24 +257,7 @@ const styles = StyleSheet.create({
     borderColor: "transparent",
     fontFamily: "manrope",
     fontSize: 16,
-    color: "black", // Set the color of the entered text
+    color: "black",
     padding: 15,
   },
-  // datePickerContainer: {
-  //   flexDirection: "row",
-  //   marginBottom: 10,
-  //   paddingHorizontal: 10,
-  //   borderRadius: 10,
-  //   backgroundColor: "white",
-  //   alignItems: "center",
-  //   height: 56,
-  //   borderWidth: 1,
-  //   borderColor: "gray",
-  //   fontFamily: "manrope",
-  //   fontSize: 16,
-  //   color: "#A5A5A5",
-  // },
-  // datePickerButtonText: {
-  //   fontFamily: "moon",
-  // },
 });

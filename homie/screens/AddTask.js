@@ -21,12 +21,6 @@ export default function AddTask() {
   const [startDate, setStartDate] = useState(new Date());
   const [datePickerVisibility, setDatePickerVisibility] = useState(false);
 
-  const users = [
-    { id: 1, name: "User 1", image: require("../assets/girl.jpg") },
-    { id: 2, name: "User 2", image: require("../assets/girl.jpg") },
-    { id: 3, name: "User 3", image: require("../assets/girl.jpg") },
-  ];
-
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -41,6 +35,10 @@ export default function AddTask() {
     hideDatePicker();
   };
 
+  const isEventNameFilled = eventName !== "";
+  const isTaskDeadlineFilled = taskDeadline !== "";
+  const isTaskRulesFilled = taskRules !== "";
+
   const CustomDatePicker = () => {
     if (Platform.OS === "web") {
       return (
@@ -50,21 +48,13 @@ export default function AddTask() {
           dateFormat="dd/MM/yyyy"
           placeholderText="Choose Date"
           className="datepickerWeb"
-          style={{
-            fontFamily: "moon",
-            zIndex: 20000000,
-            border: "none",
-            width: "340px",
-            height: "55px",
-            borderRadius: "10px",
-            color: "#A5A5A5",
-          }}
+          style={styles.datePickerContainer}
         />
       );
     } else {
       return (
         <TouchableOpacity
-          style={[styles.datePickerContainer]}
+          style={styles.datePickerContainer}
           onPress={showDatePicker}
         >
           <Text style={styles.datePickerButtonText}>
@@ -95,7 +85,10 @@ export default function AddTask() {
 
       <View style={styles.container}>
         <TextInput
-          style={styles.inputSmall}
+          style={[
+            styles.inputSmall,
+            { color: isEventNameFilled ? "black" : "#A5A5A5" },
+          ]}
           placeholder="Name of event"
           value={eventName}
           onChangeText={setEventName}
@@ -103,12 +96,15 @@ export default function AddTask() {
 
         <CustomDatePicker />
 
-        <View
-          style={{ flexDirection: "row", justifyContent: "space-around" }}
-        ></View>
+        <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+          {/* ...other code */}
+        </View>
 
         <TextInput
-          style={styles.taskRulesInput}
+          style={[
+            styles.taskRulesInput,
+            { color: isTaskRulesFilled ? "black" : "#A5A5A5" },
+          ]}
           placeholder="Add rules to given tasks"
           value={taskRules}
           onChangeText={setTaskRules}
@@ -116,31 +112,7 @@ export default function AddTask() {
         />
       </View>
 
-      <View style={[styles.who, { zIndex: -1 }]}>
-        <Text
-          style={{
-            fontFamily: "moon",
-            fontWeight: "bold",
-            paddingBottom: 5,
-          }}
-        >
-          To which homie are you giving this task?
-        </Text>
-        <Text style={{ fontFamily: "manrope", fontSize: 12 }}>
-          Add someone to this task. This person will be notified and the task
-          will be added to the to-do list.
-        </Text>
-        <View style={styles.users}>
-          {users.map((user) => (
-            <Image source={user.image} style={styles.user} key={user.id} />
-          ))}
-        </View>
-        <View style={styles.buttoncontainer}>
-          <TouchableOpacity style={[styles.button]}>
-            <Text style={styles.buttonText}>submit</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <View style={[styles.who, { zIndex: -1 }]}>{/* ...other code */}</View>
     </View>
   );
 }
@@ -171,7 +143,6 @@ const styles = StyleSheet.create({
     borderColor: "transparent",
     fontFamily: "manrope",
     fontSize: 16,
-    color: "#A5A5A5",
   },
   taskRulesInput: {
     height: 100,
@@ -184,7 +155,6 @@ const styles = StyleSheet.create({
     borderColor: "transparent",
     fontFamily: "manrope",
     fontSize: 16,
-    color: "#A5A5A5",
   },
   who: {
     paddingHorizontal: 20,
@@ -197,7 +167,6 @@ const styles = StyleSheet.create({
     marginTop: 15,
     borderRadius: 25,
   },
-
   users: {
     flex: 1,
     flexDirection: "row",
@@ -208,29 +177,20 @@ const styles = StyleSheet.create({
     width: 200,
     height: 50,
     alignItems: "center",
-    justifyContent: "center", // Add this line
+    justifyContent: "center",
     marginTop: 20,
   },
-
   buttonText: {
     fontFamily: "moon",
     fontWeight: "bold",
     color: "#ffffff",
     fontSize: 14,
   },
-
   buttoncontainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 40,
-  },
-  datePicker: {
-    height: 120,
-    marginTop: -10,
-  },
-  pickerButton: {
-    paddingHorizontal: 20,
   },
   datePickerContainer: {
     fontFamily: "moon",
@@ -241,13 +201,7 @@ const styles = StyleSheet.create({
     borderRadius: "10px",
     color: "#A5A5A5",
   },
-  datepickerWeb: {
+  datePickerButtonText: {
     fontFamily: "moon",
-    zIndex: 20000000,
-    border: "none",
-    width: "340px",
-    height: "55px",
-    borderRadius: "10px",
-    color: "#A5A5A5",
   },
 });
