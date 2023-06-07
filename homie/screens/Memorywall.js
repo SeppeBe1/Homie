@@ -195,7 +195,7 @@ export default function Memorywall({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <TouchableOpacity
+      <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.arrowContainer}
         >
@@ -348,8 +348,8 @@ const styles = StyleSheet.create({
   },
   shareButton: {
     position: 'absolute',
-    left: 63,
-    top: 192,
+    left: 68,
+    top: 190,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1,
