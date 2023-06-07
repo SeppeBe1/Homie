@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import * as Font from "expo-font";
 import MoonFont from "../assets/fonts/Moon.otf";
 import Novatica from "../assets/fonts/Novatica-Bold.woff";
@@ -11,15 +11,16 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  Modal,
 } from "react-native";
 
 import checkbox from "../assets/icons/Checkbox_empty.svg";
 import arrowright from "../assets/icons/Arrow-Right.svg";
+import crossIcon from "../assets/icons/close.svg";
 import girl from "../assets/girl.jpg";
 import boy from "../assets/boy.jpg";
 import AddTask from "./AddTask";
 import AddEvent from "./AddEvent";
-import EventDetails from "./EventDetails.js";
 
 // Load the font
 const loadFonts = async () => {
@@ -28,11 +29,6 @@ const loadFonts = async () => {
     novatica: Novatica,
     manrope: Manrope,
   });
-};
-
-const handleEventPress = (event) => {
-  // Navigate to the detail page for the selected event
-  navigation.navigate("EventDetails", { event });
 };
 
 export default function Homescreen({ navigation }) {
@@ -75,9 +71,19 @@ export default function Homescreen({ navigation }) {
     },
   ];
 
+  const [isPopUpVisible, setIsPopUpVisible] = useState(false);
+
   useEffect(() => {
     loadFonts();
   }, []);
+
+  const togglePopUp = () => {
+    setIsPopUpVisible(!isPopUpVisible);
+  };
+
+  const handleEventPress = (event) => {
+    navigation.navigate("EventDetails", { event });
+  };
 
   return (
     <View style={{ backgroundColor: "#F5F5F5" }}>
@@ -153,10 +159,7 @@ export default function Homescreen({ navigation }) {
         {tasks.map((task) => (
           <View key={task.id} style={styles.tasks}>
             <View>
-              <Image
-                source={checkbox}
-                style={{ width: "16px", height: "16px" }}
-              />
+              <Image source={checkbox} style={{ width: 16, height: 16 }} />
             </View>
             <View>
               <Text
@@ -185,10 +188,7 @@ export default function Homescreen({ navigation }) {
             onPress={() => navigation.navigate("EventsScreen")}
           >
             <Text style={styles.linkText}>All events</Text>
-            <Image
-              source={arrowright}
-              style={{ width: "10px", height: "6px" }}
-            />
+            <Image source={arrowright} style={{ width: 10, height: 6 }} />
           </TouchableOpacity>
         </View>
       </View>
@@ -203,8 +203,8 @@ export default function Homescreen({ navigation }) {
       >
         {events.map((event) => (
           <TouchableOpacity
-            key={event.name}
-            onPress={() => navigation.navigate("EventDetails")}
+            key={event.title}
+            onPress={() => handleEventPress(event)}
           >
             <View
               style={{
@@ -273,10 +273,7 @@ export default function Homescreen({ navigation }) {
             style={styles.link}
           >
             <Text style={styles.linkText}>All tasks</Text>
-            <Image
-              source={arrowright}
-              style={{ width: "10px", height: "6px" }}
-            />
+            <Image source={arrowright} style={{ width: 10, height: 6 }} />
           </TouchableOpacity>
         </View>
       </View>
@@ -290,60 +287,135 @@ export default function Homescreen({ navigation }) {
         }}
       >
         {tasks.map((task) => (
-          <View
-            key={task.name}
-            style={{
-              marginHorizontal: 24,
-              display: "flex",
-              flexDirection: "row",
-              backgroundColor: "white",
-              paddingHorizontal: 11,
-              paddingVertical: 8,
-              borderRadius: 10,
-              alignItems: "center",
-              gap: 29,
-              alignItems: "flex-end",
-            }}
-          >
+          <TouchableOpacity key={task.id} onPress={togglePopUp}>
             <View
               style={{
+                marginHorizontal: 24,
                 display: "flex",
-                flexDirection: "column",
+                flexDirection: "row",
+                backgroundColor: "white",
+                paddingHorizontal: 11,
+                paddingVertical: 8,
+                borderRadius: 10,
+                alignItems: "center",
+                gap: 29,
+                alignItems: "flex-end",
               }}
             >
-              <Text
+              <View
                 style={{
-                  fontFamily: "novatica",
-                  fontWeight: "bold",
-                  fontSize: 20,
+                  display: "flex",
+                  flexDirection: "column",
                 }}
               >
-                {task.day}
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "novatica",
-                  fontWeight: "bold",
-                  fontSize: 10,
-                }}
-              >
-                {task.month}
-              </Text>
+                <Text
+                  style={{
+                    fontFamily: "novatica",
+                    fontWeight: "bold",
+                    fontSize: 20,
+                  }}
+                >
+                  {task.day}
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: "novatica",
+                    fontWeight: "bold",
+                    fontSize: 10,
+                  }}
+                >
+                  {task.month}
+                </Text>
+              </View>
+              <Text style={styles.h3black}>{task.name}</Text>
             </View>
-            <Text style={styles.h3black}>{task.name}</Text>
-          </View>
+          </TouchableOpacity>
         ))}
       </View>
 
+      <Modal visible={isPopUpVisible} animationType="fade" transparent>
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(22, 6, 53, 0.5)",
+          }}
+          onPress={togglePopUp}
+        >
+          <View
+            style={{
+              backgroundColor: "white",
+              width: 342,
+              height: 325,
+              borderRadius: 10,
+              textAlign: "center",
+              padding: 65,
+            }}
+          >
+            <TouchableOpacity
+              style={{ position: "absolute", top: 16, right: 16 }}
+              onPress={togglePopUp}
+            >
+              <Image source={crossIcon} style={{ width: 30, height: 30 }} />
+            </TouchableOpacity>
+            <View style={styles.popupText}>
+              <View style={{ flex: 1, flexDirection: "column" }}>
+                <Text
+                  style={{
+                    fontFamily: "novatica",
+                    fontWeight: "bold",
+                    fontSize: 40,
+                    color: "#160635",
+                  }}
+                >
+                  14
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: "novatica",
+                    fontSize: 20,
+                    color: "#160635",
+                  }}
+                >
+                  Dec
+                </Text>
+              </View>
+
+              <Text
+                style={{
+                  fontFamily: "moon",
+                  fontWeight: "bold",
+                  fontSize: 13,
+                  color: "#160635",
+                }}
+              >
+                Taking out the dustbin
+              </Text>
+              <Text
+                style={{
+                  fontFamily: "manrope",
+                  fontSize: 13,
+                  color: "black",
+                }}
+              >
+                "Both the PMD bag, residual waste bag and GFT bin have to be put
+                outside. You can put it outside from 8pm. Don't forget!"
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      </Modal>
+
       <View style={{ display: "flex", flexDirection: "row", margin: 24 }}>
         <TouchableOpacity
-          onPress={() => navigation.navigate(AddTask)}
+          onPress={() => navigation.navigate("AddTask")}
           style={[styles.button, { flex: 1, marginRight: 16 }]}
         >
           <Text style={styles.buttonText}>Add task</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate(AddEvent)}
+          onPress={() => navigation.navigate("AddEvent")}
           style={[styles.button, { flex: 1 }]}
         >
           <Text style={styles.buttonText}>Add event</Text>
@@ -413,6 +485,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
+  popupText: {
+    flex: 1,
+    flexDirection: "column",
+    gap: 20,
+  },
+
   button: {
     backgroundColor: "#B900F4",
     borderRadius: 35,
@@ -439,9 +517,9 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     backgroundColor: "#FFFFFF",
     color: "white",
-    width: "53px",
-    height: "64px",
-    borderRadius: "15px",
+    width: 53,
+    height: 64,
+    borderRadius: 15,
     justifyContent: "center",
     textAlign: "center",
   },
