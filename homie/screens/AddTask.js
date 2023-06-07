@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import DateTimePicker from "@react-native-community/datetimepicker";
-
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import {
   Text,
   View,
@@ -9,37 +9,17 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
-  Pressable,
   Platform,
 } from "react-native";
 import arrowLeft from "../assets/icons/arrowLeft.svg";
-
-import MoonFont from "../assets/fonts/Moon.otf";
-import Novatica from "../assets/fonts/Novatica-Bold.woff";
-import Manrope from "../assets/fonts/Manrope-Bold.ttf";
 
 export default function AddTask() {
   const navigation = useNavigation();
   const [eventName, setEventName] = useState("");
   const [taskDeadline, setTaskDeadline] = useState("");
   const [taskRules, setTaskRules] = useState("");
-  const [date, setDate] = useState(new Date());
-  const [showPicker, setShowPicker] = useState(false);
-  const toggleDatepicker = () => {
-    setShowPicker(!showPicker);
-  };
-  const onChange = ({ type }, selectedDate) => {
-    if (type === "set") {
-      const currentDate = selectedDate || date;
-      setDate(currentDate);
-      if (Platform.OS === "android") {
-        toggleDatepicker();
-        setTaskDeadline(currentDate.toDateString());
-      }
-    } else {
-      toggleDatepicker();
-    }
-  };
+  const [startDate, setStartDate] = useState(new Date());
+  const [datePickerVisibility, setDatePickerVisibility] = useState(false);
 
   const users = [
     { id: 1, name: "User 1", image: require("../assets/girl.jpg") },
@@ -47,9 +27,44 @@ export default function AddTask() {
     { id: 3, name: "User 3", image: require("../assets/girl.jpg") },
   ];
 
-  const confirmIOSDate = () => {
-    setTaskDeadline(date.toDateString());
-    toggleDatepicker();
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    console.warn("A date has been picked: ", date);
+    setTaskDeadline(date.toLocaleDateString()); // convert date to a string in local date format
+    hideDatePicker();
+  };
+
+  const CustomDatePicker = () => {
+    if (Platform.OS === "web") {
+      return (
+        <DatePicker
+          selected={startDate}
+          onChange={(date) => setStartDate(date)}
+          dateFormat="dd/MM/yyyy"
+          placeholderText="Choose Date"
+          className="datepicker-web"
+          style={{ fontFamily: "moon", zIndex: 100000 }}
+        />
+      );
+    } else {
+      return (
+        <TouchableOpacity
+          style={styles.datePickerContainer}
+          onPress={showDatePicker}
+        >
+          <Text style={styles.datePickerButtonText}>
+            {taskDeadline ? taskDeadline : "Deadline of task"}
+          </Text>
+        </TouchableOpacity>
+      );
+    }
   };
 
   return (
@@ -78,57 +93,7 @@ export default function AddTask() {
           onChangeText={setEventName}
         />
 
-        {!showPicker && (
-          <Pressable onPress={toggleDatepicker}>
-            <TextInput
-              style={styles.input}
-              placeholder="Deadline of task"
-              value={taskDeadline}
-              onChangeText={setTaskDeadline}
-              editable={false}
-              onPressIn={toggleDatepicker}
-            />
-          </Pressable>
-        )}
-
-        {showPicker && Platform.OS !== "web" && (
-          <DateTimePicker
-            mode="date"
-            display="spinner"
-            value={date}
-            onChange={onChange}
-            style={styles.datePicker}
-          />
-        )}
-
-        {showPicker && Platform.OS === "ios" && (
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-around" }}
-          >
-            <TouchableOpacity
-              style={[
-                styles.button,
-                styles.pickerButton,
-                { backgroundColor: "white" },
-              ]}
-              onPress={toggleDatepicker}
-            >
-              <Text style={[styles.buttonText, { color: "pink" }]}>cancel</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.button,
-                styles.pickerButton,
-                { backgroundColor: "white" },
-              ]}
-              onPress={confirmIOSDate}
-            >
-              <Text style={[styles.buttonText, { color: "pink" }]}>
-                confirm
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
+        <CustomDatePicker />
 
         <View
           style={{ flexDirection: "row", justifyContent: "space-around" }}

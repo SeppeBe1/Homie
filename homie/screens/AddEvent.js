@@ -1,34 +1,33 @@
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-
 import {
+  Platform,
   Text,
   View,
   StyleSheet,
   TouchableOpacity,
   Image,
   TextInput,
-  Platform,
 } from "react-native";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 import arrowLeft from "../assets/icons/arrowLeft.svg";
 import upload from "../assets/icons/upload.svg";
 
 import * as ImagePicker from "expo-image-picker";
 
-import MoonFont from "../assets/fonts/Moon.otf";
-import Novatica from "../assets/fonts/Novatica-Bold.woff";
-import Manrope from "../assets/fonts/Manrope-Bold.ttf";
-import { color } from "react-native-reanimated";
-
 export default function AddEvent() {
+  const [startDate, setStartDate] = useState(new Date());
   const navigation = useNavigation();
   const [eventName, setEventName] = useState("");
   const [eventDescription, setEventDescription] = useState("");
   const [eventLocation, setEventLocation] = useState("");
-  const [eventDate, setEventDate] = useState("");
   const [eventHour, setEventHour] = useState("");
   const [eventPicture, setEventPicture] = useState("");
   const [eventNote, setEventNote] = useState("");
+  const [eventDate, setEventDate] = useState("");
+
   const handleSelectPicture = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
@@ -39,6 +38,46 @@ export default function AddEvent() {
     const result = await ImagePicker.launchImageLibraryAsync();
     if (!result.cancelled) {
       setEventPicture(result.uri);
+    }
+  };
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    console.warn("A date has been picked: ", date);
+    setEventDate(date.toLocaleDateString()); // convert date to a string in local date format
+    hideDatePicker();
+  };
+
+  const CustomDatePicker = () => {
+    if (Platform.OS === "web") {
+      return (
+        <DatePicker
+          selected={startDate}
+          onChange={(date) => setStartDate(date)}
+          dateFormat="dd/MM/yyyy"
+          placeholderText="Choose Date"
+          className="datepicker-web"
+          style={{ fontFamily: "moon", zIndex: 10000 }}
+        />
+      );
+    } else {
+      return (
+        <TouchableOpacity
+          style={styles.datePickerContainer}
+          onPress={showDatePicker}
+        >
+          <Text style={styles.datePickerButtonText}>
+            {eventDate ? eventDate : "Choose Date"}
+          </Text>
+        </TouchableOpacity>
+      );
     }
   };
 
@@ -82,12 +121,7 @@ export default function AddEvent() {
           onChangeText={setEventLocation}
         />
 
-        <TextInput
-          style={styles.input}
-          placeholder="Date of event"
-          value={eventDate}
-          onChangeText={setEventDate}
-        />
+        <CustomDatePicker />
 
         <TextInput
           style={styles.input}
@@ -102,7 +136,6 @@ export default function AddEvent() {
         >
           <View style={styles.inputPicture}>
             <Text style={styles.text}>Add a fun picture</Text>
-
             <Image source={upload} style={{ width: 30, height: 30 }} />
           </View>
         </TouchableOpacity>
@@ -113,9 +146,11 @@ export default function AddEvent() {
           </Text>
           <TextInput
             style={styles.inputBig}
+            placeholderTextColor="#A5A5A5"
             placeholder="Type a note"
             value={eventNote}
             onChangeText={setEventNote}
+            multiline
           />
           <Image source={{ uri: eventPicture }} style={styles.picture} />
         </View>
@@ -157,53 +192,33 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#A5A5A5",
   },
-
   button: {
     backgroundColor: "#B900F4",
     borderRadius: 30,
     width: 200,
     height: 50,
     alignItems: "center",
-    justifyContent: "center", // Add this line
+    justifyContent: "center",
     marginTop: 20,
   },
-
   buttonText: {
     fontFamily: "moon",
     fontWeight: "bold",
     color: "#ffffff",
     fontSize: 14,
   },
-
   buttoncontainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 40,
   },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderColor: "gray",
-    borderWidth: 1,
-    borderRadius: 10,
-  },
-
-  buttonPicture: {
-    height: 56,
-  },
-  buttonPictureText: {
-    fontFamily: "moon",
-    fontWeight: "bold",
-    color: "#ffffff",
-    fontSize: 14,
-  },
   inputPicture: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    borderColor: "transparant",
+    borderColor: "transparent",
     marginBottom: 10,
     borderRadius: 10,
     backgroundColor: "white",
@@ -215,18 +230,31 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#A5A5A5",
   },
-
   inputBig: {
-    flex: 1,
-    flexDirection: "column",
-    height: 113,
-    borderColor: "gray",
-    borderWidth: 1,
+    height: 115,
     borderRadius: 10,
     backgroundColor: "white",
     borderColor: "transparent",
     fontFamily: "manrope",
     fontSize: 16,
-    color: "#A5A5A5",
+    color: "black", // Set the color of the entered text
+    padding: 15,
   },
+  // datePickerContainer: {
+  //   flexDirection: "row",
+  //   marginBottom: 10,
+  //   paddingHorizontal: 10,
+  //   borderRadius: 10,
+  //   backgroundColor: "white",
+  //   alignItems: "center",
+  //   height: 56,
+  //   borderWidth: 1,
+  //   borderColor: "gray",
+  //   fontFamily: "manrope",
+  //   fontSize: 16,
+  //   color: "#A5A5A5",
+  // },
+  // datePickerButtonText: {
+  //   fontFamily: "moon",
+  // },
 });
