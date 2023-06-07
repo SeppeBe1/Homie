@@ -8,7 +8,7 @@ const Homename = 'Home';
 const Costsplittername = 'Costsplitter';
 const Behomiename = 'Behomie';
 const Calendarname = 'Calendar';
-const Login = 'Login';
+//const Login = 'Login';
 const Homeaccountname = 'Homeaccount';
 const Myprofilename = 'MyProfile';
 

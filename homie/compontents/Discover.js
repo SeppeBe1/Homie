@@ -25,7 +25,7 @@ export default class Discover extends Component {
     </View>
 </View>
   <View style={{ justifyContent:'center' }}>
-  <Image source={require('../assets/groupfoto.jpg')} style={{ width: 410, height: 563.75, marginBottom: 40 }} />
+  <Image source={require('../assets/groupfoto.jpg')} style={{ width: 340, height: 460, marginBottom: 40 }} />
   </View>
   </View> 
     );

@@ -9,6 +9,7 @@ import Calendar from "./screens/Calendarscreen";
 import { View } from "react-native";
 import Homeaccount from "./screens/Homeaccount";
 import Myprofilescreen from "./screens/MyProfilescreen";
+import Memorywall from "./screens/Memorywall";
 import Settingsscreen from "./screens/settings";
 import Login from "./screens/login/Login";
 import SignUp from "./screens/login/SignUp";
@@ -61,6 +62,7 @@ const BehomiescreenStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="behomie" component={Behomie} />
+      <Stack.Screen name="memorywall" component={Memorywall} />
     </Stack.Navigator>
   );
 };
