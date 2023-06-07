@@ -50,13 +50,21 @@ export default function AddTask() {
           dateFormat="dd/MM/yyyy"
           placeholderText="Choose Date"
           className="datepicker-web"
-          style={{ fontFamily: "moon", zIndex: 100000 }}
+          style={{
+            fontFamily: "moon",
+            zIndex: 20000000,
+            border: "none",
+            width: "340px",
+            height: "55px",
+            borderRadius: "10px",
+            color: "#A5A5A5",
+          }}
         />
       );
     } else {
       return (
         <TouchableOpacity
-          style={styles.datePickerContainer}
+          style={[styles.datePickerContainer]}
           onPress={showDatePicker}
         >
           <Text style={styles.datePickerButtonText}>
@@ -108,7 +116,7 @@ export default function AddTask() {
         />
       </View>
 
-      <View style={styles.who}>
+      <View style={[styles.who, { zIndex: -1 }]}>
         <Text
           style={{
             fontFamily: "moon",
@@ -222,5 +230,14 @@ const styles = StyleSheet.create({
   },
   pickerButton: {
     paddingHorizontal: 20,
+  },
+  datePickerContainer: {
+    fontFamily: "moon",
+    zIndex: 20000000,
+    border: "none",
+    width: "340px",
+    height: "55px",
+    borderRadius: "10px",
+    color: "#A5A5A5",
   },
 });
