@@ -1,14 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import arrowLeft from "../assets/icons/arrowLeft.svg";
 import fun from "../assets/undraw_having_fun_re_vj4h 1.svg";
 import Event from "../compontents/Event";
 import AddEvent from "./AddEvent";
-
-import MoonFont from "../assets/fonts/Moon.otf";
-import Novatica from "../assets/fonts/Novatica-Bold.woff";
-import Manrope from "../assets/fonts/Manrope-Bold.ttf";
+import EventDetails from "./EventDetails.js";
 
 export default function FullCalenderScreen() {
   const navigation = useNavigation();
@@ -36,12 +33,7 @@ export default function FullCalenderScreen() {
   return (
     <View>
       <View style={styles.header}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "flex-start",
-          }}
-        >
+        <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
           <View
             style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
           >
@@ -62,21 +54,19 @@ export default function FullCalenderScreen() {
                   fontFamily: "novaticaBold",
                   fontSize: 20,
                   textAlign: "center",
-                  flex: 1, // Take up remaining space
+                  flex: 1,
                 }}
               >
                 All planned events
               </Text>
-              <View style={{ width: 8, height: 15 }} />{" "}
-              {/* Placeholder for spacing */}
+              <View style={{ width: 8, height: 15 }} />
             </View>
-
             <Image
               source={fun}
               style={{ width: 110, height: 100, marginTop: 20 }}
             />
             <TouchableOpacity
-              onPress={() => navigation.navigate(AddEvent)}
+              onPress={() => navigation.navigate("AddEvent")}
               style={[styles.button]}
             >
               <Text style={styles.buttonText}>Plan an event</Text>
@@ -84,15 +74,22 @@ export default function FullCalenderScreen() {
           </View>
         </View>
       </View>
-      {events.map((event, index) => (
-        <Event
-          key={index}
-          date={event.date}
-          title={event.title}
-          description={event.description}
-          image={event.image}
-        />
-      ))}
+      <View style={styles.eventContainer}>
+        {events.map((event, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => navigation.navigate("EventDetails")}
+          >
+            <Event
+              date={event.date}
+              title={event.title}
+              description={event.description}
+              image={event.image}
+              navigation={navigation}
+            />
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   );
 }
@@ -110,7 +107,7 @@ const styles = StyleSheet.create({
     width: 194,
     height: 50,
     alignItems: "center",
-    justifyContent: "center", // Add this line
+    justifyContent: "center",
     marginTop: 20,
   },
 
@@ -119,5 +116,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#ffffff",
     fontSize: 14,
+  },
+
+  eventContainer: {
+    marginTop: 20,
   },
 });

@@ -14,6 +14,8 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import arrowLeft from "../assets/icons/arrowLeft.svg";
 import upload from "../assets/icons/upload.svg";
+import dropdown from "../assets/icons/dropdown.svg";
+import manrope from "../assets/fonts/Manrope-Regular.ttf";
 
 import * as ImagePicker from "expo-image-picker";
 
@@ -81,6 +83,7 @@ export default function AddEvent() {
           <Text style={styles.datePickerButtonText}>
             {eventDate ? eventDate : "Choose Date"}
           </Text>
+          <Image source={dropdown} style={styles.dropdownArrow} />
         </TouchableOpacity>
       );
     }
@@ -259,5 +262,30 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "black",
     padding: 15,
+  },
+  datePickerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    height: 56,
+    backgroundColor: "white",
+  },
+  datePickerButtonText: {
+    fontFamily: "moon",
+    flex: 1,
+    color: "#A5A5A5",
+  },
+  dropdownArrow: {
+    width: 20,
+    height: 20,
+  },
+  picture: {
+    width: 150,
+    height: 150,
+    marginTop: 10,
+    borderRadius: 10,
   },
 });
