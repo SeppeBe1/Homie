@@ -8,9 +8,6 @@ const Homename = 'Home';
 const Costsplittername = 'Costsplitter';
 const Behomiename = 'Behomie';
 const Calendarname = 'Calendar';
-//const Login = 'Login';
-const Homeaccountname = 'Homeaccount';
-const Myprofilename = 'MyProfile';
 
 
 const Tab = createBottomTabNavigator();
@@ -19,8 +16,7 @@ const Tab = createBottomTabNavigator();
 
  export function TabNavigator() {
   return (
-        <Tab.Navigator screenOptions={{headerShown: false}} tabBarOptions={{
-        showLabel: false}}>
+        <Tab.Navigator screenOptions={{headerShown: false, showLabel: false}}>
 
           <Tab.Screen name={Homename} component={HomescreenStack}
             options={{

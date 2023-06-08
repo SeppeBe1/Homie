@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Button, Image } from "react-native";
+import { StyleSheet, View, Text, Button, Image,  FlatList   } from "react-native";
 import { Header, Avatar } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import * as Font from "expo-font";
 import myImage from "../assets/float.svg";
 import pen from "../assets/pentosquare.svg";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 // Load the font
 const loadFonts = async () => {
@@ -18,12 +20,107 @@ const loadFonts = async () => {
 
 export default function Homescreen({ navigation }) {
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [data, setData] = useState([]);
+  const [firstname, setFirstname] = useState([]);
+  const [lastname, setLastname] = useState([]);
+  const [houseIdd, setHouseId] = useState([]);
+  const [housenamee, setHousename] = useState([]);
+
 
   useEffect(() => {
+    getUser();
+    getHouse();
     loadFonts().then(() => {
       setFontsLoaded(true);
     });
-  }, []);
+    getHouserules();
+  }, [houseIdd, housenamee]);
+
+  const getUser = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+
+    fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+      }
+      })
+      .then(response => response.json())
+      .then(data => {        
+          if(data.status == "failed"){
+          } else if(data.status == "succes"){
+            setFirstname(data.data.firstname);
+            setLastname(data.data.lastname);
+            setHouseId(data.data.houseId);
+
+            // let profilePic = data.data.profilePic;
+          }
+      })
+      .catch(error => {
+          // Handle any errors
+          console.error(error);
+      });
+  }
+
+  const getHouse = async () => {
+    const token = await AsyncStorage.getItem('token');
+
+    const response = await fetch(`http://localhost:3000/api/v1/house/${houseIdd}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    if (data.status === 'failed') {
+    } else if (data.status === 'succes') {
+      setHousename(data.data.housename);
+
+  }
+}
+
+  const getHouserules = async () => {
+      const token = await AsyncStorage.getItem('token');
+
+      fetch(`http://localhost:3000/api/v1/announcement`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        }
+        })
+        .then(response => response.json())
+        .then(data => {        
+            if(data.status == "failed"){
+              console.log(data.status);
+    
+            } else if(data.status == "succes"){
+              console.log(data.status);
+              console.log(data);
+              for(let i = 0; i < data.result.length ; i++){
+                console.log(data.result[i].houseId);
+                if(data.result[i].houseId == houseIdd){
+                  console.log(data.data.description)
+                  console.log('correct');
+                  return;
+                } else {
+                  console.log('fout');
+                }
+  
+              }
+            }
+            // Perform any necessary actions after successful login
+        })
+        .catch(error => {
+            // Handle any errors
+            console.error(error);
+        });
+     
+  };
+
+  // getHouserules();
+
 
   if (!fontsLoaded) {
     return null; // or a loading screen
@@ -55,7 +152,7 @@ export default function Homescreen({ navigation }) {
               }}
             >
               <Button
-                title="Casa"
+                title={housenamee}
                 onPress={() => navigation.navigate("homeaccount")}
               />
             </View>
@@ -104,7 +201,7 @@ export default function Homescreen({ navigation }) {
               color: "#160635",
             }}
           >
-            Welcome back Jade!
+            Welcome back {firstname +' ' + lastname}!
           </Text>
         </View>
       </View>
@@ -159,7 +256,20 @@ export default function Homescreen({ navigation }) {
           justifyContent: "center",
         }}
       >
-        <Text>Hey</Text>
+          <FlatList
+            keyExtractor={(item) => item._id}
+            data={data}
+            
+            renderItem={({ item }) => (
+              // item.id == houseId ?  
+              <>
+                <Text>{item._id}</Text>
+                <Text>{item.description}</Text>
+              </>
+              // : null
+            )}
+          />
+        
       </View>
     </View>
   );

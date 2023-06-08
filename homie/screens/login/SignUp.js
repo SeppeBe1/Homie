@@ -10,7 +10,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SignUp({ navigation }) {
 
-  const [username, setUsername] = useState('');
+    const [fistname, setFirstname] = useState('');
+    const [lastname, setLastname] = useState('');
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmpassword, setconfirmPassword] = useState('');
@@ -41,7 +43,8 @@ export default function SignUp({ navigation }) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                username: username,
+                firstname: fistname,
+                lastname: lastname,
                 email: email,
                 password: password,
                 confirmpassword: confirmpassword,
@@ -61,6 +64,8 @@ export default function SignUp({ navigation }) {
                     // navigation.navigate('TabNavigator', { screen: Homename });
                     let token = data.data.token
                     AsyncStorage.setItem('token', token);
+                    console.log(data.data.token);
+                    AsyncStorage.setItem('userId',  data.data.userId);
                     navigation.navigate("Login");
                 }
                 // Perform any necessary actions after successful login
@@ -87,9 +92,16 @@ export default function SignUp({ navigation }) {
 
             <TextInput
             style={[styles.input, { borderColor: color }]}
-            placeholder="Username"
-            onChangeText={text => setUsername(text)}
-            value={username}
+            placeholder="Fistname"
+            onChangeText={text => setFirstname(text)}
+            value={fistname}
+            />
+
+            <TextInput
+            style={[styles.input, { borderColor: color }]}
+            placeholder="Lastname"
+            onChangeText={text => setLastname(text)}
+            value={lastname}
             />
 
             <TextInput
@@ -130,11 +142,10 @@ export default function SignUp({ navigation }) {
 const styles = StyleSheet.create({
 
     container: {
-        backgroundColor: "white",
         position: "relative",
         height: "100%",
         width: "100vw",
-        backgroundColor:"#FAFAFA",
+        backgroundColor:"#F9F9F9",
       },
 
     header: {
