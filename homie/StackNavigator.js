@@ -22,6 +22,7 @@ import AddTask from "./screens/AddTask";
 import AddEvent from "./screens/AddEvent";
 import EventDetails from "./screens/EventDetails";
 import ChangePassword from "./screens/ChangePassword";
+import HousemateProfile from "./screens/HousemateProfile";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -56,6 +57,7 @@ const HomescreenStack = () => {
       <Stack.Screen name="myprofilescreen" component={Myprofilescreen} />
       <Stack.Screen name="settingsscreen" component={Settingsscreen} />
       <Stack.Screen name="changepassword" component={ChangePassword} />
+      <Stack.Screen name="housemateprofile" component={HousemateProfile} />
     </Stack.Navigator>
   );
 };

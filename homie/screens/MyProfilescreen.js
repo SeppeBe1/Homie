@@ -15,11 +15,16 @@ import crossIcon from "../assets/icons/close.svg"
 import CheckBoxIcon from 'react-native-elements/dist/checkbox/CheckBoxIcon'
 import checkboxEmpty from "../assets/icons/greenCheckbox_empt.svg"
 import checkboxChecked from "../assets/icons/greenCheckbox.svg"
+import profilePicture from "../assets/profielfoto.svg"
 
+import { AntDesign } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 
 import * as Font from 'expo-font';
 
 import React, {useState, useEffect} from 'react'
+import * as ImagePicker from 'expo-image-picker';
+import { useNavigation } from '@react-navigation/native'
 
 // Load the font
 const loadFonts = async () => {
@@ -32,6 +37,88 @@ const loadFonts = async () => {
 };
 
 export default function Myprofilescreen({navigation}) {
+
+  const cameraIconColor = "#00B9F4"; // Color for the camera icon
+  const imageIconColor = "#F57ED4"; // Color for the files icon
+
+  const [profilePictureURI, setProfilePictureURI] = useState(profilePicture);
+  const [uploadPopupVisible, setUploadPopupVisible] = useState(false);
+
+  const handleChooseFromFiles = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      alert("Sorry, we need camera roll permissions to select an image.");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync();
+    if (!result.cancelled) {
+      // Set the selected image as the background image
+      setProfilePictureURI(result.uri);
+    }
+
+    setUploadPopupVisible(false);
+  };
+
+
+  const handleTakePhoto = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== "granted") {
+      alert("Sorry, we need camera permissions to take a photo.");
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync();
+    if (!result.cancelled) {
+      // Set the captured image as the background image
+      setBackgroundImageURI(result.uri);
+    }
+
+    setUploadPopupVisible(false);
+  };
+
+  const UploadImagePopup = () => {
+    return (
+      <View>
+        <TouchableOpacity
+          style={styles.link}
+          onPress={() => setUploadPopupVisible(true)}
+        >
+          <Image source={editIcon} style={{ width: 24, height: 24 }} />
+        </TouchableOpacity>
+
+        <Modal visible={uploadPopupVisible} animationType="slide" transparent>
+          <View style={styles.overlay}>
+            <View style={styles.modalProfilePicture}>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setUploadPopupVisible(false)}
+              >
+                <Image source={crossIcon} style={{ width: 24, height: 24 }} />
+              </TouchableOpacity>
+              <Text style={styles.modalTitle}>Upload Image</Text>
+              <View style={styles.uploadContainer}>
+                <TouchableOpacity
+                  style={styles.uploadZone}
+                  onPress={handleChooseFromFiles}
+                >
+                  <FontAwesome name="image" size={23} color={imageIconColor} />
+                  <Text style={styles.uploadText}>Gallery</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.uploadZone}
+                  onPress={handleTakePhoto}
+                >
+                  <AntDesign name="camera" size={28} color={cameraIconColor} />
+                  <Text style={styles.uploadText}>Take Photo</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </View>
+    );
+  };
 
   const [isEmailAddressVisible, setIsEmailAddressVisible] = useState(false);
   const [isPhoneNumberVisible, setIsPhoneNumberVisible] = useState(false);
@@ -79,7 +166,7 @@ export default function Myprofilescreen({navigation}) {
     <View style={{ flex: 1, alignItems: 'center' }}>
     <View style={{ position: 'relative' }}>
       <Image
-        source={require('../assets/profielfoto.svg')}
+        source={{ uri: profilePictureURI }}
         style={{ width: 88, height: 88, borderRadius: 50 }}
       />
       <TouchableOpacity
@@ -88,6 +175,13 @@ export default function Myprofilescreen({navigation}) {
       >
         <Image source={editIcon} style={{ width: 20, height: 20 }} />
       </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate("housemateprofile")}>
+      <Image source={editFieldIcon} style={{width: 16, height: 16, marginRight: 10}}/>
+      </TouchableOpacity>
+
+
+      <UploadImagePopup />
     </View>
       <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
         <View>
@@ -331,6 +425,54 @@ const styles = StyleSheet.create({
     fontFamily: 'manrope',
     fontSize: 16,
     marginLeft: 5,
+  },
+
+  modalProfilePicture: {
+    height: '225px',
+    backgroundColor: "white",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    position: 'relative',
+    padding: 20,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+
+  modalTitle: {
+    fontFamily: "moon",
+    fontSize: 17,
+    fontWeight: "bold",
+    marginBottom: 10,
+    marginTop: 20,
+  },
+  closeButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    padding: 8,
+  },
+
+  uploadText: {
+    fontFamily: "manrope",
+    fontSize: 12,
+  },
+
+  uploadZone: {
+    paddingTop: 15,
+    flex: 1,
+    alignItems: "center",
+    width: 100,
+    alignContent: "space-around",
+  },
+
+  uploadContainer: {
+    alignItems: "baseline",
+    flex: 1,
+    flexDirection: "row",
+    width: 160,
   },
 
   titleText: {
