@@ -5,6 +5,7 @@ import {
   Image,
   StyleSheet,
   Modal,
+  Share,
 } from "react-native";
 import React, { Component } from "react";
 import girl1 from "../assets/girl.jpg";
@@ -29,6 +30,18 @@ export default class Residents extends Component {
 
   closeImage = () => {
     this.setState({ selectedImage: null });
+  };
+
+  shareImage = async (image) => {
+    try {
+      const shareOptions = {
+        title: "Share Image",
+        url: image,
+      };
+      await Share.share(shareOptions);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   render() {
