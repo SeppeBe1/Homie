@@ -14,6 +14,7 @@ import dropdownIconUp from '../assets/icons/dropdownUp.png'
 import crossIcon from "../assets/icons/close.svg"
 import CheckBoxIcon from 'react-native-elements/dist/checkbox/CheckBoxIcon'
 import checkboxEmpty from "../assets/icons/greenCheckbox_empt.svg"
+import checkboxChecked from "../assets/icons/greenCheckbox.svg"
 
 
 import * as Font from 'expo-font';
@@ -48,6 +49,12 @@ export default function Myprofilescreen({navigation}) {
 
   const toggleDropdown = () => {
     setIsDropdownVisible(!isDropdownVisible);
+  };
+
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckmarkClick = () => {
+    setIsChecked(!isChecked); // Toggle the checked status
   };
 
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -190,11 +197,17 @@ export default function Myprofilescreen({navigation}) {
                 Change email address
               </Text>
               <TextInput
-                style={{fontFamily: 'manrope', marginBottom: '37px', fontSize: '16px'}}
+                style={{fontFamily: 'manrope', marginBottom: '37px', fontSize: '16px', color:'#A5A5A5'}}
                 placeholder="jadeapers@hotmail.com"
+                onTouchStart={(event) => event.stopPropagation()} // Prevent event propagation for input field touch
               />
               <View style={styles.modalCheckboxContainer}>
-                <Image source={checkboxEmpty} style={{ width: 24, height: 24, marginRight: 2 }} />
+              <TouchableOpacity onPress={handleCheckmarkClick}>
+                <Image
+                  source={isChecked ? checkboxChecked : checkboxEmpty}
+                  style={{ width: 24, height: 24 }}
+                />
+              </TouchableOpacity>
                 <Text style={styles.modalCheckboxText}>Make visible for public</Text>
               </View>
               <TouchableOpacity style={[styles.button, { alignSelf: 'center' }]} onPress={() => console.log('New email address saved')}>
@@ -239,9 +252,15 @@ export default function Myprofilescreen({navigation}) {
               <TextInput
                 style={{fontFamily: 'manrope', marginBottom: '37px', fontSize: '16px', color:'#A5A5A5'}}
                 placeholder="+32 412 34 76 06"
+                onTouchStart={(event) => event.stopPropagation()} // Prevent event propagation for input field touch
               />
               <View style={styles.modalCheckboxContainer}>
-                <Image source={checkboxEmpty} style={{ width: 24, height: 24, marginRight: 2 }} />
+              <TouchableOpacity onPress={handleCheckmarkClick}>
+                <Image
+                  source={isChecked ? checkboxChecked : checkboxEmpty}
+                  style={{ width: 24, height: 24 }}
+                />
+              </TouchableOpacity>
                 <Text style={styles.modalCheckboxText}>Make visible for public</Text>
               </View>
               <TouchableOpacity style={[styles.button, { alignSelf: 'center' }]} onPress={() => console.log('New email address saved')}>
