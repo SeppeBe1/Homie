@@ -173,7 +173,7 @@ export default function Myprofilescreen({navigation}) {
             alignItems: "center",
             backgroundColor: "rgba(22, 6, 53, 0.5)",
           }}
-          onPress={toggleEmail}
+         // onPress={toggleEmail}
           activeOpacity={1}
         >
           <View
@@ -187,7 +187,7 @@ export default function Myprofilescreen({navigation}) {
             }}
           >
             <TouchableOpacity
-              style={{ position: "absolute", top: 16, right: 16 }}
+              style={{ position: "absolute", top: 16, right: 16, zIndex: 2 }}
               onPress={toggleEmail}
             >
               <Image source={crossIcon} style={{ width: 30, height: 30 }} />
@@ -201,16 +201,16 @@ export default function Myprofilescreen({navigation}) {
                 placeholder="jadeapers@hotmail.com"
                 onTouchStart={(event) => event.stopPropagation()} // Prevent event propagation for input field touch
               />
-              <View style={styles.modalCheckboxContainer}>
               <TouchableOpacity onPress={handleCheckmarkClick}>
+              <View style={styles.modalCheckboxContainer}>
                 <Image
                   source={isChecked ? checkboxChecked : checkboxEmpty}
                   style={{ width: 24, height: 24 }}
                 />
-              </TouchableOpacity>
                 <Text style={styles.modalCheckboxText}>Make visible for public</Text>
-              </View>
-              <TouchableOpacity style={[styles.button, { alignSelf: 'center' }]} onPress={() => console.log('New email address saved')}>
+                </View>
+                </TouchableOpacity>
+              <TouchableOpacity style={[styles.button, { alignSelf: 'center' }]} onPress={() => console.log('save new email address')}>
                 <Text style={styles.buttonText}>Save</Text>
               </TouchableOpacity>
             </View>
@@ -226,8 +226,8 @@ export default function Myprofilescreen({navigation}) {
             alignItems: "center",
             backgroundColor: "rgba(22, 6, 53, 0.5)",
           }}
+         // onPress={togglePhone}
           activeOpacity={1}
-          onPress={togglePhone}
         >
           <View
             style={{
@@ -240,7 +240,7 @@ export default function Myprofilescreen({navigation}) {
             }}
           >
             <TouchableOpacity
-              style={{ position: "absolute", top: 16, right: 16 }}
+              style={{ position: "absolute", top: 16, right: 16, zIndex: 2 }}
               onPress={togglePhone}
             >
               <Image source={crossIcon} style={{ width: 30, height: 30 }} />
@@ -254,16 +254,16 @@ export default function Myprofilescreen({navigation}) {
                 placeholder="+32 412 34 76 06"
                 onTouchStart={(event) => event.stopPropagation()} // Prevent event propagation for input field touch
               />
-              <View style={styles.modalCheckboxContainer}>
               <TouchableOpacity onPress={handleCheckmarkClick}>
+              <View style={styles.modalCheckboxContainer}>
                 <Image
                   source={isChecked ? checkboxChecked : checkboxEmpty}
                   style={{ width: 24, height: 24 }}
                 />
-              </TouchableOpacity>
                 <Text style={styles.modalCheckboxText}>Make visible for public</Text>
-              </View>
-              <TouchableOpacity style={[styles.button, { alignSelf: 'center' }]} onPress={() => console.log('New email address saved')}>
+                </View>
+                </TouchableOpacity>
+              <TouchableOpacity style={[styles.button, { alignSelf: 'center' }]} onPress={() => console.log('save changed phone number')}>
                 <Text style={styles.buttonText}>Save</Text>
               </TouchableOpacity>
             </View>
@@ -366,6 +366,7 @@ const styles = StyleSheet.create({
 
   modalCheckboxText: {
     fontFamily: 'manrope', 
-    fontSize: '16px'
+    fontSize: '16px', 
+    marginLeft: 2
   }
 })
