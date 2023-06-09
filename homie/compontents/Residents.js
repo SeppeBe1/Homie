@@ -15,6 +15,7 @@ import profilePicture from "../assets/girl.jpg";
 import messenger from "../assets/icons/messenger.svg";
 import whatsapp from "../assets/icons/whatsapp.svg";
 import share from "../assets/icons/share.svg";
+import crossIcon from "../assets/icons/close.svg";
 
 const residentsData = [
   { name: "Me", profileStatusColor: "#FFB84E" },
@@ -89,7 +90,12 @@ export default class Residents extends Component {
         </View>
         {this.renderResidents()}
         <View>
-          <TouchableOpacity style={styles.leave}>Leave House</TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("FullCalenderScreen")}
+            style={styles.leave}
+          >
+            Leave House
+          </TouchableOpacity>
         </View>
 
         <Modal visible={showModal} animationType="fade" transparent>
@@ -101,10 +107,7 @@ export default class Residents extends Component {
               style={styles.closeButton}
               onPress={this.toggleModal}
             >
-              <Image
-                source={require("../assets/icons/close.svg")}
-                style={styles.closeIcon}
-              />
+              <Image source={crossIcon} style={styles.closeIcon} />
             </TouchableOpacity>
             <View style={{ flex: 1, gap: 24 }}>
               <Text
@@ -297,10 +300,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 8,
     right: 8,
-    padding: 8,
   },
   closeIcon: {
-    width: 20,
-    height: 20,
+    width: 25,
+    height: 25,
   },
 });
