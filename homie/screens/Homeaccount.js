@@ -7,6 +7,7 @@ import Residents from "../compontents/Residents";
 import Photos from "../compontents/Photos";
 import Houserules from "../compontents/Houserules";
 import * as ImagePicker from "expo-image-picker";
+import { useNavigation } from "@react-navigation/native";
 
 import {
   View,
@@ -38,6 +39,8 @@ const cameraIconColor = "#00B9F4"; // Color for the camera icon
 const imageIconColor = "#F57ED4"; // Color for the files icon
 
 const App = () => {
+  const navigation = useNavigation();
+
   const [currentView, setCurrentView] = useState("Residents");
   const [backgroundImageURI, setBackgroundImageURI] = useState(backgroundImage);
 
@@ -146,8 +149,11 @@ const App = () => {
           style={styles.background}
         >
           <View style={styles.overlay} />
-          <TouchableOpacity style={styles.link}>
-            <Image source={arrowback} style={{ width: 8, height: 15 }} />
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image
+              source={arrowback}
+              style={{ width: 8, height: 15, marginRight: 10 }}
+            />
           </TouchableOpacity>
           <TouchableOpacity style={styles.link}>
             <Text style={styles.h1}>My house</Text>
