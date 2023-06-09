@@ -149,7 +149,7 @@ export default function Myprofilescreen({navigation}) {
       <Image source={passwordIcon} style={{width: 18, height: 20, margin: 10}}/>
       <Text style={styles.titleText}>Password</Text>
       </View>
-      <TouchableOpacity onPress={() => console.log('Edit password clicked')}>
+      <TouchableOpacity onPress={() => navigation.navigate("changepassword")}>
       <Image source={editFieldIcon} style={{width: 16, height: 16, marginRight: 10}}/>
       </TouchableOpacity>
       </View>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Button, Image } from "react-native";
+import { StyleSheet, View, Text, Button, Image, Modal } from "react-native";
 import { Header, Avatar } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import * as Font from "expo-font";
