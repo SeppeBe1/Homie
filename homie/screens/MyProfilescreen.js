@@ -10,6 +10,7 @@ import statusAvailable from '../assets/icons/statusAvailable.svg'
 import statusBusy from '../assets/icons/statusBusy.svg'
 import statusNotdisturb from '../assets/icons/statusNotdisturb.svg'
 import dropdownIcon from '../assets/icons/dropdown.svg'
+import dropdownIconUp from '../assets/icons/dropdownUp.png'
 import crossIcon from "../assets/icons/close.svg"
 import CheckBoxIcon from 'react-native-elements/dist/checkbox/CheckBoxIcon'
 import checkboxEmpty from "../assets/icons/greenCheckbox_empt.svg"
@@ -40,6 +41,13 @@ export default function Myprofilescreen({navigation}) {
 
   const togglePhone = () => {
     setIsPhoneNumberVisible(!isPhoneNumberVisible);
+  };
+
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState('Available');
+
+  const toggleDropdown = () => {
+    setIsDropdownVisible(!isDropdownVisible);
   };
 
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -79,12 +87,36 @@ export default function Myprofilescreen({navigation}) {
       <Text style={{ color: '#fff', fontFamily: 'novaticaBold', fontSize: '16px', textAlign: 'center' }}>Jade Apers</Text>
       </View>
       </View>
-      <TouchableOpacity onPress={() => console.log('Status clicked')} style={{ flexDirection: 'row', alignItems: 'center', position: 'absolute', top: 120, right: 95 }}>
-        <Image source={statusAvailable} style={{ width: 11, height: 11, marginRight: 5 }} />
-        <Image source={dropdownIcon} style={{ width: 15, height: 8 }} />
+      <TouchableOpacity onPress={toggleDropdown} style={{ flexDirection: 'row', alignItems: 'center', position: 'absolute', top: 120, right: 95 }}>
+      {selectedStatus === 'Available' && <Image source={statusAvailable} style={{ width: 11, height: 11, marginRight: 5 }} />}
+      {selectedStatus === 'Busy' && <Image source={statusBusy} style={{ width: 11, height: 11, marginRight: 5 }} />}
+      {selectedStatus === 'Do Not Disturb' && <Image source={statusNotdisturb} style={{ width: 11, height: 11, marginRight: 5 }} />}
+        
+      {isDropdownVisible ? (
+              <Image source={dropdownIconUp} style={{ width: 15, height: 8 }} />
+            ) : (
+              <Image source={dropdownIcon} style={{ width: 15, height: 8 }} />
+            )}
       </TouchableOpacity>
   </View>
   </View>
+
+  {isDropdownVisible && (
+  <View style={styles.dropdownMenu}>
+    <TouchableOpacity onPress={() => setSelectedStatus('Available')} style={styles.dropdownItem}>
+      <Image source={statusAvailable} style={{ width: 11, height: 11, marginRight: 5 }} />
+      <Text style={styles.dropdownText}>Available</Text>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={() => setSelectedStatus('Busy')} style={styles.dropdownItem}>
+      <Image source={statusBusy} style={{ width: 11, height: 11, marginRight: 5 }} />
+      <Text style={styles.dropdownText}>Busy</Text>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={() => setSelectedStatus('Do Not Disturb')} style={styles.dropdownItem}>
+      <Image source={statusNotdisturb} style={{ width: 11, height: 11, marginRight: 5 }} />
+      <Text style={styles.dropdownText}>Do not disturb</Text>
+    </TouchableOpacity>
+  </View>
+)}
     
   <View style={{ backgroundColor: '#F2F2F2'}}>
     <View style={styles.profileItemFirst}>
@@ -123,6 +155,8 @@ export default function Myprofilescreen({navigation}) {
       </View>
     </View>
   </View>
+
+
 
   <Modal visible={isEmailAddressVisible} animationType="fade" transparent>
         <TouchableOpacity
@@ -255,6 +289,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems:'flex-start',
     padding: 10
+  },
+
+  dropdownMenu: {
+    position: 'absolute',
+    top: 182,
+    right: 0,
+    width: 158,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    elevation: 3,
+    zIndex: 1, 
+    marginRight: 7
+  },
+  dropdownItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  dropdownText: {
+    fontFamily: 'manrope',
+    fontSize: 16,
+    marginLeft: 5,
   },
 
   titleText: {
