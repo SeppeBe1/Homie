@@ -27,6 +27,8 @@ import EventDetails from "./screens/Planner/EventDetails";
 import SplitCosts from "./screens/Costsplitter/SplitCosts";
 import ViewStatistics from "./screens/Costsplitter/ViewStatistics";
 import ViewInvoices from "./screens/Costsplitter/ViewInvoices";
+import ChangePassword from "./screens/ChangePassword";
+import HousemateProfile from "./screens/HousemateProfile";
 
 const Homename = "Home";
 
@@ -93,6 +95,8 @@ const HomescreenStack = () => {
       <Stack.Screen name="homeaccount" component={Homeaccount} />
       <Stack.Screen name="myprofilescreen" component={Myprofilescreen} />
       <Stack.Screen name="settingsscreen" component={Settingsscreen} />
+      <Stack.Screen name="changepassword" component={ChangePassword} />
+      <Stack.Screen name="housemateprofile" component={HousemateProfile} />
     </Stack.Navigator>
   );
 };
