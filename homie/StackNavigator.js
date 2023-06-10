@@ -29,6 +29,7 @@ import ViewStatistics from "./screens/Costsplitter/ViewStatistics";
 import ViewInvoices from "./screens/Costsplitter/ViewInvoices";
 import ChangePassword from "./screens/ChangePassword";
 import HousemateProfile from "./screens/HousemateProfile";
+import ExternHomeaccount from "./screens/ExternHomeaccount";
 
 const Homename = "Home";
 
@@ -106,6 +107,7 @@ const BehomiescreenStack = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="behomie" component={Behomie} />
       <Stack.Screen name="memorywall" component={Memorywall} />
+      <Stack.Screen name="externhomeaccount" component= {ExternHomeaccount} />
     </Stack.Navigator>
   );
 };

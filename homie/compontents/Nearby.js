@@ -25,10 +25,14 @@ export default class Nearby extends Component {
     <View>
     <View style={{ flexDirection:'row', alignItems: 'center', marginBottom: 20 }}>
     <View>
+      <TouchableOpacity onPress={() => navigation.navigate("externhomeaccount")}>
       <Image source={require('../assets/groupfoto.jpg')} style={{ width: 58, height: 58, borderRadius:50 }} />
+      </TouchableOpacity>
     </View>
     <View style={{ marginLeft: 15, flex: 1 }}>
-      <Text style={{ color: '#160635', fontFamily:'novaticaBold', fontSize: '16px' }}>Casa Frankie</Text>
+    <TouchableOpacity onPress={() => navigation.navigate("externhomeaccount")}>
+    <Text style={{ color: '#160635', fontFamily:'novaticaBold', fontSize: '16px' }}>Casa Frankie</Text>
+      </TouchableOpacity>
       {!hideImages && (
               <>
                 <Text style={{ fontFamily: 'manrope', fontSize: 14 }}>Time for dinner!</Text>
