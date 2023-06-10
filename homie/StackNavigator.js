@@ -25,6 +25,8 @@ import AddTask from "./screens/Planner/AddTask";
 import AddEvent from "./screens/Planner/AddEvent";
 import EventDetails from "./screens/Planner/EventDetails";
 import SplitCosts from "./screens/Costsplitter/SplitCosts";
+import ViewStatistics from "./screens/Costsplitter/ViewStatistics";
+import ViewInvoices from "./screens/Costsplitter/ViewInvoices";
 
 const Homename = "Home";
 
@@ -109,6 +111,8 @@ const CostsplitterscreenStack = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="costsplitter" component={Costsplitter} />
       <Stack.Screen name="SplitCosts" component={SplitCosts} />
+      <Stack.Screen name="ViewInvoices" component={ViewInvoices} />
+      <Stack.Screen name="ViewStatistics" component={ViewStatistics} />
     </Stack.Navigator>
   );
 };

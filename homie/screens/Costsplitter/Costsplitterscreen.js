@@ -4,6 +4,8 @@ import costsplitter from "../../assets/costsplitter.svg";
 import * as Font from "expo-font";
 
 import React, { useState, useEffect } from "react";
+import ViewStatistics from "./ViewStatistics";
+import ViewInvoices from "./ViewInvoices";
 
 // Load the font
 const loadFonts = async () => {
@@ -64,13 +66,13 @@ export default function Costsplitterscreen({ navigation }) {
           <Text style={styles.buttonText}>Split costs</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate(AddTask)}
+          onPress={() => navigation.navigate(ViewStatistics)}
           style={[styles.button]}
         >
           <Text style={styles.buttonText}>View statistics</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate(AddTask)}
+          onPress={() => navigation.navigate(ViewInvoices)}
           style={[styles.button]}
         >
           <Text style={styles.buttonText}>View invoices</Text>
