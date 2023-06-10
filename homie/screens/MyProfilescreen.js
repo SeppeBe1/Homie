@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Modal, TextInput } from 'react-native'
-import { Header, Button, CheckBox } from 'react-native-elements'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, TextInput } from 'react-native'
+import { Header, Button } from 'react-native-elements'
 import arrowLeft from '../assets/icons/arrowLeft.svg'
 import editIcon from '../assets/icons/edit.svg'
 import emailIcon from '../assets/icons/email.svg'
@@ -12,7 +12,6 @@ import statusNotdisturb from '../assets/icons/statusNotdisturb.svg'
 import dropdownIcon from '../assets/icons/dropdown.svg'
 import dropdownIconUp from '../assets/icons/dropdownUp.png'
 import crossIcon from "../assets/icons/close.svg"
-import CheckBoxIcon from 'react-native-elements/dist/checkbox/CheckBoxIcon'
 import checkboxEmpty from "../assets/icons/greenCheckbox_empt.svg"
 import checkboxChecked from "../assets/icons/greenCheckbox.svg"
 import profilePicture from "../assets/profielfoto.svg"
@@ -50,16 +49,13 @@ export default function Myprofilescreen({navigation}) {
       alert("Sorry, we need camera roll permissions to select an image.");
       return;
     }
-
     const result = await ImagePicker.launchImageLibraryAsync();
     if (!result.cancelled) {
       // Set the selected image as the background image
       setProfilePictureURI(result.uri);
     }
-
     setUploadPopupVisible(false);
   };
-
 
   const handleTakePhoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -67,48 +63,30 @@ export default function Myprofilescreen({navigation}) {
       alert("Sorry, we need camera permissions to take a photo.");
       return;
     }
-
     const result = await ImagePicker.launchCameraAsync();
     if (!result.cancelled) {
       // Set the captured image as the background image
       setBackgroundImageURI(result.uri);
     }
-
     setUploadPopupVisible(false);
   };
 
   const UploadImagePopup = () => {
     return (
       <View>
-        <TouchableOpacity
-          style={styles.link}
-          onPress={() => setUploadPopupVisible(true)}
-        >
-          <Image source={editIcon} style={{ width: 24, height: 24 }} />
-        </TouchableOpacity>
-
         <Modal visible={uploadPopupVisible} animationType="slide" transparent>
           <View style={styles.overlay}>
             <View style={styles.modalProfilePicture}>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={() => setUploadPopupVisible(false)}
-              >
+              <TouchableOpacity style={styles.closeButton} onPress={() => setUploadPopupVisible(false)} >
                 <Image source={crossIcon} style={{ width: 24, height: 24 }} />
               </TouchableOpacity>
               <Text style={styles.modalTitle}>Upload Image</Text>
               <View style={styles.uploadContainer}>
-                <TouchableOpacity
-                  style={styles.uploadZone}
-                  onPress={handleChooseFromFiles}
-                >
+                <TouchableOpacity style={styles.uploadZone} onPress={handleChooseFromFiles}>
                   <FontAwesome name="image" size={23} color={imageIconColor} />
                   <Text style={styles.uploadText}>Gallery</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.uploadZone}
-                  onPress={handleTakePhoto}
-                >
+                <TouchableOpacity style={styles.uploadZone} onPress={handleTakePhoto}  >
                   <AntDesign name="camera" size={28} color={cameraIconColor} />
                   <Text style={styles.uploadText}>Take Photo</Text>
                 </TouchableOpacity>
@@ -158,29 +136,16 @@ export default function Myprofilescreen({navigation}) {
 
   return (
     <View>
-
-<View style={styles.topHeader}>
-    <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Image source={arrowLeft} style={{ width: 8, height: 15 }} />
-    </TouchableOpacity>
-    <View style={{ flex: 1, alignItems: 'center' }}>
-    <View style={{ position: 'relative' }}>
-      <Image
-        source={{ uri: profilePictureURI }}
-        style={{ width: 88, height: 88, borderRadius: 50 }}
-      />
-      <TouchableOpacity
-        style={{ position: 'absolute', top: 0, right: 0 }}
-        onPress={() => console.log('Edit profile clicked')}
-      >
-        <Image source={editIcon} style={{ width: 20, height: 20 }} />
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => navigation.navigate("housemateprofile")}>
-      <Image source={editFieldIcon} style={{width: 16, height: 16, marginRight: 10}}/>
-      </TouchableOpacity>
-
-
+      <View style={styles.topHeader}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image source={arrowLeft} style={{ width: 8, height: 15 }} />
+        </TouchableOpacity>
+        <View style={{ flex: 1, alignItems: 'center' }}>
+        <View style={{ position: 'relative' }}>
+          <Image source={{ uri: profilePictureURI }} style={{ width: 88, height: 88, borderRadius: 50 }} />
+          <TouchableOpacity style={{ position: 'absolute', top: 0, right: 0 }} onPress={() => setUploadPopupVisible(true)} >
+            <Image source={editIcon} style={{ width: 20, height: 20 }} />
+          </TouchableOpacity>
       <UploadImagePopup />
     </View>
       <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
@@ -189,17 +154,16 @@ export default function Myprofilescreen({navigation}) {
       </View>
       </View>
       <TouchableOpacity onPress={toggleDropdown} style={{ flexDirection: 'row', alignItems: 'center', position: 'absolute', top: 120, right: 95 }}>
-      {selectedStatus === 'Available' && <Image source={statusAvailable} style={{ width: 11, height: 11, marginRight: 5 }} />}
-      {selectedStatus === 'Busy' && <Image source={statusBusy} style={{ width: 11, height: 11, marginRight: 5 }} />}
-      {selectedStatus === 'Do Not Disturb' && <Image source={statusNotdisturb} style={{ width: 11, height: 11, marginRight: 5 }} />}
-        
-      {isDropdownVisible ? (
+        {selectedStatus === 'Available' && <Image source={statusAvailable} style={{ width: 11, height: 11, marginRight: 5 }} />}
+        {selectedStatus === 'Busy' && <Image source={statusBusy} style={{ width: 11, height: 11, marginRight: 5 }} />}
+        {selectedStatus === 'Do Not Disturb' && <Image source={statusNotdisturb} style={{ width: 11, height: 11, marginRight: 5 }} />}    
+        {isDropdownVisible ? (
               <Image source={dropdownIconUp} style={{ width: 15, height: 8 }} />
             ) : (
               <Image source={dropdownIcon} style={{ width: 15, height: 8 }} />
             )}
       </TouchableOpacity>
-  </View>
+    </View>
   </View>
 
   {isDropdownVisible && (
@@ -427,6 +391,11 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
 
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(22,6,53,0.6)",
+  },
+
   modalProfilePicture: {
     height: '225px',
     backgroundColor: "white",
@@ -434,7 +403,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     justifyContent: "center",
     alignItems: "center",
-    position: 'relative',
+    position: 'absolute',
     padding: 20,
     bottom: 0,
     left: 0,
