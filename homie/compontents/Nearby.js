@@ -23,7 +23,6 @@ export default class Nearby extends Component {
 
   return (   
     <View>
-
     <View style={{ flexDirection:'row', alignItems: 'center', marginBottom: 20 }}>
     <View>
       <Image source={require('../assets/groupfoto.jpg')} style={{ width: 58, height: 58, borderRadius:50 }} />

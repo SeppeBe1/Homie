@@ -197,7 +197,7 @@ export default function Memorywall({ navigation }) {
       <View style={styles.headerContainer}>
       <TouchableOpacity
           onPress={() => navigation.goBack()}
-          style={styles.arrowContainer}
+          style={[styles.arrowContainer,  {zIndex: 1}]}
         >
           <Image source={arrowLeft} style={{ width: 8, height: 15 }} />
         </TouchableOpacity>
