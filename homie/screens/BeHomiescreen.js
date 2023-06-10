@@ -3,6 +3,7 @@ import { Header, Button } from 'react-native-elements'
 import calendarIcon from '../assets/calendar.png'
 import like from '../assets/like.png'
 import emptylike from '../assets/emptylike.png'
+import photoIcon from '../assets/icons/photo.svg'
 import * as Font from 'expo-font';
 
 import Nearby from "../compontents/Nearby";
@@ -22,6 +23,11 @@ const loadFonts = async () => {
 ;
 
 export default function Behomiescreen({navigation}) {
+  const [hideImages, setHideImages] = useState(false);
+
+  const hideAllImages = () => {
+    setHideImages(true);
+  };
 
   const [currentView, setCurrentView] = useState("Nearby");
 
@@ -36,7 +42,7 @@ export default function Behomiescreen({navigation}) {
   const renderView = () => {
     switch (currentView) {
       case "Nearby":
-        return <Nearby />;
+        return <Nearby hideImages={hideImages} />;
       case "Discover":
         return <Discover />;
       default:
@@ -57,16 +63,29 @@ export default function Behomiescreen({navigation}) {
     </View>
   </View>
   <View style={{ flex: 1,  alignItems: 'center', color: '#fff' }}>
+  {hideImages ? (
+    <TouchableOpacity onPress={hideAllImages} style={styles.buttonHide}>
+      <Image source={photoIcon} style={{width: 29, height: 25}} />
+      <Text style={styles.buttonHideText}>Take a picture</Text>
+  </TouchableOpacity>
+) : (
     <Image source={require('../assets/groupfoto.jpg')} style={{ width: 160, height: 220, marginBottom:5, marginTop: '-20px'}} />
+)}
+{!hideImages && (
+  <>
     <View style={styles.details}>
       <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
       <Image source={like} style={{width: 20, height: 17}}/>
       <Text style={{ color: '#fff', fontFamily:'manrope', fontSize: '13px', paddingLeft: 5 }}>2</Text>
       </View>
       <Text style={{ color: '#3BEDBF', fontFamily:'manrope', fontSize: '13px' }}>20 minutes ago</Text>
+    
     </View>
-    <Text style={{ color: '#fff', fontFamily:'manrope', fontSize: '14px' }}>Add a description...</Text>
+        <Text style={{ color: '#fff', fontFamily:'manrope', fontSize: '14px' }}>Add a description...</Text>
+    </>
+    )}
   </View>
+
   <View style={{ flex: 2 }}>
   <ScrollView style={styles.homiefeed}>
     <View style={{ flexDirection:'row', justifyContent: 'space-between' }}>
@@ -195,5 +214,25 @@ const styles = StyleSheet.create({
   btnTextPassive: {
     color:'#fff', fontStyle: 'normal', fontWeight: '700', fontSize: '14px',  
     fontFamily:'moon'
+  }, 
+  buttonHide: {
+    textAlign:"center",
+    alignSelf: 'center',
+    backgroundColor:"#B900F4",
+    color: "#fff",
+    borderRadius: 100,
+    width: 240,
+    paddingVertical: 16,
+    flexDirection: 'row',
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    marginTop: '45px'
+  },
+  buttonHideText: {
+    fontFamily:'moon', 
+    fontSize:'18px',
+    fontWeight: 'bold',
+    color: "#fff",
+    marginLeft: '15px'
   }
 });

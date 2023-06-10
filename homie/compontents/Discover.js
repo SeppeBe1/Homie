@@ -9,7 +9,7 @@ export default class Discover extends Component {
     <View>
     <View style={{ flexDirection:'row', alignItems: 'center', marginBottom: 20 }}>
     <View>
-      <Image source={require('../assets/groupfoto.jpg')} style={{ width: 58, height: 58, borderRadius:50 }} />
+      <Image source={require('../assets/grouppicture.jpg')} style={{ width: 58, height: 58, borderRadius:50 }} />
     </View>
     <View style={{ marginLeft: 15, flex: 1 }}>
       <Text style={{ color: '#160635', fontFamily:'novaticaBold', fontSize: '16px' }}>Chinatown</Text>
@@ -25,7 +25,7 @@ export default class Discover extends Component {
     </View>
 </View>
   <View style={{ justifyContent:'center' }}>
-  <Image source={require('../assets/groupfoto.jpg')} style={{ width: 340, height: 460, marginBottom: 40 }} />
+  <Image source={require('../assets/grouppicture.jpg')} style={{ width: 340, height: 460, marginBottom: 40 }} />
   </View>
   </View> 
     );
