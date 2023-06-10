@@ -4,7 +4,7 @@ import { TabNavigator } from "./TabNavigator";
 
 import Home from "./screens/Homescreen";
 import Behomie from "./screens/BeHomiescreen";
-import Costsplitter from "./screens/Costsplitterscreen";
+import Costsplitter from "./screens/Costsplitter/Costsplitterscreen";
 import Calendar from "./screens/Planner/Calendarscreen";
 import Homeaccount from "./screens/Homeaccount";
 import Myprofilescreen from "./screens/MyProfilescreen";
@@ -24,6 +24,7 @@ import TasksScreen from "./screens/Planner/TasksScreen";
 import AddTask from "./screens/Planner/AddTask";
 import AddEvent from "./screens/Planner/AddEvent";
 import EventDetails from "./screens/Planner/EventDetails";
+import SplitCosts from "./screens/Costsplitter/SplitCosts";
 
 const Homename = "Home";
 
@@ -107,6 +108,7 @@ const CostsplitterscreenStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="costsplitter" component={Costsplitter} />
+      <Stack.Screen name="SplitCosts" component={SplitCosts} />
     </Stack.Navigator>
   );
 };
