@@ -8,10 +8,10 @@ import {
   ImageBackground,
   Text,
 } from "react-native";
-import arrowLeft from "../assets/icons/arrowLeft.svg";
-import backgroundImage from "../assets/event_picture.png";
-import location from "../assets/icons/Location.svg";
-import users from "../assets/boy2.jpg";
+import arrowLeft from "../../assets/icons/arrowLeft.svg";
+import backgroundImage from "../../assets/event_picture.png";
+import location from "../../assets/icons/Location.svg";
+import users from "../../assets/boy2.jpg";
 import { withTheme } from "react-native-elements";
 
 export default function EventDetails() {

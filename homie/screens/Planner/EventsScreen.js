@@ -1,9 +1,9 @@
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
-import arrowLeft from "../assets/icons/arrowLeft.svg";
-import fun from "../assets/undraw_having_fun_re_vj4h 1.svg";
-import Event from "../compontents/Event";
+import arrowLeft from "../../assets/icons/arrowLeft.svg";
+import fun from "../../assets/undraw_having_fun_re_vj4h 1.svg";
+import Event from "../../compontents/Event";
 import AddEvent from "./AddEvent";
 import EventDetails from "./EventDetails.js";
 
@@ -14,19 +14,19 @@ export default function FullCalenderScreen() {
       date: { day: "12", month: "DEC" },
       title: "Houseparty in Casa",
       description: "A little party killed nobody",
-      image: require("../assets/girl.jpg"),
+      image: require("../../assets/girl.jpg"),
     },
     {
       date: { day: "15", month: "DEC" },
       title: "Outdoor Concert",
       description: "Live music under the stars",
-      image: require("../assets/boy.jpg"),
+      image: require("../../assets/boy.jpg"),
     },
     {
       date: { day: "18", month: "DEC" },
       title: "Art Exhibition",
       description: "Explore stunning artworks",
-      image: require("../assets/boy.jpg"),
+      image: require("../../assets/boy.jpg"),
     },
   ];
 

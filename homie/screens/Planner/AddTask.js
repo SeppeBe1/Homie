@@ -11,7 +11,7 @@ import {
   TextInput,
   Platform,
 } from "react-native";
-import arrowLeft from "../assets/icons/arrowLeft.svg";
+import arrowLeft from "../../assets/icons/arrowLeft.svg";
 
 export default function AddTask() {
   const navigation = useNavigation();

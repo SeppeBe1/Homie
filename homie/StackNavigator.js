@@ -5,25 +5,25 @@ import { TabNavigator } from "./TabNavigator";
 import Home from "./screens/Homescreen";
 import Behomie from "./screens/BeHomiescreen";
 import Costsplitter from "./screens/Costsplitterscreen";
-import Calendar from "./screens/Calendarscreen";
+import Calendar from "./screens/Planner/Calendarscreen";
 import Homeaccount from "./screens/Homeaccount";
 import Myprofilescreen from "./screens/MyProfilescreen";
 import Memorywall from "./screens/Memorywall";
 import Settingsscreen from "./screens/settings";
-import Login from "./screens/login/Login";
-import SignUp from "./screens/login/SignUp";
+// import Login from "./screens/login/Login";
+// import SignUp from "./screens/login/SignUp";
 import HouseChoice from "./screens/login/houseChoice";
 import CreateHouse from "./screens/login/CreateHouse";
 import CreateHouseAdress from "./screens/login/CreateHouseAdress";
 import CreateHouseRule from "./screens/login/CreateHouseRule";
 import ShareHomie from "./screens/login/ShareHomie";
 import JoinHouse from "./screens/login/joinHouse";
-import FullCalenderScreen from "./screens/FullCalenderScreen";
-import EventsScreen from "./screens/EventsScreen";
-import TasksScreen from "./screens/TasksScreen";
-import AddTask from "./screens/AddTask";
-import AddEvent from "./screens/AddEvent";
-import EventDetails from "./screens/EventDetails";
+import FullCalenderScreen from "./screens/Planner/FullCalenderScreen";
+import EventsScreen from "./screens/Planner/EventsScreen";
+import TasksScreen from "./screens/Planner/TasksScreen";
+import AddTask from "./screens/Planner/AddTask";
+import AddEvent from "./screens/Planner/AddEvent";
+import EventDetails from "./screens/Planner/EventDetails";
 
 const Homename = "Home";
 
@@ -33,7 +33,7 @@ const Tab = createBottomTabNavigator();
 const LoginscreenStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen
+      {/* <Stack.Screen
         name="Login"
         component={Login}
         options={{ tabBarVisible: true }}
@@ -42,8 +42,8 @@ const LoginscreenStack = () => {
         name="SignUp"
         component={SignUp}
         options={{ tabBarVisible: true }}
-      />
-      <Stack.Screen
+      /> */}
+      {/* <Stack.Screen
         name="HouseChoice"
         component={HouseChoice}
         options={{ tabBarVisible: true }}
@@ -72,7 +72,7 @@ const LoginscreenStack = () => {
         name="ShareHomie"
         component={ShareHomie}
         options={{ tabBarVisible: true }}
-      />
+      /> */}
 
       <Stack.Screen
         name="TabNavigator"

@@ -1,24 +1,24 @@
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
-import arrowLeft from "../assets/icons/arrowLeft.svg";
-import tasks from "../assets/completed_tasks.svg";
-import Task from "../compontents/Task";
+import arrowLeft from "../../assets/icons/arrowLeft.svg";
+import tasks from "../../assets/completed_tasks.svg";
+import Task from "../../compontents/Task";
 import AddTask from "./AddTask";
 
-import MoonFont from "../assets/fonts/Moon.otf";
-import Novatica from "../assets/fonts/Novatica-Bold.woff";
-import Manrope from "../assets/fonts/Manrope-Bold.ttf";
+import MoonFont from "../../assets/fonts/Moon.otf";
+import Novatica from "../../assets/fonts/Novatica-Bold.woff";
+import Manrope from "../../assets/fonts/Manrope-Bold.ttf";
 
 export default function FullCalenderScreen() {
   const navigation = useNavigation();
 
   // Define an array of tasks
   const tasksArray = [
-    { description: "Task 1", image: require("../assets/girl.jpg") },
-    { description: "Task 2", image: require("../assets/girl.jpg") },
-    { description: "Task 3", image: require("../assets/girl.jpg") },
-    { description: "Task 4", image: require("../assets/girl.jpg") },
+    { description: "Task 1", image: require("../../assets/girl.jpg") },
+    { description: "Task 2", image: require("../../assets/girl.jpg") },
+    { description: "Task 3", image: require("../../assets/girl.jpg") },
+    { description: "Task 4", image: require("../../assets/girl.jpg") },
   ];
 
   return (
