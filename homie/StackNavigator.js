@@ -4,7 +4,7 @@ import { TabNavigator } from "./TabNavigator";
 
 import Home from "./screens/Homescreen";
 import Behomie from "./screens/BeHomiescreen";
-import Costsplitter from "./screens/Costsplitter/Costsplitterscreen"
+import Costsplitter from "./screens/Costsplitter/Costsplitterscreen";
 import Calendar from "./screens/Planner/Calendarscreen";
 import Homeaccount from "./screens/Homeaccount";
 import Myprofilescreen from "./screens/MyProfilescreen";
@@ -40,7 +40,7 @@ const Tab = createBottomTabNavigator();
 
 const LoginscreenStack = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}} >
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       {/* <Stack.Screen name="Login" component={Login} options={{tabBarVisible: true}} />
       <Stack.Screen name="SignUp" component={SignUp} options={{tabBarVisible: true}} />
       <Stack.Screen name="HouseChoice" component={HouseChoice} options={{tabBarVisible: true}} />
@@ -50,7 +50,11 @@ const LoginscreenStack = () => {
       <Stack.Screen name="CreateHouseRule" component={CreateHouseRule} options={{tabBarVisible: true}} />
       <Stack.Screen name="ShareHomie" component={ShareHomie} options={{tabBarVisible: true}} /> */}
 
-    <Stack.Screen name="TabNavigator" component={TabNavigator} options={{tabBarVisible: true}} />
+      <Stack.Screen
+        name="TabNavigator"
+        component={TabNavigator}
+        options={{ tabBarVisible: true }}
+      />
     </Stack.Navigator>
   );
 };
@@ -75,7 +79,7 @@ const BehomiescreenStack = () => {
       <Stack.Screen name="memorywall" component={Memorywall} />
       <Stack.Screen name="Nearby" component={Nearby} />
       <Stack.Screen name="Discover" component={Discover} />
-      <Stack.Screen name="externhomeaccount" component= {ExternHomeaccount} />
+      <Stack.Screen name="externhomeaccount" component={ExternHomeaccount} />
       <Stack.Screen name="housemateprofile" component={HousemateProfile} />
     </Stack.Navigator>
   );
