@@ -4,14 +4,14 @@ import { TabNavigator } from "./TabNavigator";
 
 import Home from "./screens/Homescreen";
 import Behomie from "./screens/BeHomiescreen";
-import Costsplitter from "./screens/Costsplitter/Costsplitterscreen";
+import Costsplitter from "./screens/Costsplitter/Costsplitterscreen"
 import Calendar from "./screens/Planner/Calendarscreen";
 import Homeaccount from "./screens/Homeaccount";
 import Myprofilescreen from "./screens/MyProfilescreen";
 import Memorywall from "./screens/Memorywall";
 import Settingsscreen from "./screens/settings";
-// import Login from "./screens/login/Login";
-// import SignUp from "./screens/login/SignUp";
+import Login from "./screens/login/Login";
+import SignUp from "./screens/login/SignUp";
 import HouseChoice from "./screens/login/houseChoice";
 import CreateHouse from "./screens/login/CreateHouse";
 import CreateHouseAdress from "./screens/login/CreateHouseAdress";
@@ -37,7 +37,6 @@ const Tab = createBottomTabNavigator();
 
 const LoginscreenStack = () => {
   return (
-<<<<<<< HEAD
     <Stack.Navigator screenOptions={{headerShown: false}} >
       {/* <Stack.Screen name="Login" component={Login} options={{tabBarVisible: true}} />
       <Stack.Screen name="SignUp" component={SignUp} options={{tabBarVisible: true}} />
@@ -47,55 +46,8 @@ const LoginscreenStack = () => {
       <Stack.Screen name="CreateHouseAdress" component={CreateHouseAdress} options={{tabBarVisible: true}} />
       <Stack.Screen name="CreateHouseRule" component={CreateHouseRule} options={{tabBarVisible: true}} />
       <Stack.Screen name="ShareHomie" component={ShareHomie} options={{tabBarVisible: true}} /> */}
-=======
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {/* <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{ tabBarVisible: true }}
-      />
-      <Stack.Screen
-        name="SignUp"
-        component={SignUp}
-        options={{ tabBarVisible: true }}
-      /> */}
-      {/* <Stack.Screen
-        name="HouseChoice"
-        component={HouseChoice}
-        options={{ tabBarVisible: true }}
-      />
-      <Stack.Screen
-        name="JoinHouse"
-        component={JoinHouse}
-        options={{ tabBarVisible: true }}
-      />
-      <Stack.Screen
-        name="CreateHouse"
-        component={CreateHouse}
-        options={{ tabBarVisible: true }}
-      />
-      <Stack.Screen
-        name="CreateHouseAdress"
-        component={CreateHouseAdress}
-        options={{ tabBarVisible: true }}
-      />
-      <Stack.Screen
-        name="CreateHouseRule"
-        component={CreateHouseRule}
-        options={{ tabBarVisible: true }}
-      />
-      <Stack.Screen
-        name="ShareHomie"
-        component={ShareHomie}
-        options={{ tabBarVisible: true }}
-      /> */}
->>>>>>> 53626950ba9c2f637014df4e65f0f6e164fa4353
 
-      <Stack.Screen
-        name="TabNavigator"
-        component={TabNavigator}
-        options={{ tabBarVisible: true }}
-      />
+    <Stack.Screen name="TabNavigator" component={TabNavigator} options={{tabBarVisible: true}} />
     </Stack.Navigator>
   );
 };
