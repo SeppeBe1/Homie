@@ -1,6 +1,7 @@
 import React, { Component, useState } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import emptylike from '../assets/emptylike.png';
+import filledlike from '../assets/like.png';
 import hiddencontent from '../assets/icons/hiddencontent.svg';
 import { useNavigation } from '@react-navigation/native';
 
@@ -9,29 +10,21 @@ import groep from '../assets/groupfoto.jpg'
 const Discover = () => {
   const navigation = useNavigation();
   const [hideImages, setHideImages]= useState(false);
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
 
   const hideAllImages = () => {
     setHideImages(true);
   };
 
-/*export default class Discover extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hideImages: false
-    };
-  }
-
-  hideAllImages = () => {
-    this.setState({ hideImages: true });
+  const toggleLike = () => {
+    if (liked) {
+      setLikeCount(likeCount - 1);
+    } else {
+      setLikeCount(likeCount + 1);
+    }
+    setLiked(!liked);
   };
-
-    render(){
-      const { hideImages } = this.state;*/
-
-   /*   <TouchableOpacity onPress={hideAllImages}>
-          <Text>Hide Images</Text>
-        </TouchableOpacity>*/
 
   return (   
     <View>
@@ -58,8 +51,11 @@ const Discover = () => {
           </View>
           {!hideImages && (
             <View>
-              <Image source={emptylike} style={{ width: 20, height: 17 }} />
-            </View>
+          <TouchableOpacity onPress={toggleLike} style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Image source={liked ? filledlike : emptylike} style={{ width: 20, height: 17 }} />
+            {liked && <Text style={{ marginLeft: 5, fontFamily: 'manrope', fontSize: 13 }}>{likeCount}</Text>}
+          </TouchableOpacity>
+          </View>
           )}
         </View>
           <View style={{ justifyContent:'center', marginBottom: 40 }}>

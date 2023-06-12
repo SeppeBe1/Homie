@@ -163,12 +163,14 @@ const styles = StyleSheet.create({
 
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
+    alignContent: 'center',
+    alignItems: 'center',
     gap: 5,
   },
   button: {
     height: 50,
-    width: 163,
+    width: 170,
     borderRadius: 30,
     backgroundColor: "#F2F2F2",
     borderColor: "#D9B2EE",

@@ -1,6 +1,7 @@
 import React, { Component, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import emptylike from '../assets/emptylike.png';
+import filledlike from '../assets/like.png';
 import hiddencontent from '../assets/icons/hiddencontent.svg';
 import { useNavigation } from '@react-navigation/native';
 
@@ -12,10 +13,21 @@ import { useNavigation } from '@react-navigation/native';
   const Nearby = () => {
     const navigation = useNavigation();
     const [hideImages, setHideImages]= useState(false);
+    const [liked, setLiked] = useState(false);
+    const [likeCount, setLikeCount] = useState(0);
 
       const hideAllImages = () => {
         setHideImages(true);
       }; 
+
+      const toggleLike = () => {
+        if (liked) {
+          setLikeCount(likeCount - 1);
+        } else {
+          setLikeCount(likeCount + 1);
+        }
+        setLiked(!liked);
+      };
 
   return (   
     <View>
@@ -26,7 +38,7 @@ import { useNavigation } from '@react-navigation/native';
       </TouchableOpacity>
     </View>
     <View style={{ marginLeft: 15, flex: 1 }}>
-    <TouchableOpacity onPress={() => navigation.navigate("externhomeaccount")}>
+    <TouchableOpacity style={{ width:'fit-content' }} onPress={() => navigation.navigate("externhomeaccount")}>
       <Text style={{ color: '#160635', fontFamily:'novaticaBold', fontSize: '16px' }}>Casa Frankie</Text>
     </TouchableOpacity>
       {!hideImages && (
@@ -41,9 +53,12 @@ import { useNavigation } from '@react-navigation/native';
             )}
           </View>
           {!hideImages && (
-            <View>
-              <Image source={emptylike} style={{ width: 20, height: 17 }} />
-            </View>
+            <View >
+          <TouchableOpacity onPress={toggleLike} style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Image source={liked ? filledlike : emptylike} style={{ width: 20, height: 17 }} />
+            {liked && <Text style={{ marginLeft: 5, fontFamily: 'manrope', fontSize: 13 }}>{likeCount}</Text>}
+          </TouchableOpacity>
+          </View>
           )}
 </View>
   <View style={{ justifyContent:'center', marginBottom: 40 }}>
