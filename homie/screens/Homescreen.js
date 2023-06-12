@@ -59,6 +59,12 @@ export default function Homescreen({ navigation }) {
       getAnnouncement(houseIdd);
     }
   }, [houseIdd]);
+
+  const handleDeleteItem = (itemId) => {
+    setAnnouncements((prevAnnouncements) =>
+      prevAnnouncements.filter((item) => item._id !== itemId)
+    );
+  };
   
 
 
