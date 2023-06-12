@@ -22,6 +22,8 @@ import water from "../../assets/water.svg";
 import other from "../../assets/other.png";
 import invoices from "../../assets/invoices.svg";
 import close from "../../assets/icons/close.svg";
+import camera from "../../assets/icons/Camera.svg";
+import picture from "../../assets/icons/picture.svg";
 
 export default function ViewInvoices() {
   const navigation = useNavigation();
@@ -150,13 +152,22 @@ export default function ViewInvoices() {
                   style={styles.uploadOption}
                   onPress={handleTakePicture}
                 >
-                  <Text style={styles.uploadOptionText}>Take a Picture</Text>
+                  <View style={styles.buttonContainer}>
+                    <Image
+                      source={camera}
+                      style={{ width: 29, height: 25, marginLeft: "20px" }}
+                    />
+                    <Text style={styles.uploadOptionText}>Take a Picture</Text>
+                  </View>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.uploadOption}
-                  onPress={handleSelectImage}
-                >
-                  <Text style={styles.uploadOptionText}>Select an Image</Text>
+                <TouchableOpacity onPress={handleSelectImage}>
+                  <View style={styles.buttonContainer}>
+                    <Image
+                      source={picture}
+                      style={{ width: 29, height: 25, marginLeft: "20px" }}
+                    />
+                    <Text style={styles.uploadOptionText}>Select an image</Text>
+                  </View>
                 </TouchableOpacity>
               </View>
             </View>
@@ -334,24 +345,28 @@ const styles = StyleSheet.create({
   popupContent: {
     backgroundColor: "#fff",
     borderRadius: 10,
-    padding: 20,
+    paddingHorizontal: 20,
     position: "relative",
     height: 250,
+    alignItems: "center",
   },
-  uploadOption: {
-    marginBottom: 10,
-    alignItems: "flex-end",
+
+  buttonContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#B900F4",
+    borderRadius: 30,
+    width: 280,
+    height: 55,
+    marginTop: 20,
   },
+
   uploadOptionText: {
     fontFamily: "moon",
     fontSize: 14,
-    backgroundColor: "#B900F4",
-    padding: 10,
-    paddingTop: 20,
-    borderRadius: 30,
-    color: "white",
-    width: 280,
-    height: 55,
     textAlign: "center",
+    fontWeight: "bold",
+    color: "white",
+    marginLeft: 10,
   },
 });
