@@ -15,14 +15,6 @@ import { color } from "react-native-elements/dist/helpers";
 
 
 // Load the font
-const loadFonts = async () => {
-  await Font.loadAsync({
-    moon: require("../assets/fonts/Moon.otf"),
-    manrope: require("../assets/fonts/Manrope.ttf"),
-    novatica: require("../assets/fonts/Novatica.ttf"),
-    novaticaBold: require("../assets/fonts/Novatica-Bold.ttf"),
-  });
-};
 
 export default function Homescreen({ navigation }) {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -36,18 +28,39 @@ export default function Homescreen({ navigation }) {
   const [announcements, setAnnouncements] = useState([]);
   const currentDate = new Date();
 
-
+  const loadFonts = async () => {
+    try {
+      await Font.loadAsync({
+        moon: require("../assets/fonts/Moon.otf"),
+        manrope: require("../assets/fonts/Manrope.ttf"),
+        novatica: require("../assets/fonts/Novatica.ttf"),
+        novaticaBold: require("../assets/fonts/Novatica-Bold.ttf"),
+      });
+      setFontsLoaded(true);
+    } catch (error) {
+      console.error("Error loading fonts:", error);
+    }
+  };
 
 
   useEffect(() => {
-    getUser();
-    getHouse();
+    const fetchData = async () => {
+      await loadFonts();
+  
+      getUser();
+    };
+  
+    fetchData();
+  }, []);
 
-    loadFonts().then(() => { 
-      setFontsLoaded(true);
-    });
-    // getAnnouncement();
-  }, [houseIdd, housenamee, inputValue]);
+  useEffect(() => {
+    if (houseIdd.length > 0) {
+      getHouse();
+      getAnnouncement(houseIdd);
+    }
+  }, [houseIdd]);
+  
+
 
   const handleOpenModal = () => {
     setModalVisible(true);
@@ -115,7 +128,6 @@ export default function Homescreen({ navigation }) {
     if (data.status === 'failed') {
     } else if (data.status === 'succes') {
       setHousename(data.data.housename);
-
   }
 }
 
@@ -155,8 +167,10 @@ const createAnnouncement = async () => {
             });
 }
 
-  const getAnnouncement = async () => {
+
+  const getAnnouncement = async (houseIdd) => {
       const token = await AsyncStorage.getItem('token');
+      console.log(token)
       if(houseIdd){
         fetch(`http://localhost:3000/api/v1/anouncement/${houseIdd}`, {
           method: 'GET',
@@ -167,31 +181,10 @@ const createAnnouncement = async () => {
           })
           .then(response =>  response.json())
           .then(data => {   
-            console.log(data.status);
-              if(data.status === "success"){
-                for(let i = 0; i < data.result.length; i++ ){
-                  console.log(data.result[i])
-                  setAnnouncements(data.result[i]);
-                  // switch (data.result[i].type) {
-                  //   case 'Announcement':
-                  //     console.log('Announcement');
-                  //     break;
-                  //     case 'Behomie':
-                  //       console.log('Behomie');
-                  //       break;
-                  //   case 'Costsplitter':
-                  //     console.log('Costsplitter');
-                  //     break;
-                  //   case 'Event':
-                  //     console.log('Event');
-                  //     break;
-                  //   default:
-                  //     break;
-                  // }
-
-
-                }
-              
+            if (data.status === "success") {
+              const fetchedAnnouncements = data.result.map((announcement) => announcement);
+              console.log(fetchedAnnouncements)
+              setAnnouncements(fetchedAnnouncements);
               } 
               else if(data === "failed"){
                 console.log(data.result);
@@ -206,14 +199,17 @@ const createAnnouncement = async () => {
 
   };
 
-
+  try {
+    if (!fontsLoaded) {
+      return null; // or a loading screen
+    }
   
-
-
-
-  if (!fontsLoaded) {
-    return null; // or a loading screen
+    // Rest of the return statement...
+  } catch (error) {
+    console.error("Error rendering component:", error);
   }
+
+
 
   return (
     <View style={styles.container}>
@@ -361,32 +357,44 @@ const createAnnouncement = async () => {
           </View>
         </View>
       </View>
-      <View
-        style={{
-          height: "100%",
-          width: "100%",
-          backgroundColor: "blue",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+      <View>
+        {announcements.length === 0 ? (
+          <Text>No announcements found</Text>
+        ) : (
           <FlatList
             keyExtractor={(item) => item._id}
             data={announcements}
-            
-            renderItem={({ item }) => (
-              // item.id == houseId ?  
-              <>
-              <View style={styles.announcement}>
-                <Text style={styles.announcementText}>{item.description}</Text>
-                <Text style={styles.announcementTime}>1 sec ago</Text>
-              </View>
-              </>
-              // : null
-            )}
+            renderItem={({ item }) => {
+              let announcementStyle;
+              let announcementTextStyle;
+
+              switch (item.type) {
+                case "Announcement":
+                  announcementStyle = styles.announcement;
+                  announcementTextStyle = styles.announcementText;
+                  break;
+                case "Payment":
+                  announcementStyle = styles.payment;
+                  announcementTextStyle = styles.announcementText;
+                  break;
+                case "Event":
+                  announcementStyle = styles.event;
+                  announcementTextStyle = styles.announcementText;
+                  break;
+
+              }
+
+              return (
+                <>
+                  <View style={announcementStyle}>
+                    <Text style={announcementTextStyle}>{item.description}</Text>
+                    <Text style={styles.announcementTime}>1 sec ago</Text>
+                  </View>
+                </>
+              );
+            }}
           />
-        
+        )}
       </View>
     </View>
   );
@@ -496,6 +504,26 @@ createAnnouncement: {
 
 announcement:{
   backgroundColor: '#FF7A7A',
+  fontFamily: Manrope,
+  borderRadius: 10,
+  height: 41,
+  marginLeft: 30,
+  marginRight: 30,
+  marginTop: 8,
+},
+
+payment:{
+  backgroundColor: '#F57ED4',
+  fontFamily: Manrope,
+  borderRadius: 10,
+  height: 41,
+  marginLeft: 30,
+  marginRight: 30,
+  marginTop: 8,
+},
+
+event:{
+  backgroundColor: '#00B9F4',
   fontFamily: Manrope,
   borderRadius: 10,
   height: 41,
