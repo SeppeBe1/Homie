@@ -11,30 +11,36 @@ import {
   Linking,
 } from "react-native";
 import addButton from "../assets/icons/add.svg";
-import profilePicture from "../assets/girl.jpg";
+import profileJade from "../assets/profielfoto.svg";
+import profileBoy from "../assets/boy2.jpg";
+import profileSeppe from "../assets/boy.jpg";
+import profileYanelle from "../assets/girl.jpg";
 import messenger from "../assets/icons/messenger.svg";
 import whatsapp from "../assets/icons/whatsapp.svg";
 import share from "../assets/icons/share.svg";
 import crossIcon from "../assets/icons/close.svg";
 
 const residentsData = [
-  { name: "Me" },
-  { name: "Boysangur" },
-  { name: "Yanelle" },
-  { name: "Seppe" },
+  { name: "Me", image: profileJade },
+  { name: "Boysangur", image: profileBoy },
+  { name: "Yanelle", image: profileYanelle },
+  { name: "Seppe", image: profileSeppe },
 ];
 
 export default class Residents extends Component {
    
   renderResidents() {
+    const { navigation } = this.props;
     return residentsData.map((resident, index) => (
       <View style={styles.residentFull} key={index}>
+        <TouchableOpacity onPress={() => navigation.navigate("housemateprofile")}>
         <View style={styles.residentProfile}>
           <View style={styles.status}>
-            <Image source={profilePicture} style={styles.profilePicture} />
+            <Image source={resident.image} style={styles.profilePicture} />
           </View>
           <Text style={{ fontSize: '16px', fontFamily:'manrope' }}>{resident.name}</Text>
         </View>
+        </TouchableOpacity>
       </View>
     ));
   }

@@ -112,6 +112,7 @@ const BehomiescreenStack = () => {
       <Stack.Screen name="Nearby" component={Nearby} />
       <Stack.Screen name="Discover" component={Discover} />
       <Stack.Screen name="externhomeaccount" component= {ExternHomeaccount} />
+      <Stack.Screen name="housemateprofile" component={HousemateProfile} />
     </Stack.Navigator>
   );
 };

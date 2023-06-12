@@ -50,7 +50,7 @@ export default function ExternHomeaccount({navigation}) {
   const renderView = () => {
     switch (currentView) {
       case "ExternResidents":
-        return <ExternResidents />;
+        return <ExternResidents navigation={navigation} />;
       case "ExternPhotos":
         return <ExternPhotos />;
       default:
