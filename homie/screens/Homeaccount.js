@@ -8,6 +8,7 @@ import Photos from "../compontents/Photos";
 import Houserules from "../compontents/Houserules";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
   View,
@@ -43,14 +44,28 @@ const App = () => {
 
   const [currentView, setCurrentView] = useState("Residents");
   const [backgroundImageURI, setBackgroundImageURI] = useState(backgroundImage);
+  const [houseIdd, setHouseId] = useState([]);
+  const [housenamee, setHousename] = useState([]);
 
   const switchView = (view) => {
     setCurrentView(view);
   };
 
   useEffect(() => {
-    loadFonts();
+    const fetchData = async () => {
+      await loadFonts();
+  
+      getUser();
+    };
+  
+    fetchData();
   }, []);
+
+  useEffect(() => {
+    if (houseIdd.length > 0) {
+      getHouse();
+    }
+  }, [houseIdd]);
 
   const renderView = () => {
     switch (currentView) {
@@ -97,6 +112,50 @@ const App = () => {
 
     setUploadPopupVisible(false);
   };
+
+  const getUser = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    console.log('yeet')
+
+    fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+      }
+      })
+      .then(response => response.json())
+      .then(data => {        
+          if(data.status == "failed"){
+            console.log(data.status);
+          } else if(data.status == "succes"){
+            setHouseId(data.data.houseId);
+
+
+            // let profilePic = data.data.profilePic;
+          }
+      })
+      .catch(error => {
+          // Handle any errors
+          console.error(error);
+      });
+  }
+
+  const getHouse = async () => {
+    const token = await AsyncStorage.getItem('token');
+
+    const response = await fetch(`http://localhost:3000/api/v1/house/${houseIdd}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    if (data.status === 'failed') {
+    } else if (data.status === 'succes') {
+      setHousename(data.data.housename);
+  }
+}
 
   const UploadImagePopup = () => {
     return (
@@ -163,7 +222,7 @@ const App = () => {
       </View>
 
       <View style={styles.container}>
-        <Text style={styles.h2}> Casa Magdalena </Text>
+        <Text style={styles.h2}> {housenamee} </Text>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[

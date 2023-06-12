@@ -10,6 +10,7 @@ import { useCode } from 'react-native-reanimated';
 
 const JoinHouse = ({ navigation }) => {
   const [code, setCode] = useState('');
+  const [houseIdd, setHouseId] = useState('');
   const [validation, setValidation] = useState(false);
 
   const handleCodeChange = (index, text) => {
@@ -23,13 +24,9 @@ const JoinHouse = ({ navigation }) => {
   };
 
   const checkCode = async (code) => {
-    console.log(code);
-    console.log('code');
-
     const token = await AsyncStorage.getItem('token');
-    const userId = await AsyncStorage.getItem('userId');
   
-    fetch(`http://localhost:3000/api/v1/house/`, {
+    fetch(`http://localhost:3000/api/v1/house/code/${code}`, {
       method: 'GET',
       headers: {
           'Authorization': `Bearer ${token}`,
@@ -39,35 +36,25 @@ const JoinHouse = ({ navigation }) => {
       .then(response => response.json())
       .then(data => {        
           if(data.status == "failed"){
-            console.log(data.status);
-  
+            console.log('fout');
+            setValidation(true);
           } else if(data.status == "succes"){
-            console.log(data.status);
-            console.log(data);
-            for(let i = 0; i < data.result.length ; i++){
-              console.log(data.result[i].houseCode);
-              if(data.result[i].houseCode == code){
-                console.log('correct');
-                joinHouseId(code);
+            setHouseId(data.result[0]._id)
+            console.log(data.result[0]._id);
+                joinHouseId(data.result[0]._id);
                 return;
-              } else {
-                console.log('fout');
-                setValidation(true);
               }
-
             }
-          }
-          // Perform any necessary actions after successful login
-      })
+      )
       .catch(error => {
           // Handle any errors
           console.error(error);
       });
     }
 
-  const joinHouseId = async (code) => {
-    console.log("deze code ist " + code );
+  const joinHouseId = async (houseIddd) => {
   const userId = await AsyncStorage.getItem('userId');
+  console.log(houseIddd)
 
   fetch(`http://localhost:3000/api/v1/users/${userId}`, {
     method: 'PUT',
@@ -75,7 +62,7 @@ const JoinHouse = ({ navigation }) => {
         'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      houseId: code,
+      houseId: houseIddd,
     }),
     })
     .then(response => response.json())
