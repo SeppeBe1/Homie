@@ -12,12 +12,12 @@ import Memorywall from "./screens/Memorywall";
 import Settingsscreen from "./screens/settings";
 import Login from "./screens/login/Login";
 import SignUp from "./screens/login/SignUp";
-import HouseChoice from "./screens/login/houseChoice";
+import HouseChoice from "./screens/login/HouseChoice";
 import CreateHouse from "./screens/login/CreateHouse";
 import CreateHouseAdress from "./screens/login/CreateHouseAdress";
 import CreateHouseRule from "./screens/login/CreateHouseRule";
 import ShareHomie from "./screens/login/ShareHomie";
-import JoinHouse from "./screens/login/joinHouse";
+import JoinHouse from "./screens/login/JoinHouse";
 import FullCalenderScreen from "./screens/Planner/FullCalenderScreen";
 import EventsScreen from "./screens/Planner/EventsScreen";
 import TasksScreen from "./screens/Planner/TasksScreen";
@@ -29,6 +29,9 @@ import ViewStatistics from "./screens/Costsplitter/ViewStatistics";
 import ViewInvoices from "./screens/Costsplitter/ViewInvoices";
 import ChangePassword from "./screens/ChangePassword";
 import HousemateProfile from "./screens/HousemateProfile";
+import ExternHomeaccount from "./screens/ExternHomeaccount";
+import Discover from "./compontents/Discover";
+import Nearby from "./compontents/Nearby";
 
 const Homename = "Home";
 
@@ -70,6 +73,10 @@ const BehomiescreenStack = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="behomie" component={Behomie} />
       <Stack.Screen name="memorywall" component={Memorywall} />
+      <Stack.Screen name="Nearby" component={Nearby} />
+      <Stack.Screen name="Discover" component={Discover} />
+      <Stack.Screen name="externhomeaccount" component= {ExternHomeaccount} />
+      <Stack.Screen name="housemateprofile" component={HousemateProfile} />
     </Stack.Navigator>
   );
 };
