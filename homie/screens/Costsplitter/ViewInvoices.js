@@ -64,6 +64,10 @@ export default function ViewInvoices() {
     setPopupVisible(false);
   };
 
+  const handleCategorySelect = (category) => {
+    navigation.navigate("CategoryScreen", { category });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -97,7 +101,10 @@ export default function ViewInvoices() {
         <View style={styles.folderContainer}>
           <Text style={styles.subtitle}>Folders</Text>
           <View style={styles.category}>
-            <View style={styles.imageContainer}>
+            <TouchableOpacity
+              style={styles.imageContainer}
+              onPress={() => handleCategorySelect("Energy")}
+            >
               <ImageBackground
                 source={energy}
                 style={styles.image}
@@ -107,8 +114,11 @@ export default function ViewInvoices() {
                   <Text style={styles.categoryText}>Energy</Text>
                 </View>
               </ImageBackground>
-            </View>
-            <View style={styles.imageContainer}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.imageContainer}
+              onPress={() => handleCategorySelect("Water")}
+            >
               <ImageBackground
                 source={water}
                 style={styles.image}
@@ -118,8 +128,11 @@ export default function ViewInvoices() {
                   <Text style={styles.categoryText}>Water</Text>
                 </View>
               </ImageBackground>
-            </View>
-            <View style={styles.imageContainer}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.imageContainer}
+              onPress={() => handleCategorySelect("Other")}
+            >
               <ImageBackground
                 source={other}
                 style={styles.image}
@@ -129,11 +142,12 @@ export default function ViewInvoices() {
                   <Text style={styles.categoryText}>Other</Text>
                 </View>
               </ImageBackground>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.recentContainer}>
           <Text style={styles.subtitle}>Recent invoices</Text>
+          <Text style={styles.fileItem}> filename uit database</Text>
         </View>
       </View>
 
@@ -155,7 +169,7 @@ export default function ViewInvoices() {
                   <View style={styles.buttonContainer}>
                     <Image
                       source={camera}
-                      style={{ width: 29, height: 25, marginLeft: "20px" }}
+                      style={{ width: 29, height: 25, marginLeft: 20 }}
                     />
                     <Text style={styles.uploadOptionText}>Take a Picture</Text>
                   </View>
@@ -164,7 +178,7 @@ export default function ViewInvoices() {
                   <View style={styles.buttonContainer}>
                     <Image
                       source={picture}
-                      style={{ width: 29, height: 25, marginLeft: "20px" }}
+                      style={{ width: 29, height: 25, marginLeft: 20 }}
                     />
                     <Text style={styles.uploadOptionText}>Select an image</Text>
                   </View>
@@ -284,6 +298,11 @@ const styles = StyleSheet.create({
     width: 115,
     height: 125,
   },
+  fileItem: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    height: 56,
+  },
   overlay: {
     flex: 1,
     backgroundColor: "rgba(22, 6, 53, 0.5)",
@@ -350,7 +369,6 @@ const styles = StyleSheet.create({
     height: 250,
     alignItems: "center",
   },
-
   buttonContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -360,7 +378,6 @@ const styles = StyleSheet.create({
     height: 55,
     marginTop: 20,
   },
-
   uploadOptionText: {
     fontFamily: "moon",
     fontSize: 14,

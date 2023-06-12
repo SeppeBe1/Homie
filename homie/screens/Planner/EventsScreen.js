@@ -73,7 +73,7 @@ export default function FullCalenderScreen() {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </View> 
       <View style={styles.eventContainer}>
         {events.map((event, index) => (
           <TouchableOpacity
