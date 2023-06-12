@@ -108,8 +108,7 @@ export default function Homescreen({ navigation }) {
           } else if(data.status == "succes"){
             setFirstname(data.data.firstname);
             setLastname(data.data.lastname);
-            setHouseId(data.data.houseId);
-
+            AsyncStorage.setItem('houseId', data.data.houseId);
 
             // let profilePic = data.data.profilePic;
           }
@@ -122,6 +121,7 @@ export default function Homescreen({ navigation }) {
 
   const getHouse = async () => {
     const token = await AsyncStorage.getItem('token');
+    const houseIdd = await AsyncStorage.getItem('houseId');
 
     const response = await fetch(`http://localhost:3000/api/v1/house/${houseIdd}`, {
       method: 'GET',
@@ -163,6 +163,7 @@ const createAnnouncement = async () => {
                 if(data.status == "failed"){
 
                 } else if(data.status == "succes"){
+                  setInputValue("");
                   handleCloseModal();
                 }
                 // Perform any necessary actions after successful login

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import {
   Share,
   Text,
@@ -16,15 +16,92 @@ import messenger from "../assets/icons/messenger.svg";
 import whatsapp from "../assets/icons/whatsapp.svg";
 import share from "../assets/icons/share.svg";
 import crossIcon from "../assets/icons/close.svg";
-
-const residentsData = [
-  { name: "Me", profileStatusColor: "#FFB84E" },
-  { name: "Boysangur", profileStatusColor: "#3BED6D" },
-  { name: "Yanelle", profileStatusColor: "#FF7A7A" },
-  { name: "Seppe", profileStatusColor: "#FF7A7A" },
-];
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class Residents extends Component {
+
+  residentsData = [];
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      showModal: false,
+      residentsData: [],
+    };
+  }
+
+  componentDidMount() {
+    this.getUsers();
+  }
+
+
+  getUsers = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const houseId = await AsyncStorage.getItem("houseId");
+    fetch(`http://localhost:3000/api/v1/users/house/${houseId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.status);
+        if (data.status === "failed") {
+          console.log(data.status);
+        } else if (data.status === "success") {
+          const fetchedResidents = data.result;
+          for (let i = 0; i < fetchedResidents.length; i++) {
+            const resident = fetchedResidents[i];
+            console.log(resident);
+            this.residentsData.push({
+              firstname: resident.firstname,
+              lastname: resident.lastname,
+            });
+          }
+          this.setState({ residentsData: this.residentsData });
+          console.log(this.residentsData);
+        }
+      })
+      .catch((error) => {
+        // Handle any errors
+        console.error(error);
+      });
+  };
+
+   leaveHouse = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+  
+    fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+      method: 'PUT',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        houseId: "",
+      }),
+      })
+      .then(response => response.json())
+      .then(data => {        
+        console.log(data);
+          if(data.status == "failed"){
+            console.log(data.status);
+  
+          } else if(data.status == "success"){
+            console.log(data.status);
+            navigation.navigate("Login");
+  
+          }
+          // Perform any necessary actions after successful login
+      })
+      .catch(error => {
+          // Handle any errors
+          console.error(error);
+      });
+    }
+
+
   handleShare = async () => {
     try {
       const shareOptions = {
@@ -41,12 +118,6 @@ export default class Residents extends Component {
     }
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      showModal: false,
-    };
-  }
 
   toggleModal = () => {
     this.setState((prevState) => ({
@@ -55,7 +126,12 @@ export default class Residents extends Component {
   };
 
   renderResidents() {
-    return residentsData.map((resident, index) => (
+    if (this.residentsData.length === 0) {
+      return <Text>Loading...</Text>; // Show loading indicator while data is being fetched
+    }
+    
+    
+    return this.residentsData.map((resident, index) => (
       <View style={styles.residentFull} key={index}>
         <View style={styles.residentProfile}>
           <View style={styles.status}>
@@ -67,14 +143,16 @@ export default class Residents extends Component {
               ]}
             />
           </View>
-          <Text>{resident.name}</Text>
+          <Text>{resident.firstname}</Text>
         </View>
       </View>
     ));
   }
 
   render() {
+
     const { showModal } = this.state;
+    const { houseCode } = this.props;
 
     return (
       <View>
@@ -91,10 +169,9 @@ export default class Residents extends Component {
         {this.renderResidents()}
         <View>
           <TouchableOpacity
-            onPress={() => navigation.navigate("FullCalenderScreen")}
             style={styles.leave}
           >
-            Leave House
+            <Text style={styles.leave} onPress={this.leaveHouse}>Leave House</Text>
           </TouchableOpacity>
         </View>
 
@@ -118,7 +195,7 @@ export default class Residents extends Component {
                   color: "#160635",
                 }}
               >
-                New resident
+                <Text>New resident</Text>
               </Text>
               <Text
                 style={{
@@ -139,7 +216,7 @@ export default class Residents extends Component {
                   alignSelf: "center",
                 }}
               >
-                986 546
+                {this.props.houseCode}
               </Text>
               <View
                 style={{
@@ -196,7 +273,7 @@ export default class Residents extends Component {
                   }}
                   onPress={() =>
                     Linking.openURL(
-                      "whatsapp://send?text=Join our house with this code: 986 546"
+                      `whatsapp://send?text=Join our house with this code: ${this.props.houseCode}`
                     )
                   }
                 >

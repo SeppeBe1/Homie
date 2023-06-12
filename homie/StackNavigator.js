@@ -56,6 +56,7 @@ const HomescreenStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Login" component={Login} options={{tabBarVisible: true}} />
       {/* <Stack.Screen name="homeaccount" component={Homeaccount} /> */}
       <Stack.Screen name="myprofilescreen" component={Myprofilescreen} />
       <Stack.Screen name="settingsscreen" component={Settingsscreen} />
