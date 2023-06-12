@@ -1,11 +1,20 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import emptylike from '../assets/emptylike.png';
 import hiddencontent from '../assets/icons/hiddencontent.svg';
+import { useNavigation } from '@react-navigation/native';
 
 import groep from '../assets/groupfoto.jpg'
 
-export default class Discover extends Component {
+const Discover = () => {
+  const navigation = useNavigation();
+  const [hideImages, setHideImages]= useState(false);
+
+  const hideAllImages = () => {
+    setHideImages(true);
+  };
+
+/*export default class Discover extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,9 +27,9 @@ export default class Discover extends Component {
   };
 
     render(){
-      const { hideImages } = this.state;
+      const { hideImages } = this.state;*/
 
-   /*   <TouchableOpacity onPress={this.hideAllImages}>
+   /*   <TouchableOpacity onPress={hideAllImages}>
           <Text>Hide Images</Text>
         </TouchableOpacity>*/
 
@@ -28,11 +37,15 @@ export default class Discover extends Component {
     <View>
     <View style={{ flexDirection:'row', alignItems: 'center', marginBottom: 20 }}>
     <View>
-      <Image source={require('../assets/grouppicture.jpg')} style={{ width: 58, height: 58, borderRadius:50 }} />
-    </View>
+      <TouchableOpacity onPress={() => navigation.navigate("externhomeaccount")}>
+        <Image source={require('../assets/grouppicture.jpg')} style={{ width: 58, height: 58, borderRadius:50 }} />
+      </TouchableOpacity>    
+      </View>
     <View style={{ marginLeft: 15, flex: 1 }}>
+    <TouchableOpacity onPress={() => navigation.navigate("externhomeaccount")}>
       <Text style={{ color: '#160635', fontFamily:'novaticaBold', fontSize: '16px' }}>Chinatown</Text>
-      {!hideImages && (
+    </TouchableOpacity>      
+    {!hideImages && (
               <>
                 <Text style={{ fontFamily: 'manrope', fontSize: 14 }}>Partytime!</Text>
                 <View style={{ flexDirection: 'row' }}>
@@ -67,8 +80,6 @@ export default class Discover extends Component {
           </View> 
           );
         }
-        }
-
         
 
 const styles = StyleSheet.create({
@@ -103,5 +114,8 @@ const styles = StyleSheet.create({
     padding: 20
   },
 } )
+
+export default Discover;
+
 
 

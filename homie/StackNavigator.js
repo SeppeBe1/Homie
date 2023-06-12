@@ -30,6 +30,8 @@ import ViewInvoices from "./screens/Costsplitter/ViewInvoices";
 import ChangePassword from "./screens/ChangePassword";
 import HousemateProfile from "./screens/HousemateProfile";
 import ExternHomeaccount from "./screens/ExternHomeaccount";
+import Discover from "./compontents/Discover";
+import Nearby from "./compontents/Nearby";
 
 const Homename = "Home";
 
@@ -107,6 +109,8 @@ const BehomiescreenStack = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="behomie" component={Behomie} />
       <Stack.Screen name="memorywall" component={Memorywall} />
+      <Stack.Screen name="Nearby" component={Nearby} />
+      <Stack.Screen name="Discover" component={Discover} />
       <Stack.Screen name="externhomeaccount" component= {ExternHomeaccount} />
     </Stack.Navigator>
   );

@@ -62,9 +62,6 @@ export default function Behomiescreen({navigation}) {
     <Text style={styles.heading}>
       Homie moments
     </Text>
-    <TouchableOpacity onPress>
-      <Text>Houseaccount</Text>
-    </TouchableOpacity>
     <View style={styles.iconContainer}>
       <TouchableOpacity onPress={() => navigation.navigate("memorywall")}>
       <Image source={calendarIcon} style={{width: 24, height: 24}}/>

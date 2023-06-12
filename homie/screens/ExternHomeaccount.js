@@ -34,8 +34,7 @@ const loadFonts = async () => {
   });
 };
 
-const App = () => {
-  const navigation = useNavigation();
+export default function ExternHomeaccount({navigation}) {
 
   const [currentView, setCurrentView] = useState("ExternResidents");
   const [backgroundImageURI, setBackgroundImageURI] = useState(backgroundImage);
@@ -61,7 +60,7 @@ const App = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F5F5F5" }}>
-      <View style={styles.header}>
+      <View style={[styles.header, {marginBottom: '35px'}]}>
         <ImageBackground
           source={{ uri: backgroundImageURI }}
           style={styles.background}
@@ -73,8 +72,8 @@ const App = () => {
               style={{ width: 8, height: 15, marginRight: 10 }}
             />
           </TouchableOpacity>
-          <View>
-        <Text style={[styles.h1, {textAlign:'center', zIndex: 1}]}>Casa Frankie</Text>
+          <View style={{ flex: 1, alignItems: 'center', zIndex: 1 }}>
+        <Text style={[styles.h1, {textAlign:'center'}]}>Casa Frankie</Text>
         </View>
         </ImageBackground>
       </View>
@@ -137,8 +136,8 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    justifyContent: "space-between",
   },
+
   link: {
     fontFamily: "novatica",
   },
@@ -237,5 +236,3 @@ const styles = StyleSheet.create({
     width: 160,
   },
 });
-
-export default App;

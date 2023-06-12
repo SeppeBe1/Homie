@@ -2,24 +2,20 @@ import React, { Component, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import emptylike from '../assets/emptylike.png';
 import hiddencontent from '../assets/icons/hiddencontent.svg';
+import { useNavigation } from '@react-navigation/native';
 
+  /*   <TouchableOpacity onPress={hideAllImages}>
+          <Text>Hide Images</Text>
+        </TouchableOpacity>*/
 
-export default class Nearby extends Component {
+//export default class Nearby extends Component {
+  const Nearby = () => {
+    const navigation = useNavigation();
+    const [hideImages, setHideImages]= useState(false);
 
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      hideImages: false
-    };
-  }
-
-  hideAllImages = () => {
-    this.setState({ hideImages: true });
-  };
-
-    render(){
-      const { hideImages } = this.state;
+      const hideAllImages = () => {
+        setHideImages(true);
+      }; 
 
   return (   
     <View>
@@ -31,8 +27,8 @@ export default class Nearby extends Component {
     </View>
     <View style={{ marginLeft: 15, flex: 1 }}>
     <TouchableOpacity onPress={() => navigation.navigate("externhomeaccount")}>
-    <Text style={{ color: '#160635', fontFamily:'novaticaBold', fontSize: '16px' }}>Casa Frankie</Text>
-      </TouchableOpacity>
+      <Text style={{ color: '#160635', fontFamily:'novaticaBold', fontSize: '16px' }}>Casa Frankie</Text>
+    </TouchableOpacity>
       {!hideImages && (
               <>
                 <Text style={{ fontFamily: 'manrope', fontSize: 14 }}>Time for dinner!</Text>
@@ -67,9 +63,7 @@ export default class Nearby extends Component {
   </View>
   </View> 
   );
-}
-}
-
+};
 
 const styles = StyleSheet.create({
   overlay: {
@@ -103,3 +97,5 @@ const styles = StyleSheet.create({
     padding: 20
   },
 } )
+
+export default Nearby;
