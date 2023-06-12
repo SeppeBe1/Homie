@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Button, Image,  FlatList   } from "react-native";
+import { StyleSheet, View, Text, TextInput, Button, Image,  FlatList, TouchableOpacity, Modal   } from "react-native";
 import { Header, Avatar } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import * as Font from "expo-font";
 import myImage from "../assets/float.svg";
 import pen from "../assets/pentosquare.svg";
+import Manrope from "../assets/fonts/Manrope.ttf";
+import Moon from "../assets/fonts/Moon.otf";
+import Novatica from "../assets/fonts/Novatica-Bold.woff";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import close from '../assets/icons/close.svg'
+import { color } from "react-native-elements/dist/helpers";
+
 
 
 // Load the font
@@ -25,19 +31,50 @@ export default function Homescreen({ navigation }) {
   const [lastname, setLastname] = useState([]);
   const [houseIdd, setHouseId] = useState([]);
   const [housenamee, setHousename] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const [announcements, setAnnouncements] = useState([]);
+  const currentDate = new Date();
+
+
 
 
   useEffect(() => {
     getUser();
     getHouse();
-    loadFonts().then(() => {
+
+    loadFonts().then(() => { 
       setFontsLoaded(true);
     });
-    getHouserules();
-  }, [houseIdd, housenamee]);
+    // getAnnouncement();
+  }, [houseIdd, housenamee, inputValue]);
+
+  const handleOpenModal = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
+  const handleInputChange = (text) => {
+    setInputValue(text);
+  };
+
+  const options = {
+    day: "numeric",
+    month: "long",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: false,
+  };
+
+  const formattedDate = currentDate.toLocaleString("nl-NL", options).replace("om", "-");;
+
 
   const getUser = async () => {
     const userId = await AsyncStorage.getItem('userId');
+    console.log('yeet')
 
     fetch(`http://localhost:3000/api/v1/users/${userId}`, {
       method: 'GET',
@@ -48,10 +85,12 @@ export default function Homescreen({ navigation }) {
       .then(response => response.json())
       .then(data => {        
           if(data.status == "failed"){
+            console.log(data.status);
           } else if(data.status == "succes"){
             setFirstname(data.data.firstname);
             setLastname(data.data.lastname);
             setHouseId(data.data.houseId);
+
 
             // let profilePic = data.data.profilePic;
           }
@@ -80,46 +119,96 @@ export default function Homescreen({ navigation }) {
   }
 }
 
-  const getHouserules = async () => {
-      const token = await AsyncStorage.getItem('token');
-
-      fetch(`http://localhost:3000/api/v1/announcement`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-        }
-        })
-        .then(response => response.json())
-        .then(data => {        
-            if(data.status == "failed"){
-              console.log(data.status);
+const createAnnouncement = async () => {
+  const userId = await AsyncStorage.getItem('userId');
+  const token = await AsyncStorage.getItem('token');
+  fetch('http://localhost:3000/api/v1/anouncement', {
     
-            } else if(data.status == "succes"){
-              console.log(data.status);
-              console.log(data);
-              for(let i = 0; i < data.result.length ; i++){
-                console.log(data.result[i].houseId);
-                if(data.result[i].houseId == houseIdd){
-                  console.log(data.data.description)
-                  console.log('correct');
-                  return;
-                } else {
-                  console.log('fout');
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                type: 'Announcement',
+                description: inputValue,
+                creatorId: userId,
+                houseId: houseIdd,
+                dateCreated: formattedDate,
+            }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Process the response data
+                console.log(data.status);
+
+                if(data.status == "failed"){
+
+                } else if(data.status == "succes"){
+                  handleCloseModal();
                 }
-  
+                // Perform any necessary actions after successful login
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error(error);
+            });
+}
+
+  const getAnnouncement = async () => {
+      const token = await AsyncStorage.getItem('token');
+      if(houseIdd){
+        fetch(`http://localhost:3000/api/v1/anouncement/${houseIdd}`, {
+          method: 'GET',
+          headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+          }
+          })
+          .then(response =>  response.json())
+          .then(data => {   
+            console.log(data.status);
+              if(data.status === "success"){
+                for(let i = 0; i < data.result.length; i++ ){
+                  console.log(data.result[i])
+                  setAnnouncements(data.result[i]);
+                  // switch (data.result[i].type) {
+                  //   case 'Announcement':
+                  //     console.log('Announcement');
+                  //     break;
+                  //     case 'Behomie':
+                  //       console.log('Behomie');
+                  //       break;
+                  //   case 'Costsplitter':
+                  //     console.log('Costsplitter');
+                  //     break;
+                  //   case 'Event':
+                  //     console.log('Event');
+                  //     break;
+                  //   default:
+                  //     break;
+                  // }
+
+
+                }
+              
+              } 
+              else if(data === "failed"){
+                console.log(data.result);
               }
-            }
-            // Perform any necessary actions after successful login
-        })
-        .catch(error => {
-            // Handle any errors
+          })
+          .catch(error => {
             console.error(error);
-        });
-     
+          });
+      } else {
+        console.log(kaas);
+      }
+
   };
 
-  // getHouserules();
+
+  
+
 
 
   if (!fontsLoaded) {
@@ -229,20 +318,46 @@ export default function Homescreen({ navigation }) {
               alignItems: "center",
             }}
           >
-            <Text
-              style={{
-                fontSize: "0.875rem",
-                fontFamily: "manrope",
-                fontWeight: "regular",
-                color: "#939393",
-              }}
-            >
-              Add announcement
-            </Text>
-            <Image
-              source={pen}
-              style={{ width: 20, height: 20, marginLeft: 7 }}
-            />
+            <TouchableOpacity style={styles.addAnnoucement}  onPress={handleOpenModal} animationType="fade" transparent>
+              <Text
+                style={{
+                  fontSize: "0.875rem",
+                  fontFamily: "manrope",
+                  fontWeight: "regular",
+                  color: "#939393",
+                }}
+              >
+                Add announcement
+              </Text>
+              <Image
+                source={pen}
+                style={{ width: 20, height: 20, marginLeft: 7 }}
+              />
+            </TouchableOpacity>
+            {/* ---------------------------------- */}
+            <Modal visible={modalVisible} transparent={true} animationType="fade">
+              <View style={styles.modalContainer} >
+                <View style={styles.modalContent}>
+                  <TouchableOpacity onPress={handleCloseModal}>
+                    <Image source={close} style={styles.close} />
+                  </TouchableOpacity>
+                  <Text style={styles.modalText}>NEW ANNOUNCEMENT</Text>
+                  <Text style={styles.dateTime}>{formattedDate}</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Type here"
+                    multiline={true}
+                    numberOfLines={5}
+                    onChangeText={handleInputChange}
+                    value={inputValue}
+                  />
+                  <TouchableOpacity onPress={createAnnouncement} style={styles.createAnnouncementBtn} >
+                    <Text style={styles.createAnnouncement}>ADD TO DASHBOARD</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+            {/* ---------------------------------- */}
           </View>
         </View>
       </View>
@@ -250,7 +365,7 @@ export default function Homescreen({ navigation }) {
         style={{
           height: "100%",
           width: "100%",
-          backgroundColor: "red",
+          backgroundColor: "blue",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -258,13 +373,15 @@ export default function Homescreen({ navigation }) {
       >
           <FlatList
             keyExtractor={(item) => item._id}
-            data={data}
+            data={announcements}
             
             renderItem={({ item }) => (
               // item.id == houseId ?  
               <>
-                <Text>{item._id}</Text>
-                <Text>{item.description}</Text>
+              <View style={styles.announcement}>
+                <Text style={styles.announcementText}>{item.description}</Text>
+                <Text style={styles.announcementTime}>1 sec ago</Text>
+              </View>
               </>
               // : null
             )}
@@ -306,4 +423,102 @@ const styles = StyleSheet.create({
     maxWidth: "80%",
     height: "100%",
   },
+  addAnnoucement:{
+    display: "flex",
+    flexDirection: "row"
+    
+  },
+
+  modalContainer: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    marginTop: 256,
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    borderStyle: 'none',
+    width: '80%',
+  },
+
+  close: {
+    alignSelf : 'flex-end',
+    width:28,
+    height:28,
+},
+  modalText: {
+    fontSize: 16,
+    marginTop: -15,
+    marginBottom: 10,
+    fontFamily: Moon,
+    fontWeight: 'bold',
+  },
+
+  dateTime: {
+    fontSize: 14,
+    marginBottom: 10,
+    fontFamily: Manrope,
+    color:'#D9B2EE'
+  },
+
+  input: {
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+    fontFamily: Manrope,
+  },
+
+  createAnnouncementBtn: {
+    fontFamily: Moon,
+    backgroundColor: '#B900F4',
+    borderRadius: 30,
+    paddingLeft: 27,
+    paddingRight: 27,
+    paddingTop: 13,
+    paddingBottom: 13,
+    marginTop: 30,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    fontSize: 18,
+
+},
+
+createAnnouncement: {
+  fontFamily: Moon,
+  color:'white',
+
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  fontSize: 18,
+},
+
+announcement:{
+  backgroundColor: '#FF7A7A',
+  fontFamily: Manrope,
+  borderRadius: 10,
+  height: 41,
+  marginLeft: 30,
+  marginRight: 30,
+  marginTop: 8,
+},
+
+announcementText:{
+  fontSize: 14,
+  color:'white',
+  marginLeft: 17,
+  marginRight: 17,
+  marginTop: 4,
+  marginBottom: -2,
+
+},
+announcementTime:{
+  marginLeft: 17,
+  marginRight: 17,
+  fontSize: 10,
+  color:'white',
+},
+
+
 });
