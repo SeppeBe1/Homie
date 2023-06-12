@@ -14,14 +14,21 @@ const CreateHouseAdress = ({navigation}) => {
     const [postalcode, setpostalCode] = useState('');
     const [color, setColor] = useState('white');
     const [validation, setValidation] = useState(false);
+    const [validationText, setValidationText] = useState(false);
     
     async function checkAdress(){
       if(city == "" || postalcode == ""){
+        setValidationText("Cannot be empty");
         console.log("Cannot be empty");
         const newColor = color === 'white' ? '#FF7A7A' : 'white';
         setColor('#FF7A7A');
         setValidation(true);
-      } else {
+      } else if (isNaN(Number(postalcode))) {
+        setValidationText("Postal code must be a number");
+          console.log("Postal code must be a number");
+          setColor("#FF7A7A");
+          setValidation(true);
+        } else {
 
         const token = await AsyncStorage.getItem('token');
         console.log(token);
@@ -101,7 +108,7 @@ const CreateHouseAdress = ({navigation}) => {
         <Text style={styles.h3}> 2. Which city do you live?</Text>
      
         {validation && (
-                <Text style={styles.validation}>Cannot be empty</Text>
+                <Text style={styles.validation}>{validationText}</Text>
              )}
 
         <TextInput

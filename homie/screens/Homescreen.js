@@ -21,9 +21,9 @@ export default function Homescreen({ navigation }) {
   const [data, setData] = useState([]);
   const [firstname, setFirstname] = useState([]);
   const [lastname, setLastname] = useState([]);
-  const [houseIdd, setHouseId] = useState([]);
   const [housenamee, setHousename] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [isChanged, setIsChanged] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [announcements, setAnnouncements] = useState([]);
   const currentDate = new Date();
@@ -44,21 +44,16 @@ export default function Homescreen({ navigation }) {
 
 
   useEffect(() => {
-    const fetchData = async () => {
-      await loadFonts();
-  
-      getUser();
-    };
-  
-    fetchData();
-  }, []);
+     loadFonts();
 
-  useEffect(() => {
-    if (houseIdd.length > 0) {
+      getUser();
       getHouse();
-      getAnnouncement(houseIdd);
-    }
-  }, [houseIdd]);
+      getAnnouncement(); // Fetch announcements initially
+
+  }, [isChanged]);
+
+
+
 
   const handleDeleteItem = (itemId) => {
     setAnnouncements((prevAnnouncements) =>
@@ -93,7 +88,6 @@ export default function Homescreen({ navigation }) {
 
   const getUser = async () => {
     const userId = await AsyncStorage.getItem('userId');
-    console.log('yeet')
 
     fetch(`http://localhost:3000/api/v1/users/${userId}`, {
       method: 'GET',
@@ -121,9 +115,9 @@ export default function Homescreen({ navigation }) {
 
   const getHouse = async () => {
     const token = await AsyncStorage.getItem('token');
-    const houseIdd = await AsyncStorage.getItem('houseId');
+    const houseId = await AsyncStorage.getItem('houseId');
 
-    const response = await fetch(`http://localhost:3000/api/v1/house/${houseIdd}`, {
+    const response = await fetch(`http://localhost:3000/api/v1/house/${houseId}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -131,14 +125,18 @@ export default function Homescreen({ navigation }) {
       },
     });
     const data = await response.json();
+    console.log(data)
     if (data.status === 'failed') {
     } else if (data.status === 'succes') {
       setHousename(data.data.housename);
+      console.log(data.data.housename)
   }
 }
 
 const createAnnouncement = async () => {
   const userId = await AsyncStorage.getItem('userId');
+  const houseId = await AsyncStorage.getItem('houseId');
+  console.log(userId);
   const token = await AsyncStorage.getItem('token');
   fetch('http://localhost:3000/api/v1/anouncement', {
     
@@ -151,19 +149,24 @@ const createAnnouncement = async () => {
                 type: 'Announcement',
                 description: inputValue,
                 creatorId: userId,
-                houseId: houseIdd,
+                houseId: houseId,
                 dateCreated: formattedDate,
             }),
             })
             .then(response => response.json())
             .then(data => {
                 // Process the response data
-                console.log(data.status);
+                console.log(data);
 
                 if(data.status == "failed"){
 
                 } else if(data.status == "succes"){
                   setInputValue("");
+                  if(isChanged == false){
+                    setIsChanged(true)  
+                  } else {
+                  setIsChanged(false)
+                  }
                   handleCloseModal();
                 }
                 // Perform any necessary actions after successful login
@@ -175,11 +178,12 @@ const createAnnouncement = async () => {
 }
 
 
-  const getAnnouncement = async (houseIdd) => {
+  const getAnnouncement = async () => {
       const token = await AsyncStorage.getItem('token');
+      const houseId = await AsyncStorage.getItem('houseId');
       console.log(token)
-      if(houseIdd){
-        fetch(`http://localhost:3000/api/v1/anouncement/${houseIdd}`, {
+      if(houseId){
+        fetch(`http://localhost:3000/api/v1/anouncement/${houseId}`, {
           method: 'GET',
           headers: {
               'Authorization': `Bearer ${token}`,
@@ -366,7 +370,7 @@ const createAnnouncement = async () => {
       </View>
       <View>
         {announcements.length === 0 ? (
-          <Text>No announcements found</Text>
+          <Text style={styles.nothingFound}>No announcements found</Text>
         ) : (
           <FlatList
             keyExtractor={(item) => item._id}
@@ -521,6 +525,16 @@ createAnnouncement: {
   marginLeft: 'auto',
   marginRight: 'auto',
   fontSize: 18,
+},
+
+nothingFound:{
+  fontFamily: Manrope,
+  textAlign: 'center',
+  marginLeft:'auto',
+  marginRight:'auto',
+  color: '#FF7A7A',
+  marginTop: 20,
+
 },
 
 announcement:{
