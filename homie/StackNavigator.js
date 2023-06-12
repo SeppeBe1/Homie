@@ -32,6 +32,8 @@ import HousemateProfile from "./screens/HousemateProfile";
 import ExternHomeaccount from "./screens/ExternHomeaccount";
 import Discover from "./compontents/Discover";
 import Nearby from "./compontents/Nearby";
+import AddInvoice from "./screens/Costsplitter/AddInvoice";
+import CategoryScreen from "./screens/Costsplitter/CategoryScreen";
 
 const Homename = "Home";
 
@@ -92,6 +94,8 @@ const CostsplitterscreenStack = () => {
       <Stack.Screen name="SplitCosts" component={SplitCosts} />
       <Stack.Screen name="ViewInvoices" component={ViewInvoices} />
       <Stack.Screen name="ViewStatistics" component={ViewStatistics} />
+      <Stack.Screen name="AddInvoice" component={AddInvoice} />
+      <Stack.Screen name="CategoryScreen" component={CategoryScreen} />
     </Stack.Navigator>
   );
 };

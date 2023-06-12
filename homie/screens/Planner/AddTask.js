@@ -29,11 +29,11 @@ export default function AddTask() {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = (date) => {
-    console.warn("A date has been picked: ", date);
-    setTaskDeadline(date.toLocaleDateString()); // convert date to a string in local date format
-    hideDatePicker();
-  };
+  // const handleConfirm = (date) => {
+  //   console.warn("A date has been picked: ", date);
+  //   setTaskDeadline(date.toLocaleDateString()); // convert date to a string in local date format
+  //   hideDatePicker();
+  // };
 
   const isEventNameFilled = eventName !== "";
   const isTaskDeadlineFilled = taskDeadline !== "";
@@ -134,8 +134,6 @@ const styles = StyleSheet.create({
   inputSmall: {
     height: 56,
     width: "100%",
-    borderColor: "gray",
-    borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
     borderRadius: 10,
