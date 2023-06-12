@@ -6,6 +6,8 @@ import Manrope from "../assets/fonts/Manrope-Bold.ttf";
 import Residents from "../compontents/Residents";
 import Photos from "../compontents/Photos";
 import Houserules from "../compontents/Houserules";
+import * as ImagePicker from "expo-image-picker";
+import { useNavigation } from "@react-navigation/native";
 
 import {
   View,
@@ -14,11 +16,16 @@ import {
   TouchableOpacity,
   Image,
   ImageBackground,
+  Modal,
+  Button,
 } from "react-native";
 
 import arrowback from "../assets/icons/Arrow_back.svg";
 import editpen from "../assets/icons/Edit_pen.svg";
 import backgroundImage from "../assets/grouppicture.jpg";
+import closeIcon from "../assets/icons/close.svg";
+import { AntDesign } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 
 const loadFonts = async () => {
   await Font.loadAsync({
@@ -28,8 +35,14 @@ const loadFonts = async () => {
   });
 };
 
+const cameraIconColor = "#00B9F4"; // Color for the camera icon
+const imageIconColor = "#F57ED4"; // Color for the files icon
+
 const App = () => {
+  const navigation = useNavigation();
+
   const [currentView, setCurrentView] = useState("Residents");
+  const [backgroundImageURI, setBackgroundImageURI] = useState(backgroundImage);
 
   const switchView = (view) => {
     setCurrentView(view);
@@ -52,20 +65,100 @@ const App = () => {
     }
   };
 
+  const [uploadPopupVisible, setUploadPopupVisible] = useState(false);
+  const handleChooseFromFiles = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      alert("Sorry, we need camera roll permissions to select an image.");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync();
+    if (!result.cancelled) {
+      // Set the selected image as the background image
+      setBackgroundImageURI(result.uri);
+    }
+
+    setUploadPopupVisible(false);
+  };
+
+  const handleTakePhoto = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== "granted") {
+      alert("Sorry, we need camera permissions to take a photo.");
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync();
+    if (!result.cancelled) {
+      // Set the captured image as the background image
+      setBackgroundImageURI(result.uri);
+    }
+
+    setUploadPopupVisible(false);
+  };
+
+  const UploadImagePopup = () => {
+    return (
+      <View>
+        <TouchableOpacity
+          style={styles.link}
+          onPress={() => setUploadPopupVisible(true)}
+        >
+          <Image source={editpen} style={{ width: 24, height: 24 }} />
+        </TouchableOpacity>
+
+        <Modal visible={uploadPopupVisible} animationType="slide " transparent>
+          <View style={styles.overlay}>
+            <View style={styles.modalContainer}>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setUploadPopupVisible(false)}
+              >
+                <Image source={closeIcon} style={{ width: 24, height: 24 }} />
+              </TouchableOpacity>
+              <Text style={styles.modalTitle}>Upload Image</Text>
+              <View style={styles.uploadContainer}>
+                <TouchableOpacity
+                  style={styles.uploadZone}
+                  onPress={handleChooseFromFiles}
+                >
+                  <FontAwesome name="image" size={23} color={imageIconColor} />
+                  <Text style={styles.uploadText}>Gallery</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.uploadZone}
+                  onPress={handleTakePhoto}
+                >
+                  <AntDesign name="camera" size={28} color={cameraIconColor} />
+                  <Text style={styles.uploadText}>Take Photo</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </View>
+    );
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: "#F5F5F5" }}>
       <View style={styles.header}>
-        <ImageBackground source={backgroundImage} style={styles.background}>
+        <ImageBackground
+          source={{ uri: backgroundImageURI }}
+          style={styles.background}
+        >
           <View style={styles.overlay} />
-          <TouchableOpacity style={styles.link}>
-            <Image source={arrowback} style={{ width: 8, height: 15 }} />
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image
+              source={arrowback}
+              style={{ width: 8, height: 15, marginRight: 10 }}
+            />
           </TouchableOpacity>
           <TouchableOpacity style={styles.link}>
             <Text style={styles.h1}>My house</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.link}>
-            <Image source={editpen} style={{ width: 24, height: 24 }} />
-          </TouchableOpacity>
+          <UploadImagePopup />
         </ImageBackground>
       </View>
 
@@ -135,9 +228,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     flexDirection: "row",
     backgroundColor: "rgba(128,0,128,0.5)",
-    paddingTop: "55px",
-    height: "225px",
-    paddingHorizontal: "25px",
+    paddingTop: 55,
+    height: 225,
+    paddingHorizontal: 25,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
@@ -163,11 +256,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#160635",
-    paddingVertical: "30px",
+    paddingVertical: 30,
     textAlign: "center",
   },
   container: {
-    paddingHorizontal: "25px",
+    paddingHorizontal: 25,
   },
 
   buttonContainer: {
@@ -197,6 +290,52 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
     color: "#D9B2EE",
+  },
+
+  modalContainer: {
+    height: 180,
+    backgroundColor: "white",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  modalTitle: {
+    fontFamily: "moon",
+    fontSize: 17,
+    fontWeight: "bold",
+    marginBottom: 10,
+    marginTop: 20,
+  },
+  closeButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    padding: 8,
+  },
+  uploadText: {
+    fontFamily: "manrope",
+    fontSize: 12,
+  },
+
+  uploadZone: {
+    paddingTop: 15,
+    flex: 1,
+    alignItems: "center",
+    width: 100,
+    alignContent: "space-around",
+  },
+
+  uploadContainer: {
+    alignItems: "baseline",
+    flex: 1,
+    flexDirection: "row",
+    width: 160,
   },
 });
 

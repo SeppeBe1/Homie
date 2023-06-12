@@ -15,7 +15,7 @@ import {
 export default function App() {
   return (
     <NavigationContainer>
-      <LoginscreenStack />
+      <HomescreenStack />
     </NavigationContainer>
   );
 }

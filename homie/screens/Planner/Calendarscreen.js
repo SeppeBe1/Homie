@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import * as Font from "expo-font";
-import MoonFont from "../assets/fonts/Moon.otf";
-import Novatica from "../assets/fonts/Novatica-Bold.woff";
-import Manrope from "../assets/fonts/Manrope-Bold.ttf";
+import MoonFont from "../../assets/fonts/Moon.otf";
+import Novatica from "../../assets/fonts/Novatica-Bold.woff";
+import Manrope from "../../assets/fonts/Manrope-Bold.ttf";
 
 import {
   View,
@@ -14,11 +14,11 @@ import {
   Modal,
 } from "react-native";
 
-import checkbox from "../assets/icons/Checkbox_empty.svg";
-import arrowright from "../assets/icons/Arrow-Right.svg";
-import crossIcon from "../assets/icons/close.svg";
-import girl from "../assets/girl.jpg";
-import boy from "../assets/boy.jpg";
+import checkbox from "../../assets/icons/Checkbox_empty.svg";
+import arrowright from "../../assets/icons/Arrow-Right.svg";
+import crossIcon from "../../assets/icons/close.svg";
+import girl from "../../assets/girl.jpg";
+import boy from "../../assets/boy.jpg";
 import AddTask from "./AddTask";
 import AddEvent from "./AddEvent";
 

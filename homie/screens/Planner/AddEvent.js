@@ -12,10 +12,10 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-import arrowLeft from "../assets/icons/arrowLeft.svg";
-import upload from "../assets/icons/upload.svg";
-import dropdown from "../assets/icons/dropdown.svg";
-import manrope from "../assets/fonts/Manrope-Regular.ttf";
+import arrowLeft from "../../assets/icons/arrowLeft.svg";
+import upload from "../../assets/icons/upload.svg";
+import dropdown from "../../assets/icons/dropdown.svg";
+import manrope from "../../assets/fonts/Manrope-Regular.ttf";
 
 import * as ImagePicker from "expo-image-picker";
 
