@@ -372,26 +372,40 @@ const createAnnouncement = async () => {
                 case "Announcement":
                   announcementStyle = styles.announcement;
                   announcementTextStyle = styles.announcementText;
-                  break;
+                  return (
+                    <>
+                      <View style={announcementStyle}>
+                        <Text style={announcementTextStyle}>{item.description}</Text>
+                        <Text style={styles.announcementTime}>1 sec ago</Text>
+                      </View>
+                    </>
+                    
+                  );
                 case "Payment":
                   announcementStyle = styles.payment;
-                  announcementTextStyle = styles.announcementText;
-                  break;
+                  announcementTextStyle = styles.announcementTextEventPayment;
+
+                  return (
+                    <>
+                      <View style={announcementStyle}>
+                        <Text style={announcementTextStyle}><Text>19$: </Text>{item.description}</Text>
+                      </View>
+                    </>
+                    
+                  );
                 case "Event":
                   announcementStyle = styles.event;
-                  announcementTextStyle = styles.announcementText;
-                  break;
-
+                  announcementTextStyle = styles.announcementTextEventPayment;
+                  return (
+                    <>
+                      <View style={announcementStyle}>
+                      <Text style={announcementTextStyle}><Text>19h00: </Text>{item.description}</Text>
+                      </View>
+                    </>
+                    
+                  );
               }
 
-              return (
-                <>
-                  <View style={announcementStyle}>
-                    <Text style={announcementTextStyle}>{item.description}</Text>
-                    <Text style={styles.announcementTime}>1 sec ago</Text>
-                  </View>
-                </>
-              );
             }}
           />
         )}
@@ -539,7 +553,15 @@ announcementText:{
   marginRight: 17,
   marginTop: 4,
   marginBottom: -2,
+},
 
+announcementTextEventPayment:{
+  fontSize: 14,
+  color:'white',
+  marginLeft: 17,
+  marginRight: 17,
+  marginTop: 11,
+  marginBottom: 11,
 },
 announcementTime:{
   marginLeft: 17,
