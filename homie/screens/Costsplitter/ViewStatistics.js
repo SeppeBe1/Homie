@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Modal, Picker } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Image, Modal, Picker } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { BarChart } from "react-native-chart-kit";
 
@@ -8,7 +8,7 @@ import * as Font from "expo-font";
 import crossIcon from "../../assets/icons/close.svg";
 import arrowLeft from '../../assets/icons/arrowLeft.svg';
 import editIcon from "../../assets/icons/editField.svg";
-import { TextInput } from "react-native-gesture-handler";
+import greenArrowIcon from "../../assets/icons/dropdown_green.svg"
 
 // Load the font
 const loadFonts = async () => {
@@ -46,12 +46,28 @@ const handlePeriodFilterChange = (selectedPeriodFilter) => {
   setPeriodFilter(selectedPeriodFilter);
 };
 
+const names = ["Yanelle", "Jade", "Boy", "Seppe"];
+
+const filterButtons = [
+  "All",
+  "Energy",
+  "Water",
+  "Furniture",
+  "Groceries",
+  "Trips",
+  "Gas",
+  "Maintenance",
+  "Others",
+];
+
 const ViewStatistics = () => {
   const [filter, setFilter] = useState("All");
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [monthlyData, setMonthlyData] = useState([]);
   const [periodFilter, setPeriodFilter] = useState("Monthly");
   const [yearlyData, setYearlyData] = useState([]);
+  const [selectedName, setSelectedName] = useState("Yanelle");
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
   const navigation = useNavigation();
 
@@ -62,6 +78,22 @@ const ViewStatistics = () => {
   
   }, []);
 
+  const toggleDropdown = () => {
+    setIsDropdownVisible(!isDropdownVisible);
+  };
+
+  const handleNameSelection = (name) => {
+    setSelectedName(name);
+    toggleDropdown();
+    };
+
+  const renderNameOptions = () => {
+    return names.map((name, index) => (
+      <TouchableOpacity key={index} style={styles.nameOption} onPress={() => handleNameSelection(name)}>
+        <Text style={{ textAlign: 'center' }}>{name}</Text>
+      </TouchableOpacity>
+    ));
+  };
   
 const chartConfigMonth = {
   backgroundColor: '#f5f5f5',
@@ -344,6 +376,29 @@ const chartConfigYear = {
       </View>
       <View style={{ marginTop: 20, paddingHorizontal: 24 }}>
         <View>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        {filterButtons.map((button, index) => (
+          <TouchableOpacity
+            key={index}
+            style={[
+              styles.filterButton,
+              filter === button && styles.activeFilterButton
+            ]}
+            onPress={() => handleFilterChange(button)}
+          >
+            <Text
+              style={[
+                styles.filterButtonText,
+                filter === button && styles.activeFilterButtonText
+              ]}
+            >
+              {button}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+
+
           <View style={styles.filterContainer}>
             <TouchableOpacity
               style={[
@@ -433,7 +488,7 @@ const chartConfigYear = {
             alignItems: "center",
             backgroundColor: "rgba(22, 6, 53, 0.5)",
           }}
-          onPress={togglePopUp}
+          activeOpacity={1}
         >
           <View style={styles.popupText}>
             <TouchableOpacity style={{ position: "absolute", top: 16, right: 16 }} onPress={togglePopUp}>
@@ -441,12 +496,26 @@ const chartConfigYear = {
             </TouchableOpacity>
             <View style={{ flex: 1, flexDirection: "column" }}>
               <Text style={styles.popupHeading}>General information</Text>
-              <Text style={styles.popupDescription}>Supplier</Text>
-              <TextInput style={styles.popupSubtext}>Bolt</TextInput>
+              <View style={styles.generalInfoContainer}>
+                <Text style={styles.popupDescription}>Supplier</Text>
+                <TextInput placeholder="Bolt" style={styles.popupSubtext}/>
+              </View>
+              <View style={styles.generalInfoContainer}>
               <Text style={styles.popupDescription}>Payer</Text>
-              <TextInput style={styles.popupSubtext}>Yanelle</TextInput>
+              <View style={styles.dropdownContainer}>
+                  <Text style={styles.popupSubtext}>{selectedName}</Text>
+                  <TouchableOpacity style={styles.dropdownArrowContainer} onPress={toggleDropdown}>
+                    <Image source={greenArrowIcon} style={styles.dropdownArrow} />
+                  </TouchableOpacity>
+                </View>
+                {isDropdownVisible && (
+                  <View style={styles.dropdownOptionsContainer}>{renderNameOptions()}</View>
+                )}
+              </View>
+              <View style={[styles.generalInfoContainer, {zIndex: -1}]}>
               <Text style={styles.popupDescription}>Advance</Text>
-              <TextInput style={styles.popupSubtext}>€75,00</TextInput>
+              <TextInput placeholder="€75,00" style={styles.popupSubtext}/>
+              </View>
             </View>
           </View>
         </TouchableOpacity>
@@ -471,39 +540,90 @@ const styles = StyleSheet.create({
     padding: 30,
   },
 
-  popupText: {
+  generalInfoContainer: {
     backgroundColor: "white",
-    width: 342,
-    height: 325,
     borderRadius: 10,
-    textAlign: "center",
+    padding: 10,
+    marginVertical: 5
+  },
+
+  popupText: {
+    backgroundColor: "#F2F2F2",
+    width: 342,
+    height: 320,
+    borderRadius: 10,
     padding: 20,
+    paddingBottom: 40
   },
 
   popupHeading: {
-    fontFamily: "novatica",
+    fontFamily: "moon",
     fontWeight: "bold",
-    fontSize: 40,
+    fontSize: 20,
     color: "#160635",
+    textAlign: "left",
+    marginBottom: 10
+
   },
 
   popupSubtext: {
-    fontFamily: "novatica",
-    fontSize: 20,
-    color: "#160635",
-  },
-
-  popupTitle: {
-    fontFamily: "moon",
+    fontFamily: "manrope",
+    fontSize: 14,
+    color: "black",
     fontWeight: "bold",
-    fontSize: 13,
-    color: "#160635",
+    textAlign: 'center'
   },
 
   popupDescription: {
     fontFamily: "manrope",
-    fontSize: 13,
+    fontSize: 12,
     color: "black",
+    textAlign: 'center',
+    padding: 5,
+  },
+
+  dropdownContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "#fff",
+    borderWidth: 0,
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    textAlign: 'center',
+  },
+  selectedName: {
+    flex: 1,
+    fontSize: 14,
+    textAlign: 'center'
+  },
+  dropdownArrow: {
+    width: 20,
+    height: 20,
+    resizeMode: "contain",
+    position: 'absolute',
+    right: '-110px',
+    top:'-8px'
+  },
+  dropdownOptionsContainer: {
+    position: "absolute",
+    top: "100%",
+    left: 0,
+    right: 0,
+    zIndex: 9999,
+    backgroundColor: "#fff",
+    borderColor: "#fff",
+    borderWidth: 0,
+    borderRadius: 5,
+    marginTop: 5,
+    padding: 10,
+  },
+  nameOption: {
+    paddingVertical: 5,
+  },
+  nameOptionText: {
+    fontSize: 14,
   },
 
   filterContainer: {

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput } from 'react-native'
-import React, { useState }  from 'react'
+import React, { useState, useEffect }  from 'react'
 import  navigation  from '@react-navigation/native';
 import logo from "../../assets/logo.png";
 import logoHomie from "../../assets/logoHomie.svg";
