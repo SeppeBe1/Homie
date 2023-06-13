@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
   arrowContainer: {
     position: "absolute",
     top: 20,
-    left: 15,
+    left: 0,
     padding: 30,
   },
   calendarContainer: {
