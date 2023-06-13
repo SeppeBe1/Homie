@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Image, Modal, Picker } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, TouchableWithoutFeedback, ScrollView, Image, Modal, Picker } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { BarChart } from "react-native-chart-kit";
 
@@ -27,33 +27,27 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
         backgroundColor: '#f5f5f5',
         backgroundGradientFrom: '#f5f5f5',
         backgroundGradientTo: '#f5f5f5',
-        decimalPlaces: 2,
-        barPercentage: 0.5,
-        verticalLabelRotation: 15,
+        fillShadowGradient: '#160635',
+        fillShadowGradientOpacity: 1,
+        decimalPlaces: 1,
+        barPercentage: 0.3,
         barRadius: 10,
         color: (opacity = 1) => `rgba(22, 6, 53, ${opacity})`,
-        propsForBackgroundLines: {
-            fill: 'rgba(22, 6, 53, 1)', // Set the background color for bars here
-        },
         propsForLabels: {
             fontFamily: 'novaticaBold'
         },
     };
   
     const chartConfigYear = {
-      // Chart configuration for yearly data
-      // ...
       backgroundColor: '#f5f5f5',
       backgroundGradientFrom: '#f5f5f5',
       backgroundGradientTo: '#f5f5f5',
-      decimalPlaces: 2,
+      fillShadowGradient: '#160635',
+      fillShadowGradientOpacity: 1,
+      decimalPlaces: 1,
       barPercentage: 1.5,
       barRadius: 30,
-      verticalLabelRotation: 15,
       color: (opacity = 1) => `rgba(22, 6, 53, ${opacity})`,
-      propsForBackgroundLines: {
-        fill: 'rgba(22, 6, 53, 1)', // Set the background color for bars here
-      },
       propsForLabels: {
         fontFamily: 'novaticaBold'
       },
@@ -74,11 +68,13 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
           selectedValue={periodFilter}
           onValueChange={(itemValue) => handlePeriodFilterChange(itemValue)}
         >
-          <Picker.Item label="Monthly" value="Monthly" />
+          <Picker.Item label="Monthly" value="Monthly" style={styles.pickerItem}  />
           <Picker.Item label="Yearly" value="Yearly" />
         </Picker>
         </View>
         {periodFilter === "Monthly" ? (
+            <TouchableWithoutFeedback onPress={() => console.log("Bar clicked!")}>
+
           <BarChart 
             data={{
               labels: [
@@ -103,14 +99,18 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
             }}
             width={365}
             height={280}
+            withHorizontalLabels= {true} 
             yAxisLabel="€"
             chartConfig={chartConfigMonth}
             showBarTops= {false}
             fromZero= {true}
+            withInnerLines= {false}
             showValuesOnTopOfBars= {false}
             style={styles.chart}
 
           />
+          </TouchableWithoutFeedback>
+
           ) : (
             <BarChart
           data={{
@@ -127,6 +127,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
           chartConfig={chartConfigYear}
           style={styles.chart}
           fromZero= {true}
+          withInnerLines= {false}
           showBarTops= {false}
           showValuesOnTopOfBars= {false}
           withHorizontalLabels= {true}
@@ -178,6 +179,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
             chartConfig={chartConfigMonth}
             showBarTops= {false}
             fromZero= {true}
+            withInnerLines= {false}
             showValuesOnTopOfBars= {false}
             style={styles.chart}
 
@@ -199,6 +201,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
           style={styles.chart}
           fromZero= {true}
           showBarTops= {false}
+          withInnerLines= {false}
           showValuesOnTopOfBars= {false}
           withHorizontalLabels= {true}
         />
@@ -248,6 +251,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
             yAxisLabel="€"
             chartConfig={chartConfigMonth}
             showBarTops= {false}
+            withInnerLines= {false}
             fromZero= {true}
             showValuesOnTopOfBars= {false}
             style={styles.chart}
@@ -271,6 +275,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
           fromZero= {true}
           showBarTops= {false}
           showValuesOnTopOfBars= {false}
+          withInnerLines= {false}
           withHorizontalLabels= {true}
         />
           )}
@@ -317,6 +322,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
             width={365}
             height={280}
             yAxisLabel="€"
+            withInnerLines= {false}
             chartConfig={chartConfigMonth}
             showBarTops= {false}
             fromZero= {true}
@@ -341,6 +347,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
           style={styles.chart}
           fromZero= {true}
           showBarTops= {false}
+          withInnerLines= {false}
           showValuesOnTopOfBars= {false}
           withHorizontalLabels= {true}
         />
@@ -391,6 +398,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
             chartConfig={chartConfigMonth}
             showBarTops= {false}
             fromZero= {true}
+            withInnerLines= {false}
             showValuesOnTopOfBars= {false}
             style={styles.chart}
 
@@ -412,6 +420,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
           style={styles.chart}
           fromZero= {true}
           showBarTops= {false}
+          withInnerLines= {false}
           showValuesOnTopOfBars= {false}
           withHorizontalLabels= {true}
         />
@@ -461,6 +470,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
             yAxisLabel="€"
             chartConfig={chartConfigMonth}
             showBarTops= {false}
+            withInnerLines= {false}
             fromZero= {true}
             showValuesOnTopOfBars= {false}
             style={styles.chart}
@@ -483,6 +493,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
           style={styles.chart}
           fromZero= {true}
           showBarTops= {false}
+          withInnerLines= {false}
           showValuesOnTopOfBars= {false}
           withHorizontalLabels= {true}
         />
@@ -530,6 +541,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
             width={365}
             height={280}
             yAxisLabel="€"
+            withInnerLines= {false}
             chartConfig={chartConfigMonth}
             showBarTops= {false}
             fromZero= {true}
@@ -553,6 +565,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
           chartConfig={chartConfigYear}
           style={styles.chart}
           fromZero= {true}
+          withInnerLines= {false}
           showBarTops= {false}
           showValuesOnTopOfBars= {false}
           withHorizontalLabels= {true}
@@ -603,6 +616,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
             yAxisLabel="€"
             chartConfig={chartConfigMonth}
             showBarTops= {false}
+            withInnerLines= {false}
             fromZero= {true}
             showValuesOnTopOfBars= {false}
             style={styles.chart}
@@ -623,6 +637,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
           yAxisLabel="€"
           chartConfig={chartConfigYear}
           style={styles.chart}
+          withInnerLines= {false}
           fromZero= {true}
           showBarTops= {false}
           showValuesOnTopOfBars= {false}
@@ -674,6 +689,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
             width={365}
             height={280}
             yAxisLabel="€"
+            withInnerLines= {false}
             chartConfig={chartConfigMonth}
             showBarTops= {false}
             fromZero= {true}
@@ -694,6 +710,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
           width={365}
           height={280}
           yAxisLabel="€"
+          withInnerLines= {false}
           chartConfig={chartConfigYear}
           style={styles.chart}
           fromZero= {true}
@@ -763,7 +780,8 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
       borderWidth: 0, // Remove the border
       borderColor: 'transparent',
       backgroundColor: '#F2F2F2',
-      fontFamily: 'manrope'
+      fontFamily: 'manrope',
+      fontSize: '14px'
     },
     pickerItem: {
       fontSize:'10px'

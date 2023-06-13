@@ -11,6 +11,7 @@ import editIcon from "../../assets/icons/editField.svg";
 import greenArrowIcon from "../../assets/icons/dropdown_green.svg"
 
 import StatisticsComponent from "../../compontents/StatisticsMonthly";
+import CustomBarChart from "../../compontents/StatisticsYearly";
 
 // Load the font
 const loadFonts = async () => {
