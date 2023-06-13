@@ -29,6 +29,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
         backgroundGradientTo: '#f5f5f5',
         decimalPlaces: 2,
         barPercentage: 0.5,
+        verticalLabelRotation: 15,
         barRadius: 10,
         color: (opacity = 1) => `rgba(22, 6, 53, ${opacity})`,
         propsForBackgroundLines: {
@@ -48,6 +49,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
       decimalPlaces: 2,
       barPercentage: 1.5,
       barRadius: 30,
+      verticalLabelRotation: 15,
       color: (opacity = 1) => `rgba(22, 6, 53, ${opacity})`,
       propsForBackgroundLines: {
         fill: 'rgba(22, 6, 53, 1)', // Set the background color for bars here
@@ -60,7 +62,6 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
     };
   
     const renderStatistics = () => {
-      // Logic to render statistics based on the selected filter
       // ...
       if (filter === "Energy") {
         return (
@@ -708,59 +709,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
   
     return (
       <View>
-        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-          <Text style={styles.chartTitle}>
-            {filter === "Energy" ? "Energy and electricity costs" : filter === "Water" ? "Water costs" : filter === "Furniture" ? "Furniture costs" : filter === "Groceries" ? "Groceries costs" : filter === "Trips" ? "Trips costs" : filter === "Gas" ? "Gas costs" : filter === "Maintenance" ? "Maintenance costs" : filter === "Others" ? "Other costs" : "All costs"}
-          </Text>
-          <Picker
-            style={styles.periodFilterPicker}
-            selectedValue={periodFilter}
-            onValueChange={(itemValue) => handlePeriodFilterChange(itemValue)}
-          >
-            <Picker.Item label="Monthly" value="Monthly" />
-            <Picker.Item label="Yearly" value="Yearly" />
-          </Picker>
-        </View>
-        {periodFilter === "Monthly" ? (
-          <BarChart
-            data={{
-              labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-              datasets: [
-                {
-                  data: monthlyData,
-                },
-              ],
-            }}
-            width={365}
-            height={280}
-            yAxisLabel="€"
-            chartConfig={chartConfigMonth}
-            showBarTops={false}
-            fromZero={true}
-            showValuesOnTopOfBars={false}
-            style={styles.chart}
-          />
-        ) : (
-          <BarChart
-            data={{
-              labels: ["2020", "2021", "2022", "2023"],
-              datasets: [
-                {
-                  data: yearlyData,
-                },
-              ],
-            }}
-            width={365}
-            height={280}
-            yAxisLabel="€"
-            chartConfig={chartConfigYear}
-            style={styles.chart}
-            fromZero={true}
-            showBarTops={false}
-            showValuesOnTopOfBars={false}
-            withHorizontalLabels={true}
-          />
-        )}
+        {renderStatistics()}
       </View>
     );
     return null;
@@ -803,8 +752,8 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
       fontWeight: 'bold'
     },
     chart: {
-      marginTop: '35px',
-      marginBottom: '15px'
+      marginTop: '15px',
+      marginBottom: '5px'
     },
   
     periodFilterPicker: {

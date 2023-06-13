@@ -129,7 +129,7 @@ const ViewStatistics = () => {
       </View>
       <View style={{ marginTop: 20, paddingHorizontal: 24 }}>
         <View>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 10 }}>
         {filterButtons.map((button, index) => (
           <TouchableOpacity
             key={index}
@@ -150,7 +150,9 @@ const ViewStatistics = () => {
           </TouchableOpacity>
         ))}
       </ScrollView>
-      <View style={{ marginTop: 20 }}>
+      <ScrollView>
+        <View style={{ height: 500 }}>
+          <View style={{ marginTop: 10 }}>
             <StatisticsComponent
               filter={filter}
               handleFilterChange={handleFilterChange}
@@ -160,8 +162,6 @@ const ViewStatistics = () => {
               yearlyData={yearlyData}
             />
             </View>
-            <View>
-        </View>
         <View style={styles.generalInfo}>
             <TouchableOpacity onPress={togglePopUp} style={{ zIndex: 2, }}>
               <Image source={editIcon} style={{ width: 20, height: 20, position: 'absolute', right: 2, padding: 2 }} />
@@ -175,16 +175,18 @@ const ViewStatistics = () => {
               style={[
                 styles.btn,
               ]}
-              onPress={() => navigation.navigate("viewinvoices")}
+              onPress={() => navigation.navigate("ViewInvoices")}
             >
               <Text
                 style={[
-                  styles.filterButtonText,
+                  styles.btnText,
                 ]}
               >
                 View invoices
               </Text>
             </TouchableOpacity>
+            </View>
+            </ScrollView>
       </View>
       </View>
 
@@ -365,11 +367,20 @@ const styles = StyleSheet.create({
   },
   btn: {
     paddingVertical: 10,
-    paddingHorizontal: 30,
     borderRadius: 20,
-    borderWidth: 1,
-    borderColor: "#B900F4",
-    marginRight: 10,
+    borderWidth: 0,
+    width: '235px',
+    backgroundColor: "#B900F4",
+    marginTop: 20,
+    marginBottom: 40,
+    alignSelf: 'center'
+  },
+  btnText: {
+    color: 'white',
+    fontFamily: 'moon',
+    fontWeight: 'bold',
+    fontSize: 14,
+    textAlign: 'center'
   },
 
   heading: {
@@ -421,16 +432,6 @@ const styles = StyleSheet.create({
     fontFamily:'manrope',
     fontSize: 14,
   },
-  chartTitle: {
-    fontFamily: 'moon',
-    fontSize:'14px',
-    fontWeight: 'bold'
-  },
-  chart: {
-    marginTop: '35px',
-    marginBottom: '15px'
-  },
-
   periodFilterPicker: {
     width: 85,
     height: 40,
