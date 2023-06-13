@@ -10,6 +10,8 @@ import arrowLeft from '../../assets/icons/arrowLeft.svg';
 import editIcon from "../../assets/icons/editField.svg";
 import greenArrowIcon from "../../assets/icons/dropdown_green.svg"
 
+import StatisticsComponent from "../../compontents/StatisticsMonthly";
+
 // Load the font
 const loadFonts = async () => {
   await Font.loadAsync({
@@ -94,40 +96,6 @@ const ViewStatistics = () => {
       </TouchableOpacity>
     ));
   };
-  
-const chartConfigMonth = {
-  backgroundColor: '#f5f5f5',
-  backgroundGradientFrom: '#f5f5f5',
-  backgroundGradientTo: '#f5f5f5',
-  decimalPlaces: 2,
-  barPercentage: 0.5,
-  barRadius: 10,
-  color: (opacity = 1) => `rgba(22, 6, 53, ${opacity})`,
-  propsForBackgroundLines: {
-    fill: 'rgba(22, 6, 53, 1)', // Set the background color for bars here
-  },
-  propsForLabels: {
-    fontFamily: 'novaticaBold'
-  },
-};
-
-const chartConfigYear = {
-  backgroundColor: '#f5f5f5',
-  backgroundGradientFrom: '#f5f5f5',
-  backgroundGradientTo: '#f5f5f5',
-  decimalPlaces: 2,
-  barPercentage: 1.5,
-  barRadius: 30,
-  color: (opacity = 1) => `rgba(22, 6, 53, ${opacity})`,
-  propsForBackgroundLines: {
-    fill: 'rgba(22, 6, 53, 1)', // Set the background color for bars here
-  },
-  propsForLabels: {
-    fontFamily: 'novaticaBold'
-  },
-  xAxisLabelCount: 0, // Set the number of visible horizontal labels to 0
-  contentInset: { left: -20, right: -20 },
-};
 
   const handleFilterChange = (selectedFilter) => {
     setFilter(selectedFilter);
@@ -140,221 +108,6 @@ const chartConfigYear = {
   const togglePopUp = () => {
     setIsPopUpVisible(!isPopUpVisible);
   };
-
-  const renderStatistics = () => {
-    // Logic to render statistics based on the selected filter
-    if (filter === "Energy") {
-      return (
-      <View>
-        <View style={{ flexDirection: "row", alignItems: "center", justifyContent:"space-between"}}>
-        <Text style={styles.chartTitle}>Energy and electricity costs</Text>
-        <Picker
-          style={styles.periodFilterPicker}
-          selectedValue={periodFilter}
-          onValueChange={(itemValue) => handlePeriodFilterChange(itemValue)}
-        >
-          <Picker.Item label="Monthly" value="Monthly" />
-          <Picker.Item label="Yearly" value="Yearly" />
-        </Picker>
-        </View>
-        {periodFilter === "Monthly" ? (
-          <BarChart 
-            data={{
-              labels: [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun",
-                "Jul",
-                "Aug",
-                "Sep",
-                "Oct",
-                "Nov",
-                "Dec",
-              ],
-              datasets: [
-                {
-                  data: monthlyData,
-                },
-              ],
-            }}
-            width={365}
-            height={280}
-            yAxisLabel="€"
-            chartConfig={chartConfigMonth}
-            showBarTops= {false}
-            fromZero= {true}
-            showValuesOnTopOfBars= {false}
-            style={styles.chart}
-
-          />
-          ) : (
-            <BarChart
-          data={{
-            labels: ['2020', '2021', '2022', '2023'],
-            datasets: [
-              {
-                data: yearlyData,
-              },
-            ],
-          }}
-          width={365}
-          height={280}
-          yAxisLabel="€"
-          chartConfig={chartConfigYear}
-          style={styles.chart}
-          fromZero= {true}
-          showBarTops= {false}
-          showValuesOnTopOfBars= {false}
-          withHorizontalLabels= {true}
-        />
-          )}
-          </View>
-          );
-          } else if (filter === "Water") {
-            return (
-              <View>
-            <View style={{ flexDirection: "row", alignItems: "center", justifyContent:"space-between"}}>
-            <Text style={styles.chartTitle}>Water costs</Text>
-            <Picker
-              style={styles.periodFilterPicker}
-              selectedValue={periodFilter}
-              onValueChange={(itemValue) => handlePeriodFilterChange(itemValue)}
-            >
-              <Picker.Item label="Monthly" value="Monthly" />
-              <Picker.Item label="Yearly" value="Yearly" />
-            </Picker>
-            </View>
-              {periodFilter === "Monthly" ? (
-                  <BarChart 
-                  data={{
-                    labels: [
-                      "Jan",
-                      "Feb",
-                      "Mar",
-                      "Apr",
-                      "May",
-                      "Jun",
-                      "Jul",
-                      "Aug",
-                      "Sep",
-                      "Oct",
-                      "Nov",
-                      "Dec",
-                    ],
-                    datasets: [
-                      {
-                        data: monthlyData,
-                      },
-                    ],
-                  }}
-                  width={365}
-                  height={280}
-                  yAxisLabel="€"
-                  chartConfig={chartConfigMonth}
-                  showBarTops= {false}
-                  showValuesOnTopOfBars= {false}
-                  fromZero= {true}
-                  style={styles.chart}
-                />
-                ) : (
-                  <BarChart
-                data={{
-                  labels: ['2020', '2021', '2022', '2023'],
-                  datasets: [
-                    {
-                      data: yearlyData,
-                    },
-                  ],
-                }}
-                width={365}
-                height={280}
-                yAxisLabel="€"
-                fromZero= {true}
-                chartConfig={chartConfigYear}
-                style={styles.chart}
-                showBarTops= {false}
-                showValuesOnTopOfBars= {false}
-                withHorizontalLabels= {true}
-              />
-                )}
-              </View>
-            );
-          } else {
-            return (
-              <View>
-                <View style={{ flexDirection: "row", alignItems: "center", justifyContent:"space-between"}}>
-                <Text style={styles.chartTitle}>All costs</Text>
-                <Picker
-                  style={styles.periodFilterPicker}
-                  selectedValue={periodFilter}
-                  onValueChange={(itemValue) => handlePeriodFilterChange(itemValue)}
-                >
-                  <Picker.Item label="Monthly" value="Monthly" style={styles.pickerItem} />
-                  <Picker.Item label="Yearly" value="Yearly" style={styles.pickerItem} />
-                </Picker>
-                </View>
-                {periodFilter === "Monthly" ? (
-                  <BarChart 
-                  data={{
-                    labels: [
-                      "Jan",
-                      "Feb",
-                      "Mar",
-                      "Apr",
-                      "May",
-                      "Jun",
-                      "Jul",
-                      "Aug",
-                      "Sep",
-                      "Oct",
-                      "Nov",
-                      "Dec",
-                    ],
-                    datasets: [
-                      {
-                        data: monthlyData,
-                      },
-                    ],
-                  }}
-                  width={365}
-                  height={280}
-                  fromZero= {true}
-                  style={styles.chart}
-                  yAxisLabel="€"
-                  chartConfig={chartConfigMonth}
-                  showBarTops= {false}
-                  showValuesOnTopOfBars= {false}
-
-                />
-                ) : (
-                  <BarChart
-                data={{
-                  labels: ['2020', '2021', '2022', '2023'],
-                  datasets: [
-                    {
-                      data: yearlyData,
-                    },
-                  ],
-                }}
-                width={365}
-                height={280}
-                yAxisLabel="€"
-                fromZero= {true}
-                chartConfig={chartConfigYear}
-                style={styles.chart}
-                showBarTops= {false}
-                showValuesOnTopOfBars= {false}
-                withHorizontalLabels= {true}
-              />
-                )}
-                  </View>
-            );
-          }
-          return null;
-          };
 
   return (
     <View style={{ backgroundColor: "#F5F5F5" }}>
@@ -397,63 +150,18 @@ const chartConfigYear = {
           </TouchableOpacity>
         ))}
       </ScrollView>
-
-
-          <View style={styles.filterContainer}>
-            <TouchableOpacity
-              style={[
-                styles.filterButton,
-                filter === "Energy" && styles.activeFilterButton,
-              ]}
-              onPress={() => handleFilterChange("Energy")}
-            >
-              <Text
-                style={[
-                  styles.filterButtonText,
-                  filter === "Energy" && styles.activeFilterButtonText,
-                ]}
-              >
-                Energy
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.filterButton,
-                filter === "Water" && styles.activeFilterButton,
-              ]}
-              onPress={() => handleFilterChange("Water")}
-            >
-              <Text
-                style={[
-                  styles.filterButtonText,
-                  filter === "Water" && styles.activeFilterButtonText,
-                ]}
-              >
-                Water
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.filterButton,
-                filter === "All" && styles.activeFilterButton,
-              ]}
-              onPress={() => handleFilterChange("All")}
-            >
-              <Text
-                style={[
-                  styles.filterButtonText,
-                  filter === "All" && styles.activeFilterButtonText,
-                ]}
-              >
-                All
-              </Text>
-            </TouchableOpacity>
+      <View style={{ marginTop: 20 }}>
+            <StatisticsComponent
+              filter={filter}
+              handleFilterChange={handleFilterChange}
+              periodFilter={periodFilter}
+              handlePeriodFilterChange={handlePeriodFilterChange}
+              monthlyData={monthlyData}
+              yearlyData={yearlyData}
+            />
             </View>
             <View>
         </View>
-          {renderStatistics()}
         <View style={styles.generalInfo}>
             <TouchableOpacity onPress={togglePopUp} style={{ zIndex: 2, }}>
               <Image source={editIcon} style={{ width: 20, height: 20, position: 'absolute', right: 2, padding: 2 }} />
