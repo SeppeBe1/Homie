@@ -19,6 +19,7 @@ import {
   Image,
   ImageBackground,
   Modal,
+  ScrollView,
 } from "react-native";
 
 import arrowback from "../assets/icons/Arrow_back.svg";
@@ -55,9 +56,9 @@ const App = () => {
   const renderView = () => {
     switch (currentView) {
       case "Residents":
-        return <Residents />;
+        return <Residents navigation={navigation} />;
       case "Photos":
-        return <Photos />;
+        return <Photos navigation={navigation} />;
       case "Houserules":
         return <Houserules />;
       default:
@@ -140,81 +141,83 @@ const App = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F5F5F5" }}>
-      <View style={styles.header}>
-        <ImageBackground
-          source={{ uri: backgroundImageURI }}
-          style={styles.background}
-        >
-          <View style={styles.overlay} />
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image
-              source={arrowback}
-              style={{ width: 8, height: 15, marginRight: 10 }}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.link}>
-            <Text style={styles.h1}>My house</Text>
-          </TouchableOpacity>
-          <UploadImagePopup />
-        </ImageBackground>
-      </View>
-
-      <View style={styles.container}>
-        <Text style={styles.h2}> Casa Magdalena </Text>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={[
-              styles.button,
-              currentView === "Residents" && styles.activeButton,
-            ]}
-            onPress={() => switchView("Residents")}
+      <ScrollView>
+        <View style={styles.header}>
+          <ImageBackground
+            source={{ uri: backgroundImageURI }}
+            style={styles.background}
           >
-            <Text
-              style={[
-                styles.buttonText,
-                currentView === "Residents" && styles.activeButtonText,
-              ]}
-            >
-              Residents
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.button,
-              currentView === "Photos" && styles.activeButton,
-            ]}
-            onPress={() => switchView("Photos")}
-          >
-            <Text
-              style={[
-                styles.buttonText,
-                currentView === "Photos" && styles.activeButtonText,
-              ]}
-            >
-              Photos
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.button,
-              currentView === "Houserules" && styles.activeButton,
-            ]}
-            onPress={() => switchView("Houserules")}
-          >
-            <Text
-              style={[
-                styles.buttonText,
-                currentView === "Houserules" && styles.activeButtonText,
-              ]}
-            >
-              Houserules
-            </Text>
-          </TouchableOpacity>
+            <View style={styles.overlay} />
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image
+                source={arrowback}
+                style={{ width: 8, height: 15, marginRight: 10 }}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.link}>
+              <Text style={styles.h1}>My house</Text>
+            </TouchableOpacity>
+            <UploadImagePopup />
+          </ImageBackground>
         </View>
-        {renderView()}
-      </View>
+
+        <View style={styles.container}>
+          <Text style={styles.h2}> Casa Magdalena </Text>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                currentView === "Residents" && styles.activeButton,
+              ]}
+              onPress={() => switchView("Residents")}
+            >
+              <Text
+                style={[
+                  styles.buttonText,
+                  currentView === "Residents" && styles.activeButtonText,
+                ]}
+              >
+                Residents
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.button,
+                currentView === "Photos" && styles.activeButton,
+              ]}
+              onPress={() => switchView("Photos")}
+            >
+              <Text
+                style={[
+                  styles.buttonText,
+                  currentView === "Photos" && styles.activeButtonText,
+                ]}
+              >
+                Photos
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.button,
+                currentView === "Houserules" && styles.activeButton,
+              ]}
+              onPress={() => switchView("Houserules")}
+            >
+              <Text
+                style={[
+                  styles.buttonText,
+                  currentView === "Houserules" && styles.activeButtonText,
+                ]}
+              >
+                Houserules
+              </Text>
+            </TouchableOpacity>
+          </View>
+          {renderView()}
+        </View>
+      </ScrollView>
     </View>
   );
 };

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Share,
   Text,
@@ -10,12 +10,14 @@ import {
   TouchableWithoutFeedback,
   Linking,
 } from "react-native";
+
 import addButton from "../assets/icons/add.svg";
 import profilePicture from "../assets/girl.jpg";
 import messenger from "../assets/icons/messenger.svg";
 import whatsapp from "../assets/icons/whatsapp.svg";
 import share from "../assets/icons/share.svg";
 import crossIcon from "../assets/icons/close.svg";
+import ThankYouScreen from "../screens/ThankYouScreen";
 
 const residentsData = [
   { name: "Me", profileStatusColor: "#FFB84E" },
@@ -24,8 +26,11 @@ const residentsData = [
   { name: "Seppe", profileStatusColor: "#FF7A7A" },
 ];
 
-export default class Residents extends Component {
-  handleShare = async () => {
+const Residents = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [redirect, setRedirect] = useState(false);
+
+  const handleShare = async () => {
     try {
       const shareOptions = {
         title: "Share Code",
@@ -41,20 +46,22 @@ export default class Residents extends Component {
     }
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      showModal: false,
-    };
-  }
-
-  toggleModal = () => {
-    this.setState((prevState) => ({
-      showModal: !prevState.showModal,
-    }));
+  const toggleModal = () => {
+    setShowModal((prevShowModal) => !prevShowModal);
   };
 
-  renderResidents() {
+  useEffect(() => {
+    if (redirect) {
+      setTimeout(() => {
+        navigation.navigate(ThankYouScreen);
+        setTimeout(() => {
+          navigation.navigate(Login);
+        }, 5000);
+      }, 5000);
+    }
+  }, [redirect]);
+
+  const renderResidents = () => {
     return residentsData.map((resident, index) => (
       <View style={styles.residentFull} key={index}>
         <View style={styles.residentProfile}>
@@ -67,200 +74,120 @@ export default class Residents extends Component {
               ]}
             />
           </View>
-          <Text>{resident.name}</Text>
+          <Text style={styles.name}>{resident.name}</Text>
         </View>
       </View>
     ));
-  }
+  };
 
-  render() {
-    const { showModal } = this.state;
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.h3}>Our homies</Text>
+        <TouchableOpacity
+          style={styles.addButtonContainer}
+          onPress={toggleModal}
+        >
+          <Text style={styles.addResidentText}>Add resident</Text>
+          <Image source={addButton} style={styles.addButtonIcon} />
+        </TouchableOpacity>
+      </View>
+      {renderResidents()}
+      <TouchableOpacity
+        onPress={() => setRedirect(true)}
+        style={styles.leaveButton}
+      >
+        <Text style={styles.leaveButtonText}>Leave House</Text>
+      </TouchableOpacity>
 
-    return (
-      <View>
-        <View style={styles.header}>
-          <Text style={styles.h3}>Our homies</Text>
-          <TouchableOpacity
-            style={styles.residentsTitle}
-            onPress={this.toggleModal}
-          >
-            <Text style={styles.addResident}>Add resident</Text>
-            <Image source={addButton} style={{ width: 20, height: 20 }} />
+      <Modal visible={showModal} animationType="fade" transparent>
+        <TouchableWithoutFeedback onPress={toggleModal}>
+          <View style={styles.overlay} />
+        </TouchableWithoutFeedback>
+        <View style={styles.modalContainer}>
+          <TouchableOpacity style={styles.closeButton} onPress={toggleModal}>
+            <Image source={crossIcon} style={styles.closeIcon} />
           </TouchableOpacity>
-        </View>
-        {this.renderResidents()}
-        <View>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("FullCalenderScreen")}
-            style={styles.leave}
-          >
-            Leave House
-          </TouchableOpacity>
-        </View>
-
-        <Modal visible={showModal} animationType="fade" transparent>
-          <TouchableWithoutFeedback onPress={this.toggleModal}>
-            <View style={styles.overlay} />
-          </TouchableWithoutFeedback>
-          <View style={styles.modalContainer}>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={this.toggleModal}
-            >
-              <Image source={crossIcon} style={styles.closeIcon} />
-            </TouchableOpacity>
-            <View style={{ flex: 1, gap: 24 }}>
-              <Text
-                style={{
-                  fontFamily: "moon",
-                  fontWeight: "bold",
-                  fontSize: 16,
-                  color: "#160635",
-                }}
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>New resident</Text>
+            <Text style={styles.modalText}>
+              You want to add a new resident? Perfect! Just share this personal
+              code, so your roomie can register and join the house.
+            </Text>
+            <Text style={styles.modalCode}>986 546</Text>
+            <View style={styles.shareButtonsContainer}>
+              <TouchableOpacity
+                style={[styles.shareButton, styles.shareButtonPurple]}
+                onPress={handleShare}
               >
-                New resident
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "manrope",
-                  fontSize: 16,
-                  color: "#160635",
-                }}
+                <Image style={styles.shareButtonIcon} source={share} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.shareButton, styles.shareButtonBlue]}
+                onPress={() =>
+                  Linking.openURL("fb-messenger://share?link=<YOUR_SHARE_LINK>")
+                }
               >
-                You want to add a new resident? Perfect! Just share this
-                personal code, so your roomie can register and join the house.
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "moon",
-                  color: "#160635",
-                  fontSize: 24,
-                  fontWeight: "bold",
-                  alignSelf: "center",
-                }}
+                <Image style={styles.shareButtonIcon} source={messenger} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.shareButton, styles.shareButtonGreen]}
+                onPress={() =>
+                  Linking.openURL(
+                    "whatsapp://send?text=Join our house with this code: 986 546"
+                  )
+                }
               >
-                986 546
-              </Text>
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: "row",
-                  gap: 15,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  paddingHorizontal: 65,
-                }}
-              >
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#B900F4",
-                    borderRadius: 30,
-                    width: 50,
-                    height: 50,
-                    alignSelf: "center",
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  onPress={this.handleShare}
-                >
-                  <Image style={{ width: 18, height: 20 }} source={share} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#0E8EF1",
-                    borderRadius: 30,
-                    width: 50,
-                    height: 50,
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  onPress={() =>
-                    Linking.openURL(
-                      "fb-messenger://share?link=<YOUR_SHARE_LINK>"
-                    )
-                  }
-                >
-                  <Image style={{ width: 18, height: 18 }} source={messenger} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#25D366",
-                    borderRadius: 30,
-                    width: 50,
-                    height: 50,
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  onPress={() =>
-                    Linking.openURL(
-                      "whatsapp://send?text=Join our house with this code: 986 546"
-                    )
-                  }
-                >
-                  <Image
-                    source={whatsapp}
-                    style={{
-                      padding: 10,
-                      width: 18,
-                      height: 18,
-                      textAlign: "center",
-                      alignItems: "center",
-                    }}
-                  />
-                </TouchableOpacity>
-              </View>
+                <Image style={styles.shareButtonIcon} source={whatsapp} />
+              </TouchableOpacity>
             </View>
           </View>
-        </Modal>
-      </View>
-    );
-  }
-}
+        </View>
+      </Modal>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingTop: 35,
+    paddingBottom: 20,
+  },
   h3: {
     fontFamily: "moon",
     fontSize: 14,
     color: "#160635",
     fontWeight: "bold",
   },
-  leave: {
-    textAlign: "center",
-    fontFamily: "manrope",
-    color: "#FF7A7A",
-    paddingTop: 29,
-    textDecorationLine: "underline",
-  },
-  header: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingTop: 35,
-    paddingBottom: 20,
-  },
-  residentsTitle: {
-    flex: 1,
+  addButtonContainer: {
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "flex-end",
+  },
+  addResidentText: {
+    fontFamily: "manrope",
+    fontSize: 13,
+    color: "#A5A5A5",
+    paddingRight: 5,
+  },
+  addButtonIcon: {
+    width: 20,
+    height: 20,
   },
   residentFull: {
     backgroundColor: "#FAFAFA",
     marginBottom: 8,
     height: 56,
     width: "100%",
-  },
-  addResident: {
-    fontFamily: "manrope",
-    fontSize: 13,
-    color: "#A5A5A5",
-    paddingRight: 5,
+    borderRadius: 10,
+    padding: 10,
   },
   residentProfile: {
-    flex: 1,
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
@@ -282,6 +209,22 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
   },
+  leaveButton: {
+    textAlign: "center",
+    fontFamily: "manrope",
+    color: "#FF7A7A",
+    paddingTop: 29,
+    textDecorationLine: "underline",
+  },
+  leaveButtonText: {
+    fontFamily: "manrope",
+    color: "#FF7A7A",
+    textDecorationLine: "underline",
+  },
+  name: {
+    fontFamily: "manrope",
+    fontSize: 16,
+  },
   overlay: {
     flex: 1,
     backgroundColor: "rgba(22, 6, 53, 0.5)",
@@ -289,13 +232,15 @@ const styles = StyleSheet.create({
   modalContainer: {
     height: 314,
     width: 342,
-    marginTop: 265,
-    marginLeft: 35,
-    marginRight: 24,
     backgroundColor: "#FFFFFF",
     borderRadius: 20,
     padding: 16,
     position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    top: "50%",
+    left: "50%",
+    transform: [{ translateX: -171 }, { translateY: -157 }],
   },
   closeButton: {
     position: "absolute",
@@ -306,4 +251,59 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
   },
+  modalContent: {
+    flex: 1,
+    justifyContent: "space-between",
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
+  modalTitle: {
+    fontFamily: "moon",
+    fontWeight: "bold",
+    fontSize: 16,
+    color: "#160635",
+    alignSelf: "left",
+  },
+  modalText: {
+    fontFamily: "manrope",
+    fontSize: 16,
+    color: "#160635",
+  },
+  modalCode: {
+    fontFamily: "moon",
+    color: "#160635",
+    fontSize: 24,
+    fontWeight: "bold",
+    alignSelf: "center",
+  },
+  shareButtonsContainer: {
+    flexDirection: "row",
+    gap: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 65,
+    paddingBottom: 20,
+  },
+  shareButton: {
+    borderRadius: 30,
+    width: 50,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  shareButtonPurple: {
+    backgroundColor: "#B900F4",
+  },
+  shareButtonBlue: {
+    backgroundColor: "#0E8EF1",
+  },
+  shareButtonGreen: {
+    backgroundColor: "#25D366",
+  },
+  shareButtonIcon: {
+    width: 18,
+    height: 18,
+  },
 });
+
+export default Residents;
