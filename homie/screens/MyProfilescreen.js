@@ -154,7 +154,7 @@ export default function Myprofilescreen({ navigation }) {
     <View>
       <View style={styles.topHeader}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={arrowLeft} style={{ width: 8, height: 15 }} />
+          <Image source={arrowLeft} style={{ width: 8, height: 15, marginTop: 30 }} />
         </TouchableOpacity>
         <View style={{ flex: 1, alignItems: "center" }}>
           <View style={{ position: "relative" }}>
