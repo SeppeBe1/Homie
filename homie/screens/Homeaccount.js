@@ -40,7 +40,6 @@ const imageIconColor = "#F57ED4"; // Color for the files icon
 
 const App = () => {
   const navigation = useNavigation();
-
   const [currentView, setCurrentView] = useState("Residents");
   const [backgroundImageURI, setBackgroundImageURI] = useState(backgroundImage);
 

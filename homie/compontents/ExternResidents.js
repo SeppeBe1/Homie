@@ -28,18 +28,21 @@ const residentsData = [
 ];
 
 export default class Residents extends Component {
-   
   renderResidents() {
     const { navigation } = this.props;
     return residentsData.map((resident, index) => (
       <View style={styles.residentFull} key={index}>
-        <TouchableOpacity onPress={() => navigation.navigate("housemateprofile")}>
-        <View style={styles.residentProfile}>
-          <View style={styles.status}>
-            <Image source={resident.image} style={styles.profilePicture} />
+        <TouchableOpacity
+          onPress={() => navigation.navigate("housemateprofile")}
+        >
+          <View style={styles.residentProfile}>
+            <View style={styles.status}>
+              <Image source={resident.image} style={styles.profilePicture} />
+            </View>
+            <Text style={{ fontSize: "16px", fontFamily: "manrope" }}>
+              {resident.name}
+            </Text>
           </View>
-          <Text style={{ fontSize: '16px', fontFamily:'manrope' }}>{resident.name}</Text>
-        </View>
         </TouchableOpacity>
       </View>
     ));
@@ -49,7 +52,7 @@ export default class Residents extends Component {
     return (
       <View>
         <View style={styles.header}>
-          <Text style={styles.h3}>Residents</Text>
+          <Text style={styles.h3}>The homies</Text>
         </View>
         {this.renderResidents()}
       </View>
@@ -62,7 +65,7 @@ const styles = StyleSheet.create({
     fontFamily: "moon",
     fontSize: 14,
     color: "#160635",
-    paddingVertical: 40,
+    paddingVertical: 20,
     fontWeight: "bold",
   },
   leave: {
@@ -78,18 +81,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   residentsTitle: {
-    flex: 1,
     alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "flex-end",
   },
   residentFull: {
     backgroundColor: "#FAFAFA",
     marginBottom: 8,
     height: 56,
     width: "100%",
-    borderRadius: '10px',
-    padding: '5px'
+    borderRadius: "10px",
+    padding: "5px",
   },
   residentProfile: {
     flex: 1,
