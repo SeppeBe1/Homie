@@ -90,6 +90,13 @@ export default class Residents extends Component {
 }
 
 const styles = StyleSheet.create({
+  h3: {
+    fontFamily: "moon",
+    fontSize: 14,
+    color: "#160635",
+    fontWeight: "bold",
+  },
+
   button: {
     width: 280,
     height: 50,

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import * as Font from "expo-font";
 import MoonFont from "../assets/fonts/Moon.otf";
-import Novatica from "../assets/fonts/Novatica-Bold.woff";
+import moonBold from "../assets/fonts/Moon Bold.otf";
+import Novatica from "../assets/fonts/Novatica.ttf";
+import NovaticaBold from "../assets/fonts/Novatica-Bold.ttf";
 import Manrope from "../assets/fonts/Manrope-Bold.ttf";
 import Residents from "../compontents/Residents";
 import Photos from "../compontents/Photos";
@@ -17,7 +19,6 @@ import {
   Image,
   ImageBackground,
   Modal,
-  Button,
 } from "react-native";
 
 import arrowback from "../assets/icons/Arrow_back.svg";
@@ -32,17 +33,17 @@ const loadFonts = async () => {
     moon: MoonFont,
     novatica: Novatica,
     manrope: Manrope,
+    novaticaBold: NovaticaBold,
+    moonBold: moonBold,
   });
 };
 
 const cameraIconColor = "#00B9F4"; // Color for the camera icon
 const imageIconColor = "#F57ED4"; // Color for the files icon
-
 const App = () => {
   const navigation = useNavigation();
   const [currentView, setCurrentView] = useState("Residents");
   const [backgroundImageURI, setBackgroundImageURI] = useState(backgroundImage);
-
   const switchView = (view) => {
     setCurrentView(view);
   };
@@ -63,7 +64,6 @@ const App = () => {
         return null;
     }
   };
-
   const [uploadPopupVisible, setUploadPopupVisible] = useState(false);
   const handleChooseFromFiles = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -71,13 +71,11 @@ const App = () => {
       alert("Sorry, we need camera roll permissions to select an image.");
       return;
     }
-
     const result = await ImagePicker.launchImageLibraryAsync();
     if (!result.cancelled) {
       // Set the selected image as the background image
       setBackgroundImageURI(result.uri);
     }
-
     setUploadPopupVisible(false);
   };
 
@@ -120,17 +118,17 @@ const App = () => {
               <View style={styles.uploadContainer}>
                 <TouchableOpacity
                   style={styles.uploadZone}
-                  onPress={handleChooseFromFiles}
+                  onPress={handleTakePhoto}
                 >
-                  <FontAwesome name="image" size={23} color={imageIconColor} />
-                  <Text style={styles.uploadText}>Gallery</Text>
+                  <AntDesign name="camera" size={40} color={cameraIconColor} />
+                  <Text style={styles.uploadText}>Camera</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.uploadZone}
-                  onPress={handleTakePhoto}
+                  onPress={handleChooseFromFiles}
                 >
-                  <AntDesign name="camera" size={28} color={cameraIconColor} />
-                  <Text style={styles.uploadText}>Take Photo</Text>
+                  <FontAwesome name="image" size={35} color={imageIconColor} />
+                  <Text style={styles.uploadText}>Gallery</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -251,9 +249,8 @@ const styles = StyleSheet.create({
     color: "white",
   },
   h2: {
-    fontFamily: "novatica",
+    fontFamily: "novaticaBold",
     fontSize: 16,
-    fontWeight: "bold",
     color: "#160635",
     paddingVertical: 30,
     textAlign: "center",

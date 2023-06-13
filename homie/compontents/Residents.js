@@ -79,7 +79,7 @@ export default class Residents extends Component {
     return (
       <View>
         <View style={styles.header}>
-          <Text style={styles.h3}>Our residents</Text>
+          <Text style={styles.h3}>Our homies</Text>
           <TouchableOpacity
             style={styles.residentsTitle}
             onPress={this.toggleModal}
@@ -225,7 +225,6 @@ const styles = StyleSheet.create({
     fontFamily: "moon",
     fontSize: 14,
     color: "#160635",
-    paddingVertical: 40,
     fontWeight: "bold",
   },
   leave: {
@@ -239,6 +238,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
+    paddingTop: 35,
+    paddingBottom: 20,
   },
   residentsTitle: {
     flex: 1,
