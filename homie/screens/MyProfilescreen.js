@@ -23,6 +23,7 @@ import crossIcon from "../assets/icons/close.svg";
 import checkboxEmpty from "../assets/icons/greenCheckbox_empt.svg";
 import checkboxChecked from "../assets/icons/greenCheckbox.svg";
 import profilePicture from "../assets/profielfoto.svg";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
@@ -49,6 +50,14 @@ export default function Myprofilescreen({ navigation }) {
 
   const [profilePictureURI, setProfilePictureURI] = useState(profilePicture);
   const [uploadPopupVisible, setUploadPopupVisible] = useState(false);
+  const [data, setData] = useState([]);
+  const [firstname, setFirstname] = useState([]);
+  const [lastname, setLastname] = useState([]);
+  const [phonenumber, setPhonenumber] = useState([]);
+  const [email, setEmail] = useState([]);
+  const [password, setPassword] = useState([]);
+  const [profilePic, setProfilePic]= useState([]);
+  const [status, setStatus]= useState([]);
 
   const handleChooseFromFiles = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -140,7 +149,42 @@ export default function Myprofilescreen({ navigation }) {
 
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
+  const getUser = async () => {
+    const userId = await AsyncStorage.getItem("userId");
+    console.log("hellokes");
+
+    fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status == "failed") {
+          console.log(data.status);
+        } else if (data.status == "succes") {
+          setFirstname(data.data.firstname);
+          setLastname(data.data.lastname);
+          setPhonenumber(data.data.phonenumber);
+          setEmail(data.data.email);
+          setPassword(data.data.password);
+          setProfilePic(data.data.profilePic);
+          setStatus(data.data.status);
+
+          // let profilePic = data.data.profilePic;
+        }
+      })
+      .catch((error) => {
+        // Handle any errors
+        console.error(error);
+      });
+  };
+
+
   useEffect(() => {
+    getUser();
+
     loadFonts().then(() => {
       setFontsLoaded(true);
     });
@@ -187,7 +231,7 @@ export default function Myprofilescreen({ navigation }) {
                   textAlign: "center",
                 }}
               >
-                Jade Apers
+                {firstname + " " + lastname}
               </Text>
             </View>
           </View>
@@ -197,7 +241,7 @@ export default function Myprofilescreen({ navigation }) {
               flexDirection: "row",
               alignItems: "center",
               position: "absolute",
-              top: 120,
+              top: 105,
               right: 95,
             }}
           >
@@ -296,7 +340,7 @@ export default function Myprofilescreen({ navigation }) {
           <Text
             style={{ fontFamily: "manrope", margin: "10px", fontSize: "16px" }}
           >
-            jadeapers@hotmail.com
+            jadeapers@hotmail.com {email}
           </Text>
         </View>
         <View style={styles.profileItem}>
@@ -325,7 +369,7 @@ export default function Myprofilescreen({ navigation }) {
           <Text
             style={{ fontFamily: "manrope", margin: "10px", fontSize: "16px" }}
           >
-            +32 412 34 76 06
+            +32 412 34 76 06 {phonenumber}
           </Text>
         </View>
         <View style={styles.profileItem}>
