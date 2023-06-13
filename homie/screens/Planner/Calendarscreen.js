@@ -533,6 +533,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     fontFamily: "novatica",
+    fontWeight: "bold"
   },
   h3: {
     fontFamily: "moon",

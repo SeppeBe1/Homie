@@ -197,7 +197,7 @@ export default function Memorywall({ navigation }) {
       <View style={styles.headerContainer}>
       <TouchableOpacity
           onPress={() => navigation.goBack()}
-          style={[styles.arrowContainer,  {zIndex: 1}]}
+          style={styles.arrowContainer}
         >
           <Image source={arrowLeft} style={{ width: 8, height: 15 }} />
         </TouchableOpacity>
@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
   arrowContainer: {
     position: 'absolute',
     top: 20,
-    left: 15,
+    left: 0,
     padding: 30,
   },
   calendarContainer: {

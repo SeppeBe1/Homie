@@ -138,7 +138,7 @@ export default function Myprofilescreen({navigation}) {
     <View>
       <View style={styles.topHeader}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image source={arrowLeft} style={{ width: 8, height: 15 }} />
+            <Image source={arrowLeft} style={{ width: 8, height: 15, marginTop: 30 }} />
         </TouchableOpacity>
         <View style={{ flex: 1, alignItems: 'center' }}>
         <View style={{ position: 'relative' }}>
@@ -153,7 +153,7 @@ export default function Myprofilescreen({navigation}) {
       <Text style={{ color: '#fff', fontFamily: 'novaticaBold', fontSize: '16px', textAlign: 'center' }}>Jade Apers</Text>
       </View>
       </View>
-      <TouchableOpacity onPress={toggleDropdown} style={{ flexDirection: 'row', alignItems: 'center', position: 'absolute', top: 120, right: 95 }}>
+      <TouchableOpacity onPress={toggleDropdown} style={{ flexDirection: 'row', alignItems: 'center', position: 'absolute', top: 105, right: 95 }}>
         {selectedStatus === 'Available' && <Image source={statusAvailable} style={{ width: 11, height: 11, marginRight: 5 }} />}
         {selectedStatus === 'Busy' && <Image source={statusBusy} style={{ width: 11, height: 11, marginRight: 5 }} />}
         {selectedStatus === 'Do Not Disturb' && <Image source={statusNotdisturb} style={{ width: 11, height: 11, marginRight: 5 }} />}    
@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
 
   dropdownMenu: {
     position: 'absolute',
-    top: 182,
+    top: 195,
     right: 0,
     width: 158,
     backgroundColor: '#fff',
