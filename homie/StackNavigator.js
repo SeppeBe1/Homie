@@ -53,8 +53,8 @@ const LoginscreenStack = () => {
         name="SignUp"
         component={SignUp}
         options={{ tabBarVisible: true }}
-      />
-      <Stack.Screen
+      /> */}
+      {/* <Stack.Screen
         name="HouseChoice"
         component={HouseChoice}
         options={{ tabBarVisible: true }}
@@ -78,8 +78,8 @@ const LoginscreenStack = () => {
         name="CreateHouseRule"
         component={CreateHouseRule}
         options={{ tabBarVisible: true }}
-      />
-      <Stack.Screen
+      /> */}
+      {/* <Stack.Screen
         name="ShareHomie"
         component={ShareHomie}
         options={{ tabBarVisible: true }}
@@ -90,6 +90,14 @@ const LoginscreenStack = () => {
         component={TabNavigator}
         options={{ tabBarVisible: true }}
       />
+
+      <Stack.Screen
+        name="ThankYouScreen"
+        component={ThankYouScreen}
+        options={{ tabBarVisible: true }}
+      />
+
+      <Stack.Screen name="Memorywall" component={Memorywall} />
     </Stack.Navigator>
   );
 };
@@ -99,7 +107,6 @@ const HomescreenStack = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="homeaccount" component={Homeaccount} />
-      <Stack.Screen name="thankyouscreen" component={ThankYouScreen} />
       <Stack.Screen name="myprofilescreen" component={Myprofilescreen} />
       <Stack.Screen name="settingsscreen" component={Settingsscreen} />
       <Stack.Screen name="changepassword" component={ChangePassword} />

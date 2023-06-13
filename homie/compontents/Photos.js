@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import share from "../assets/icons/share.svg";
 import close from "../assets/icons/close_white.svg";
-import Memorywall from "../screens/Memorywall";
 
 const galleryImages = [
   require("../assets/girl.jpg"),
@@ -112,7 +111,7 @@ export default class Residents extends Component {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.navigate(Memorywall)}
+            onPress={() => navigation.navigate("Memorywall")}
           >
             <Text style={styles.buttonText}>View memory wall</Text>
           </TouchableOpacity>

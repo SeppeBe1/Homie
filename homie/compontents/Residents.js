@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import {
   Share,
   Text,
@@ -9,15 +10,15 @@ import {
   Modal,
   TouchableWithoutFeedback,
   Linking,
+  Animated,
 } from "react-native";
-
+import { Transition } from "react-native-reanimated";
 import addButton from "../assets/icons/add.svg";
 import profilePicture from "../assets/girl.jpg";
 import messenger from "../assets/icons/messenger.svg";
 import whatsapp from "../assets/icons/whatsapp.svg";
 import share from "../assets/icons/share.svg";
 import crossIcon from "../assets/icons/close.svg";
-import ThankYouScreen from "../screens/ThankYouScreen";
 
 const residentsData = [
   { name: "Me", profileStatusColor: "#FFB84E" },
@@ -26,9 +27,9 @@ const residentsData = [
   { name: "Seppe", profileStatusColor: "#FF7A7A" },
 ];
 
-const Residents = () => {
+export default function Residents() {
+  const navigation = useNavigation();
   const [showModal, setShowModal] = useState(false);
-  const [redirect, setRedirect] = useState(false);
 
   const handleShare = async () => {
     try {
@@ -50,35 +51,44 @@ const Residents = () => {
     setShowModal((prevShowModal) => !prevShowModal);
   };
 
-  useEffect(() => {
-    if (redirect) {
+  const handleLeaveHouse = () => {
+    setTimeout(() => {
+      navigation.navigate("ThankYouScreen");
       setTimeout(() => {
-        navigation.navigate(ThankYouScreen);
-        setTimeout(() => {
-          navigation.navigate(Login);
-        }, 5000);
-      }, 5000);
-    }
-  }, [redirect]);
+        navigation.navigate("Login");
+      }, 3000);
+    });
+  };
 
   const renderResidents = () => {
     return residentsData.map((resident, index) => (
       <View style={styles.residentFull} key={index}>
-        <View style={styles.residentProfile}>
-          <View style={styles.status}>
-            <Image source={profilePicture} style={styles.profilePicture} />
-            <View
-              style={[
-                styles.circle,
-                { backgroundColor: resident.profileStatusColor },
-              ]}
-            />
+        <TouchableOpacity
+          onPress={() => navigation.navigate("housemateprofile")}
+        >
+          <View style={styles.residentProfile}>
+            <View style={styles.status}>
+              <Image source={profilePicture} style={styles.profilePicture} />
+              <View
+                style={[
+                  styles.circle,
+                  { backgroundColor: resident.profileStatusColor },
+                ]}
+              />
+            </View>
+            <Text style={styles.name}>{resident.name}</Text>
           </View>
-          <Text style={styles.name}>{resident.name}</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     ));
   };
+
+  useEffect(() => {
+    // Implement any necessary cleanup or side effects
+    return () => {
+      // Cleanup logic here
+    };
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -93,10 +103,7 @@ const Residents = () => {
         </TouchableOpacity>
       </View>
       {renderResidents()}
-      <TouchableOpacity
-        onPress={() => setRedirect(true)}
-        style={styles.leaveButton}
-      >
+      <TouchableOpacity onPress={handleLeaveHouse} style={styles.leaveButton}>
         <Text style={styles.leaveButtonText}>Leave House</Text>
       </TouchableOpacity>
 
@@ -146,7 +153,7 @@ const Residents = () => {
       </Modal>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -305,5 +312,3 @@ const styles = StyleSheet.create({
     height: 18,
   },
 });
-
-export default Residents;
