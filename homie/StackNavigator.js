@@ -44,7 +44,7 @@ const Tab = createBottomTabNavigator();
 const LoginscreenStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {/* <Stack.Screen
+      <Stack.Screen
         name="Login"
         component={Login}
         options={{ tabBarVisible: true }}
@@ -53,8 +53,8 @@ const LoginscreenStack = () => {
         name="SignUp"
         component={SignUp}
         options={{ tabBarVisible: true }}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
         name="HouseChoice"
         component={HouseChoice}
         options={{ tabBarVisible: true }}
@@ -78,12 +78,12 @@ const LoginscreenStack = () => {
         name="CreateHouseRule"
         component={CreateHouseRule}
         options={{ tabBarVisible: true }}
-      /> */}
-      {/* <Stack.Screen
+      />
+      <Stack.Screen
         name="ShareHomie"
         component={ShareHomie}
         options={{ tabBarVisible: true }}
-      /> */}
+      />
 
       <Stack.Screen
         name="TabNavigator"

@@ -80,7 +80,6 @@ export default function Homescreen({ navigation }) {
 
   const getUser = async () => {
     const userId = await AsyncStorage.getItem("userId");
-    console.log("yeet");
 
     fetch(`http://localhost:3000/api/v1/users/${userId}`, {
       method: "GET",
