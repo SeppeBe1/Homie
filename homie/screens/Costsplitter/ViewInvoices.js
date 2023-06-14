@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Platform } from "react";
 import {
   Text,
   View,
@@ -24,11 +24,21 @@ import invoices from "../../assets/invoices.svg";
 import close from "../../assets/icons/close.svg";
 import camera from "../../assets/icons/Camera.svg";
 import picture from "../../assets/icons/picture.svg";
+import { FileSystem } from "react-native-unimodules";
 
 export default function ViewInvoices() {
   const navigation = useNavigation();
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [searchText, setSearchText] = useState("");
+
+  const handleSearchTextChange = (text) => {
+    setSearchText(text);
+  };
+  const handleSearch = () => {
+    // Voeg hier je logica toe voor het uitvoeren van de zoekactie
+    console.log("Zoeken naar:", searchText);
+  };
 
   const handleUploadInvoice = () => {
     setPopupVisible(true);
@@ -44,6 +54,8 @@ export default function ViewInvoices() {
     const result = await ImagePicker.launchCameraAsync();
     if (!result.cancelled) {
       setSelectedImage(result.uri);
+      getFileInformation(result.uri);
+      console.log("Selected Image:", result); // Log the entire file object
       navigation.navigate("AddInvoice", { selectedImage: result.uri });
     }
     setPopupVisible(false);
@@ -59,6 +71,8 @@ export default function ViewInvoices() {
     const result = await ImagePicker.launchImageLibraryAsync();
     if (!result.cancelled) {
       setSelectedImage(result.uri);
+      getFileInformation(result.uri);
+      console.log("Selected Image:", result); // Log the entire file object
       navigation.navigate("AddInvoice", { selectedImage: result.uri });
     }
     setPopupVisible(false);
@@ -68,6 +82,41 @@ export default function ViewInvoices() {
     navigation.navigate("CategoryScreen", { category });
   };
 
+  const getFileInformation = async (uri) => {
+    try {
+      const response = await fetch("https://example.com/file.txt");
+      const fileInfo = {
+        size: response.headers.get("Content-Length"),
+        type: response.headers.get("Content-Type"),
+        filename:
+          Platform.OS === "android"
+            ? uri.split("/").pop()
+            : uri.split("/").pop().replace("file://", ""),
+      };
+
+      if (Platform.OS === "web") {
+        fileInfo.filename = uri.split("/").pop();
+      } else {
+        const {
+          exists,
+          isDirectory,
+          uri: fileUri,
+        } = await FileSystem.getInfoAsync(uri);
+        if (exists && !isDirectory) {
+          fileInfo.filename = fileUri.split("/").pop();
+          // ... additional file properties as needed
+        } else {
+          throw new Error("File does not exist or is a directory.");
+        }
+      }
+
+      console.log("File Information:", fileInfo);
+      console.log("File Name:", fileInfo.filename);
+      // ... additional file properties as needed
+    } catch (error) {
+      console.log("Error retrieving file information:", error);
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -92,9 +141,12 @@ export default function ViewInvoices() {
         <View style={styles.searchContainer}>
           <TextInput
             placeholder="Search an invoice"
+            placeholderTextColor={searchText ? "#000000" : "#808080"}
             style={styles.searchInput}
+            onChangeText={handleSearchTextChange}
+            value={searchText}
           />
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={handleSearch}>
             <Image source={searchIcon} style={styles.searchIcon} />
           </TouchableOpacity>
         </View>
