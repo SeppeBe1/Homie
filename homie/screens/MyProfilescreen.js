@@ -22,7 +22,7 @@ import dropdownIconUp from "../assets/icons/dropdownUp.png";
 import crossIcon from "../assets/icons/close.svg";
 import checkboxEmpty from "../assets/icons/greenCheckbox_empt.svg";
 import checkboxChecked from "../assets/icons/greenCheckbox.svg";
-import profilePicture from "../assets/profielfoto.svg";
+import defaultProfilePic from "../assets/defaultProfilePic.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { AntDesign } from "@expo/vector-icons";
@@ -48,7 +48,7 @@ export default function Myprofilescreen({ navigation }) {
   const cameraIconColor = "#00B9F4"; // Color for the camera icon
   const imageIconColor = "#F57ED4"; // Color for the files icon
 
-  const [profilePictureURI, setProfilePictureURI] = useState(profilePicture);
+  const [profilePictureURI, setProfilePictureURI] = useState(defaultProfilePic);
   const [uploadPopupVisible, setUploadPopupVisible] = useState(false);
   const [data, setData] = useState([]);
   const [firstname, setFirstname] = useState([]);
@@ -147,11 +147,18 @@ export default function Myprofilescreen({ navigation }) {
     setIsChecked(!isChecked); // Toggle the checked status
   };
 
+  const handleEmail= () => {
+    setNewEmail(email);
+  }
+
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   const getUser = async () => {
     const userId = await AsyncStorage.getItem("userId");
-    console.log("hellokes");
+    console.log("getUserke");
+    const token = await AsyncStorage.getItem('token');
+    console.log(token);
+
 
     fetch(`http://localhost:3000/api/v1/users/${userId}`, {
       method: "GET",
@@ -166,8 +173,8 @@ export default function Myprofilescreen({ navigation }) {
         } else if (data.status == "succes") {
           setFirstname(data.data.firstname);
           setLastname(data.data.lastname);
-          setPhonenumber(data.data.phonenumber);
           setEmail(data.data.email);
+          setPhonenumber(data.data.phonenumber);
           setPassword(data.data.password);
           setProfilePic(data.data.profilePic);
           setStatus(data.data.status);
@@ -181,6 +188,68 @@ export default function Myprofilescreen({ navigation }) {
       });
   };
 
+  const [newEmail, setNewEmail] = useState("");
+  const [newPhonenumber, setNewPhonenumber] = useState("");
+
+  const updateEmail = async () => {
+    // Make the API request to update the email address in the database
+    try {
+      const userId = await AsyncStorage.getItem("userId");
+      const token = await AsyncStorage.getItem("token");
+  
+      const response = await fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          email: newEmail,
+        }),
+      });
+  
+      const data = await response.json();
+      if (data.status === "success") {
+        setEmail(newEmail); 
+        toggleEmail(); 
+        console.log(data.data);
+      } else {
+        console.log(data.status);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updatePhonenumber = async () => {
+    // Make the API request to update the email address in the database
+    try {
+      const userId = await AsyncStorage.getItem("userId");
+      const token = await AsyncStorage.getItem("token");
+  
+      const response = await fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          phonenumber: newPhonenumber, 
+        }),
+      });
+  
+      const data = await response.json();
+      if (data.status === "success") {
+        setPhonenumber(newPhonenumber);
+        togglePhone(); // Close the modal
+        console.log(data.data);
+      } else {
+        console.log(data.status);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     getUser();
@@ -203,9 +272,10 @@ export default function Myprofilescreen({ navigation }) {
         <View style={{ flex: 1, alignItems: "center" }}>
           <View style={{ position: "relative" }}>
             <Image
-              source={{ uri: profilePictureURI }}
+             source={{ uri: profilePictureURI }}
               style={{ width: 88, height: 88, borderRadius: 50 }}
             />
+            
             <TouchableOpacity
               style={{ position: "absolute", top: 0, right: 0 }}
               onPress={() => setUploadPopupVisible(true)}
@@ -339,8 +409,7 @@ export default function Myprofilescreen({ navigation }) {
           </View>
           <Text
             style={{ fontFamily: "manrope", margin: "10px", fontSize: "16px" }}
-          >
-            jadeapers@hotmail.com {email}
+          >{email}
           </Text>
         </View>
         <View style={styles.profileItem}>
@@ -366,11 +435,27 @@ export default function Myprofilescreen({ navigation }) {
               />
             </TouchableOpacity>
           </View>
+          {phonenumber ? (
           <Text
-            style={{ fontFamily: "manrope", margin: "10px", fontSize: "16px" }}
+            style={{
+              fontFamily: "manrope",
+              margin: "10px",
+              fontSize: "16px",
+            }}
           >
-            +32 412 34 76 06 {phonenumber}
+            {phonenumber}
           </Text>
+        ) : (
+          <Text
+            style={{
+              fontFamily: "manrope",
+              margin: "10px",
+              fontSize: "16px",
+            }}
+          >
+            no phonenumber entered
+          </Text>
+        )}
         </View>
         <View style={styles.profileItem}>
           <View
@@ -436,7 +521,9 @@ export default function Myprofilescreen({ navigation }) {
                   fontSize: "16px",
                   color: "#A5A5A5",
                 }}
-                placeholder="jadeapers@hotmail.com"
+                placeholder={email}
+                value={newEmail}
+                onChangeText={setNewEmail}
                 onTouchStart={(event) => event.stopPropagation()} // Prevent event propagation for input field touch
               />
               <TouchableOpacity onPress={handleCheckmarkClick}>
@@ -452,7 +539,7 @@ export default function Myprofilescreen({ navigation }) {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, { alignSelf: "center" }]}
-                onPress={() => console.log("save new email address")}
+                onPress={updateEmail}
               >
                 <Text style={styles.buttonText}>Save</Text>
               </TouchableOpacity>
@@ -497,7 +584,9 @@ export default function Myprofilescreen({ navigation }) {
                   fontSize: "16px",
                   color: "#A5A5A5",
                 }}
-                placeholder="+32 412 34 76 06"
+                placeholder={phonenumber}
+                value={newPhonenumber}
+                onChangeText={setNewPhonenumber}
                 onTouchStart={(event) => event.stopPropagation()} // Prevent event propagation for input field touch
               />
               <TouchableOpacity onPress={handleCheckmarkClick}>
@@ -513,7 +602,7 @@ export default function Myprofilescreen({ navigation }) {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, { alignSelf: "center" }]}
-                onPress={() => console.log("save changed phone number")}
+                onPress={updatePhonenumber}
               >
                 <Text style={styles.buttonText}>Save</Text>
               </TouchableOpacity>
