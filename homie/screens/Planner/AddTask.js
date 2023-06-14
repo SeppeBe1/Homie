@@ -12,6 +12,7 @@ import {
   Platform,
 } from "react-native";
 import arrowLeft from "../../assets/icons/arrowLeft.svg";
+import SaveAndCancel from "../../compontents/SaveAndCancel"; // Voeg deze importregel toe
 
 export default function AddTask() {
   const navigation = useNavigation();
@@ -67,22 +68,11 @@ export default function AddTask() {
 
   return (
     <View>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image
-            source={arrowLeft}
-            style={{ width: 8, height: 15, marginRight: 10 }}
-          />
-        </TouchableOpacity>
-        <View style={{ flex: 1, alignItems: "center" }}>
-          <Text
-            style={{ color: "#fff", fontFamily: "novaticaBold", fontSize: 20 }}
-          >
-            Add a task
-          </Text>
-        </View>
-      </View>
-
+      <SaveAndCancel
+        navigation={navigation}
+        title="Add a task"
+        destination="TasksScreen"
+      />
       <View style={styles.container}>
         <TextInput
           style={[

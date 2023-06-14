@@ -23,6 +23,7 @@ import gas from "../../assets/icons/gas.svg";
 import water from "../../assets/icons/water.svg";
 import maintainance from "../../assets/icons/maintainance.svg";
 import others from "../../assets/icons/others.svg";
+import SaveAndCancel from "../../compontents/SaveAndCancel"; // Voeg deze importregel toe
 
 const AddInvoice = () => {
   const navigation = useNavigation();
@@ -33,6 +34,7 @@ const AddInvoice = () => {
   );
   const [invoiceAmount, setInvoiceAmount] = useState("€");
   const [isInvoiceAmountEntered, setIsInvoiceAmountEntered] = useState(false);
+  const [isInvoiceNameEntered, setIsInvoiceNameEntered] = useState(false);
   const datePickerRef = useRef(null);
   const [selectedDateText, setSelectedDateText] = useState("Choose Date");
   const [invoiceDate, setInvoiceDate] = useState(null); // null indicates no date selected
@@ -60,14 +62,15 @@ const AddInvoice = () => {
 
   const handleInvoiceNameChange = (text) => {
     setInvoiceName(text);
+    setIsInvoiceNameEntered(text !== "");
   };
 
   const handleInvoiceAmountChange = (text) => {
     const cleanedText = text.replace(/[€\s,]/g, "");
     const formattedText = cleanedText.replace(/,/, ".");
-    const amountWithEuroSign = "€" + formattedText;
+    const amountWithEuroSign = "€ " + formattedText;
     setInvoiceAmount(amountWithEuroSign);
-    setIsInvoiceAmountEntered(true);
+    setIsInvoiceAmountEntered(cleanedText !== ""); // Check if there is text after the € sign
   };
 
   const showDatePickerModal = () => {
@@ -158,37 +161,29 @@ const AddInvoice = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.buttonText}>Cancel</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("ViewInvoices", { fileInfo: fileInfo })
-            }
-          >
-            <Text style={styles.buttonText}>Save</Text>
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.headerTitle}>Add an invoice</Text>
-        <View style={styles.emptyIcon} />
-      </View>
+      <SaveAndCancel
+        navigation={navigation}
+        title="Add an invoice"
+        destination="ViewInvoices"
+      />
 
       <View style={styles.formContainer}>
         <TextInput
-          style={[styles.input, invoiceName !== "" && { color: "#000" }]}
+          style={[
+            styles.input,
+            isInvoiceAmountEntered ? { color: "#000" } : { color: "#9B9B9B" },
+          ]}
           placeholder="Invoice Name"
-          placeholderTextColor="#9B9B9B"
+          placeholderTextColor={isInvoiceAmountEntered ? "#000" : "#9B9B9B"}
           value={invoiceName}
           onChangeText={handleInvoiceNameChange}
         />
+
         <View style={styles.rowContainer}>
           <TextInput
             style={[
               styles.input,
-              styles.invoiceAmountInput,
-              isInvoiceAmountEntered && { color: "#000" },
+              isInvoiceAmountEntered ? { color: "#000" } : { color: "#9B9B9B" },
             ]}
             placeholder="Amount of invoice"
             placeholderTextColor="#9B9B9B"
@@ -298,31 +293,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    backgroundColor: "#160635",
-    alignItems: "center",
-    zIndex: 1,
-  },
-  buttonsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-    padding: 20,
-  },
-  buttonText: {
-    color: "white",
-    fontFamily: "moon",
-    fontSize: 14,
-  },
-  headerTitle: {
-    color: "#fff",
-    fontFamily: "novaticaBold",
-    fontSize: 20,
-    paddingBottom: 40,
-  },
+
   formContainer: {
     paddingHorizontal: 20,
-    marginTop: 20,
     zIndex: 2,
   },
   input: {
@@ -341,11 +314,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  emptyIcon: {
-    width: 8,
-    height: 15,
-    zIndex: 3,
-  },
+
   imageContainer: {
     justifyContent: "center",
     alignItems: "center",
