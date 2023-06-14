@@ -27,6 +27,15 @@ const Residents = ({ houseCode }) => {
     getUsers();
   }, []);
 
+  const clearAsyncStorage = async () => {
+    try {
+      await AsyncStorage.clear();
+      console.log("AsyncStorage cleared successfully.");
+    } catch (error) {
+      console.log("Failed to clear AsyncStorage: ", error);
+    }
+  };
+
   const getUsers = async () => {
     const token = await AsyncStorage.getItem("token");
     const houseId = await AsyncStorage.getItem("houseId");
@@ -91,6 +100,7 @@ const Residents = ({ houseCode }) => {
       } else if (data.status === "success") {
         console.log(data.status);
         handleLeaveHouse();
+        clearAsyncStorage();
       }
     } catch (error) {
       // Handle any errors
