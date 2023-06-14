@@ -58,6 +58,7 @@ export default function Myprofilescreen({ navigation }) {
   const [password, setPassword] = useState([]);
   const [profilePic, setProfilePic]= useState(defaultProfilePic);
   const [emailPublic, setEmailPublic]= useState(false);
+  const [phonePublic, setPhonePublic]= useState(false);
 
   const handleChooseFromFiles = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -199,10 +200,33 @@ export default function Myprofilescreen({ navigation }) {
 
   const [isChecked, setIsChecked] = useState(false);
 
-  const handleCheckmarkClick = () => {
-    setIsChecked(!isChecked); // Toggle the checked status
-    console.log(data.data);
-    console.log('checkmark clicked')
+  const handleCheckmarkPhone = async () => {
+    setPhonePublic(!phonePublic); // Toggle the checked status
+    try {
+      const userId = await AsyncStorage.getItem("userId");
+      const token = await AsyncStorage.getItem("token");
+  
+      const response = await fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          phonePublic: !phonePublic,
+        }),
+      });
+  
+      const data = await response.json();
+      if (data.status === "success") {
+        console.log(data.data);
+        console.log('toggle')
+      } else {
+        console.log(data.status);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleCheckmarkEmail = async () => {
@@ -290,6 +314,7 @@ export default function Myprofilescreen({ navigation }) {
           setPhonenumber(data.data.phonenumber);
           setPassword(data.data.password);
           setEmailPublic(data.data.emailPublic);
+          setPhonePublic(data.data.phonePublic);
           setAvailability(data.data.availability);
           if (data.data.profilePic) {
             setProfilePic(data.data.profilePic);
@@ -665,7 +690,6 @@ export default function Myprofilescreen({ navigation }) {
                       style={{ width: 24, height: 24 }}
                     />
                   )}
-                 
                   <Text style={styles.modalCheckboxText}>
                     Make visible for public
                   </Text>
@@ -723,12 +747,19 @@ export default function Myprofilescreen({ navigation }) {
                 onChangeText={setNewPhonenumber}
                 onTouchStart={(event) => event.stopPropagation()} // Prevent event propagation for input field touch
               />
-              <TouchableOpacity onPress={handleCheckmarkClick}>
+              <TouchableOpacity onPress={handleCheckmarkPhone}>
                 <View style={styles.modalCheckboxContainer}>
-                  <Image
-                    source={isChecked ? checkboxChecked : checkboxEmpty}
-                    style={{ width: 24, height: 24 }}
-                  />
+                {phonePublic ? (
+                    <Image
+                      source={checkboxChecked}
+                      style={{ width: 24, height: 24 }}
+                    />
+                  ) : (
+                    <Image
+                      source={checkboxEmpty}
+                      style={{ width: 24, height: 24 }}
+                    />
+                  )}
                   <Text style={styles.modalCheckboxText}>
                     Make visible for public
                   </Text>
