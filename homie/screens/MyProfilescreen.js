@@ -57,7 +57,7 @@ export default function Myprofilescreen({ navigation }) {
   const [email, setEmail] = useState([]);
   const [password, setPassword] = useState([]);
   const [profilePic, setProfilePic]= useState(defaultProfilePic);
- // const [availability, setAvailability]= useState([]);
+  const [emailPublic, setEmailPublic]= useState(false);
 
   const handleChooseFromFiles = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -201,6 +201,37 @@ export default function Myprofilescreen({ navigation }) {
 
   const handleCheckmarkClick = () => {
     setIsChecked(!isChecked); // Toggle the checked status
+    console.log(data.data);
+    console.log('checkmark clicked')
+  };
+
+  const handleCheckmarkEmail = async () => {
+    setEmailPublic(!emailPublic); // Toggle the checked status
+    try {
+      const userId = await AsyncStorage.getItem("userId");
+      const token = await AsyncStorage.getItem("token");
+  
+      const response = await fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          emailPublic: !emailPublic, // Toggle the emailPublic value
+        }),
+      });
+  
+      const data = await response.json();
+      if (data.status === "success") {
+        console.log(data.data);
+        console.log('toggle')
+      } else {
+        console.log(data.status);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleEmail= () => {
@@ -258,6 +289,7 @@ export default function Myprofilescreen({ navigation }) {
           setEmail(data.data.email);
           setPhonenumber(data.data.phonenumber);
           setPassword(data.data.password);
+          setEmailPublic(data.data.emailPublic);
           setAvailability(data.data.availability);
           if (data.data.profilePic) {
             setProfilePic(data.data.profilePic);
@@ -620,12 +652,20 @@ export default function Myprofilescreen({ navigation }) {
                 onChangeText={setNewEmail}
                 onTouchStart={(event) => event.stopPropagation()} // Prevent event propagation for input field touch
               />
-              <TouchableOpacity onPress={handleCheckmarkClick}>
+              <TouchableOpacity onPress={handleCheckmarkEmail}>
                 <View style={styles.modalCheckboxContainer}>
-                  <Image
-                    source={isChecked ? checkboxChecked : checkboxEmpty}
-                    style={{ width: 24, height: 24 }}
-                  />
+                {emailPublic ? (
+                    <Image
+                      source={checkboxChecked}
+                      style={{ width: 24, height: 24 }}
+                    />
+                  ) : (
+                    <Image
+                      source={checkboxEmpty}
+                      style={{ width: 24, height: 24 }}
+                    />
+                  )}
+                 
                   <Text style={styles.modalCheckboxText}>
                     Make visible for public
                   </Text>
