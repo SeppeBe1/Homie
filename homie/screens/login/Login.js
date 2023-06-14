@@ -19,7 +19,6 @@ import Novatica from "../../assets/fonts/Novatica-Bold.woff";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Login({ navigation }) {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [color, setColor] = useState("white");
