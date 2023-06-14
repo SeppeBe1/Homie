@@ -4,9 +4,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  ScrollView,
+  TextInput,
   ImageBackground,
   Modal,
   Button,
+  Touchable,
 } from "react-native";
 
 import React, { useState, useEffect } from "react";
@@ -17,7 +20,25 @@ import Manrope from "../../assets/fonts/Manrope-Bold.ttf";
 import { useNavigation } from "@react-navigation/native";
 
 import debtIcon from "../../assets/debtIcon.svg";
+import searchIcon from "../../assets/icons/search.svg";
 import arrowback from "../../assets/icons/Arrow_back.svg";
+import furniture from "../../assets/categories/furniture.svg";
+import furniture2 from "../../assets/categories/furniture2.svg";
+import groceries from "../../assets/categories/groceries.svg";
+import groceries2 from "../../assets/categories/groceries2.svg";
+import trips from "../../assets/categories/trips.svg";
+import trips2 from "../../assets/categories/trips2.svg";
+import bliksem from "../../assets/categories/bliksem.svg";
+import bliksem2 from "../../assets/categories/bliksem2.svg";
+import gas from "../../assets/categories/gas.svg";
+import gas2 from "../../assets/categories/gas2.svg";
+import water from "../../assets/categories/water.svg";
+import water2 from "../../assets/categories/water2.svg";
+import mainte from "../../assets/categories/mainte.svg";
+import mainte2 from "../../assets/categories/mainte2.svg";
+import other from "../../assets/categories/other.svg";
+import other2 from "../../assets/categories/other2.svg";
+import add from "../../assets/icons/add.svg";
 
 const loadFonts = async () => {
   await Font.loadAsync({
@@ -28,14 +49,26 @@ const loadFonts = async () => {
 };
 
 
+
 const SplitCosts = () => {
+
+  const [activeCategory, setActiveCategory] = useState(null);
+
+  const handleCategoryPress = (category) => {
+    if (category === activeCategory) {
+      setActiveCategory(null);
+    } else {
+      setActiveCategory(category);
+    }
+  };
+
   const navigation = useNavigation();
   useEffect(() => {
     loadFonts();
   }, []);
 
   return (
-    <View style={{ flex: 1}}>
+    <View>
       <View style={styles.headerContainer}>
         <View style={styles.title}>
           <TouchableOpacity style={{marginLeft: 10}} onPress={() => navigation.goBack()}>
@@ -73,14 +106,109 @@ const SplitCosts = () => {
           </View>
         </View>
       </View>
-      <View>
-        
+      <View style={{paddingHorizontal: 25, width: "100%", flexDirection: "row", alignItems: "center", marginTop: 10}}>
+        <View style={{backgroundColor: "white", height: 45, width: 60, justifyContent: "center", alignItems: "center", borderTopLeftRadius: 10, borderBottomLeftRadius: 10}}>
+          <Image source={searchIcon} style={{ width: 22 , height: 22}}/>
+        </View>
+        <TextInput style={{width: "100%", backgroundColor: "white", height: "45px", borderTopRightRadius: 10, borderBottomRightRadius: 10, fontFamily: "manrope",
+          fontWeight: "400",
+          fontSize: 14,
+          outlineColor: 'transparent',
+          outlineStyle: 'none',}}
+          placeholder="Enter the amount"
+          placeholderTextColor="#A5A5A5"
+        />
+      </View>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <View style={{flexDirection: 'row', marginTop: 25, paddingHorizontal: 15, flex:1}}>
+          <View style={styles.categoriesContainer}>
+            <TouchableOpacity  style={[styles.categories, activeCategory === 'furniture' && styles.activeCategory,]} onPress={() => handleCategoryPress('furniture')}>
+              <Image source={activeCategory === 'furniture' ? furniture2 : furniture} style={{ width: 18, height: 21}} />
+            </TouchableOpacity>
+            <Text style={styles.categoriesText}>Furniture</Text>
+          </View>
+          <View style={styles.categoriesContainer}>
+            <TouchableOpacity style={[styles.categories, activeCategory === 'groceries' && styles.activeCategory,]} onPress={() => handleCategoryPress('groceries')}>
+              <Image source={activeCategory === 'groceries' ? groceries2 : groceries} style={{ width: 18.3, height: 18.3}}/>
+            </TouchableOpacity>
+            <Text style={styles.categoriesText}>Groceries</Text>
+          </View>
+          <View style={styles.categoriesContainer}> 
+            <TouchableOpacity style={[styles.categories, activeCategory === 'trips' && styles.activeCategory,]} onPress={() => handleCategoryPress('trips')}>
+              <Image source={activeCategory === 'trips' ? trips2 : trips} style={{ width: 24, height: 17}}/>
+            </TouchableOpacity>
+            <Text style={styles.categoriesText}>Trips</Text>
+          </View>
+          <View style={styles.categoriesContainer}> 
+            <TouchableOpacity style={[styles.categories, activeCategory === 'bliksem' && styles.activeCategory,]} onPress={() => handleCategoryPress('bliksem')}>
+              <Image source={activeCategory === 'bliksem' ? bliksem2 : bliksem} style={{ width: 14, height: 22}}/>
+            </TouchableOpacity>
+            <Text style={styles.categoriesText}>Electricity</Text>
+          </View>
+          <View style={styles.categoriesContainer}>
+            <TouchableOpacity style={[styles.categories, activeCategory === 'gas' && styles.activeCategory,]} onPress={() => handleCategoryPress('gas')}>
+              <Image source={activeCategory === 'gas' ? gas2 : gas} style={{ width: 18, height: 23}}/>
+            </TouchableOpacity>
+            <Text style={styles.categoriesText}>Gas</Text>
+          </View>
+          <View style={styles.categoriesContainer}>
+            <TouchableOpacity style={[styles.categories, activeCategory === 'water' && styles.activeCategory,]} onPress={() => handleCategoryPress('water')}>
+              <Image source={activeCategory === 'water' ? water2 : water} style={{ width: 16, height: 19.63}}/>
+            </TouchableOpacity>
+            <Text style={styles.categoriesText}>Water</Text>
+          </View>
+          <View style={styles.categoriesContainer}>
+            <TouchableOpacity style={[styles.categories, activeCategory === 'mainte' && styles.activeCategory,]} onPress={() => handleCategoryPress('mainte')}>
+              <Image source={activeCategory === 'mainte' ? mainte2 : mainte} style={{ width: 21, height: 21}}/>
+            </TouchableOpacity>
+            <Text style={styles.categoriesText}>Maintenance</Text>
+          </View>
+          <View style={styles.categoriesContainer}>
+            <TouchableOpacity style={[styles.categories, activeCategory === 'other' && styles.activeCategory,]} onPress={() => handleCategoryPress('other')}>
+              <Image source={activeCategory === 'other' ? other2 : other} style={{ width: 20, height: 4}}/>
+            </TouchableOpacity>
+            <Text style={styles.categoriesText}>Other</Text>
+          </View>
+        </View>
+      </ScrollView>
+
+      <View style={{flexDirection: "row", justifyContent: "space-between", alignItems:"center", paddingHorizontal: 25, marginTop: 20}}>
+        <Text style={{fontSize: "0.875rem", fontFamily: "moon", fontWeight: "bold",}}>Transactions</Text>
+        <TouchableOpacity style={{flexDirection: "row"}}>
+          <Text style={{fontSize: "0.875rem", fontFamily: "manrope", fontWeight: "regular", color: "#939393", marginRight:7}}>Add spending</Text>
+          <Image source={add} style={{width: 20, height: 20}}/>
+        </TouchableOpacity>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  activeCategory: {
+    backgroundColor: '#F57ED4',
+  },
+  categoriesText: {
+    fontFamily: "manrope",
+    fontWeight: "500",
+    fontSize: 12,
+    color: "#160635",
+    marginTop: 7,
+  },
+  categoriesContainer: {
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  categories: {
+    width: 55,
+    height: 55,
+    borderRadius: 999,
+    borderWidth: 2,
+    borderColor: "#F57ED4",
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 15,
+  },
   button: {
     width: 200,
     height: 50,
