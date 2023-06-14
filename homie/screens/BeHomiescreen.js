@@ -3,9 +3,6 @@ import { Header, Button } from 'react-native-elements'
 import calendarIcon from '../assets/calendar.png'
 import like from '../assets/like.png'
 import emptylike from '../assets/emptylike.png'
-import photoIcon from '../assets/icons/photo.svg'
-import crossIcon from "../assets/icons/close.svg"
-
 import * as Font from 'expo-font';
 
 import Nearby from "../compontents/Nearby";
@@ -43,7 +40,7 @@ export default function Behomiescreen({ navigation }) {
   const renderView = () => {
     switch (currentView) {
       case "Nearby":
-        return <Nearby hideImages={hideImages} />;
+        return <Nearby />;
       case "Discover":
         return <Discover />;
       default:
