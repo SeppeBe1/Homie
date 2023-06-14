@@ -7,6 +7,7 @@ import {
   Modal,
   TextInput,
 } from "react-native";
+import * as FileSystem from 'expo-file-system';
 import { Header, Button } from "react-native-elements";
 import arrowLeft from "../assets/icons/arrowLeft.svg";
 import editIcon from "../assets/icons/edit.svg";
@@ -22,7 +23,8 @@ import dropdownIconUp from "../assets/icons/dropdownUp.png";
 import crossIcon from "../assets/icons/close.svg";
 import checkboxEmpty from "../assets/icons/greenCheckbox_empt.svg";
 import checkboxChecked from "../assets/icons/greenCheckbox.svg";
-import profilePicture from "../assets/profielfoto.svg";
+import defaultProfilePic from "../assets/defaultProfilePic.png";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
@@ -47,8 +49,16 @@ export default function Myprofilescreen({ navigation }) {
   const cameraIconColor = "#00B9F4"; // Color for the camera icon
   const imageIconColor = "#F57ED4"; // Color for the files icon
 
-  const [profilePictureURI, setProfilePictureURI] = useState(profilePicture);
   const [uploadPopupVisible, setUploadPopupVisible] = useState(false);
+  const [data, setData] = useState([]);
+  const [firstname, setFirstname] = useState([]);
+  const [lastname, setLastname] = useState([]);
+  const [phonenumber, setPhonenumber] = useState([]);
+  const [email, setEmail] = useState([]);
+  const [password, setPassword] = useState([]);
+  const [profilePic, setProfilePic]= useState(defaultProfilePic);
+  const [emailPublic, setEmailPublic]= useState(false);
+  const [phonePublic, setPhonePublic]= useState(false);
 
   const handleChooseFromFiles = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -58,8 +68,34 @@ export default function Myprofilescreen({ navigation }) {
     }
     const result = await ImagePicker.launchImageLibraryAsync();
     if (!result.cancelled) {
-      // Set the selected image as the background image
-      setProfilePictureURI(result.uri);
+      setProfilePic(result.uri);
+      const userId = await AsyncStorage.getItem("userId");
+      const token = await AsyncStorage.getItem("token");
+
+    const formData = new FormData();
+    formData.append("profilePic", {
+      uri: result.uri,
+      name: "profilepic.png",
+      type: "image/png" // You can customize the filename if needed
+    });
+
+    fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data"
+      },
+      body: formData,
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      // Handle the response from the server
+      console.log("Image upload success:", data);
+    })
+    .catch((error) => {
+      // Handle the error
+      console.log("Image upload error:", error);
+    });
     }
     setUploadPopupVisible(false);
   };
@@ -72,8 +108,34 @@ export default function Myprofilescreen({ navigation }) {
     }
     const result = await ImagePicker.launchCameraAsync();
     if (!result.cancelled) {
-      // Set the captured image as the background image
-      setBackgroundImageURI(result.uri);
+      setProfilePic(result.uri);
+
+      const userId = await AsyncStorage.getItem("userId");
+      const token = await AsyncStorage.getItem("token");
+
+      const formData = new FormData();
+      formData.append("profilePic", {
+        uri: result.uri,
+        name: "profilepic.png",
+        type: "image/png" // You can customize the filename if needed
+      });
+      fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+      body: formData,
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      // Handle the response from the server
+      console.log("Image upload success:", data);
+    })
+    .catch((error) => {
+      // Handle the error
+      console.log("Image upload error:", error);
+    });
     }
     setUploadPopupVisible(false);
   };
@@ -126,25 +188,221 @@ export default function Myprofilescreen({ navigation }) {
   };
 
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState("Available");
+  const [availability, setAvailability] = useState("Available");
 
   const toggleDropdown = () => {
     setIsDropdownVisible(!isDropdownVisible);
   };
 
+  const handleAvailabilityChange= (newAvailability) => {
+    setAvailability(newAvailability);
+  }
+
   const [isChecked, setIsChecked] = useState(false);
 
-  const handleCheckmarkClick = () => {
-    setIsChecked(!isChecked); // Toggle the checked status
+  const handleCheckmarkPhone = async () => {
+    setPhonePublic(!phonePublic); // Toggle the checked status
+    try {
+      const userId = await AsyncStorage.getItem("userId");
+      const token = await AsyncStorage.getItem("token");
+  
+      const response = await fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          phonePublic: !phonePublic,
+        }),
+      });
+  
+      const data = await response.json();
+      if (data.status === "success") {
+        console.log(data.data);
+        console.log('toggle')
+      } else {
+        console.log(data.status);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  const handleCheckmarkEmail = async () => {
+    setEmailPublic(!emailPublic); // Toggle the checked status
+    try {
+      const userId = await AsyncStorage.getItem("userId");
+      const token = await AsyncStorage.getItem("token");
+  
+      const response = await fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          emailPublic: !emailPublic, // Toggle the emailPublic value
+        }),
+      });
+  
+      const data = await response.json();
+      if (data.status === "success") {
+        console.log(data.data);
+        console.log('toggle')
+      } else {
+        console.log(data.status);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleEmail= () => {
+    setNewEmail(email);
+  }
 
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
+  const updateAvailability= async () => {
+    try {
+      const userId = await AsyncStorage.getItem("userId");
+      const token = await AsyncStorage.getItem("token");
+  
+      const response = await fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          availability: availability, // Update the status value
+        }),
+      });
+  
+      const data = await response.json();
+      if (data.status === "success") {
+        console.log(data.data);
+      } else {
+        console.log(data.status);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const getUser = async () => {
+    const userId = await AsyncStorage.getItem("userId");
+    console.log("getUserke");
+    const token = await AsyncStorage.getItem('token');
+    console.log(token);   
+
+    fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status == "failed") {
+          console.log(data.status);
+        } else if (data.status == "succes") {
+          setFirstname(data.data.firstname);
+          setLastname(data.data.lastname);
+          setEmail(data.data.email);
+          setPhonenumber(data.data.phonenumber);
+          setPassword(data.data.password);
+          setEmailPublic(data.data.emailPublic);
+          setPhonePublic(data.data.phonePublic);
+          setAvailability(data.data.availability);
+          if (data.data.profilePic) {
+            setProfilePic(data.data.profilePic);
+          } else {
+            setProfilePic(defaultProfilePic);
+          } 
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const [newEmail, setNewEmail] = useState("");
+  const [newPhonenumber, setNewPhonenumber] = useState("");
+
+  const updateEmail = async () => {
+    try {
+      const userId = await AsyncStorage.getItem("userId");
+      const token = await AsyncStorage.getItem("token");
+  
+      const response = await fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          email: newEmail,
+        }),
+      });
+  
+      const data = await response.json();
+      if (data.status === "success") {
+        setEmail(newEmail); 
+        toggleEmail(); 
+        console.log(data.data);
+      } else {
+        console.log(data.status);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updatePhonenumber = async () => {
+    // Make the API request to update the email address in the database
+    try {
+      const userId = await AsyncStorage.getItem("userId");
+      const token = await AsyncStorage.getItem("token");
+  
+      const response = await fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          phonenumber: newPhonenumber, 
+        }),
+      });
+  
+      const data = await response.json();
+      if (data.status === "success") {
+        setPhonenumber(newPhonenumber);
+        togglePhone(); // Close the modal
+        console.log(data.data);
+      } else {
+        console.log(data.status);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
+    getUser();
+
     loadFonts().then(() => {
       setFontsLoaded(true);
     });
+
   }, []);
+
+  useEffect(() => {
+    updateAvailability();
+  }, [availability]);
+
 
   if (!fontsLoaded) {
     return null; // or a loading screen
@@ -158,10 +416,17 @@ export default function Myprofilescreen({ navigation }) {
         </TouchableOpacity>
         <View style={{ flex: 1, alignItems: "center" }}>
           <View style={{ position: "relative" }}>
-            <Image
-              source={{ uri: profilePictureURI }}
-              style={{ width: 88, height: 88, borderRadius: 50 }}
-            />
+          {profilePic ? (
+                <Image
+                  source={{ uri: profilePic}}
+                  style={{ width: 88, height: 88, borderRadius: 50 }}
+                />
+              ) : (
+                <Image
+                  source={defaultProfilePic}
+                  style={{ width: 88, height: 88, borderRadius: 50 }}
+                />
+              )}            
             <TouchableOpacity
               style={{ position: "absolute", top: 0, right: 0 }}
               onPress={() => setUploadPopupVisible(true)}
@@ -187,7 +452,7 @@ export default function Myprofilescreen({ navigation }) {
                   textAlign: "center",
                 }}
               >
-                Jade Apers
+                {firstname + " " + lastname}
               </Text>
             </View>
           </View>
@@ -197,23 +462,23 @@ export default function Myprofilescreen({ navigation }) {
               flexDirection: "row",
               alignItems: "center",
               position: "absolute",
-              top: 120,
+              top: 105,
               right: 95,
             }}
           >
-            {selectedStatus === "Available" && (
+            {availability === "Available" && (
               <Image
                 source={statusAvailable}
                 style={{ width: 11, height: 11, marginRight: 5 }}
               />
             )}
-            {selectedStatus === "Busy" && (
+            {availability === "Busy" && (
               <Image
                 source={statusBusy}
                 style={{ width: 11, height: 11, marginRight: 5 }}
               />
             )}
-            {selectedStatus === "Do Not Disturb" && (
+            {availability === "Do Not Disturb" && (
               <Image
                 source={statusNotdisturb}
                 style={{ width: 11, height: 11, marginRight: 5 }}
@@ -231,35 +496,35 @@ export default function Myprofilescreen({ navigation }) {
       {isDropdownVisible && (
         <View style={styles.dropdownMenu}>
           <TouchableOpacity
-            onPress={() => setSelectedStatus("Available")}
-            style={styles.dropdownItem}
-          >
-            <Image
-              source={statusAvailable}
-              style={{ width: 11, height: 11, marginRight: 5 }}
-            />
-            <Text style={styles.dropdownText}>Available</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setSelectedStatus("Busy")}
-            style={styles.dropdownItem}
-          >
-            <Image
-              source={statusBusy}
-              style={{ width: 11, height: 11, marginRight: 5 }}
-            />
-            <Text style={styles.dropdownText}>Busy</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setSelectedStatus("Do Not Disturb")}
-            style={styles.dropdownItem}
-          >
-            <Image
-              source={statusNotdisturb}
-              style={{ width: 11, height: 11, marginRight: 5 }}
-            />
-            <Text style={styles.dropdownText}>Do not disturb</Text>
-          </TouchableOpacity>
+        onPress={() => handleAvailabilityChange("Available")}
+        style={styles.dropdownItem}
+      >
+        <Image
+          source={statusAvailable}
+          style={{ width: 11, height: 11, marginRight: 5 }}
+        />
+        <Text style={styles.dropdownText}>Available</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => handleAvailabilityChange("Busy")}
+        style={styles.dropdownItem}
+      >
+        <Image
+          source={statusBusy}
+          style={{ width: 11, height: 11, marginRight: 5 }}
+        />
+        <Text style={styles.dropdownText}>Busy</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => handleAvailabilityChange("Do Not Disturb")}
+        style={styles.dropdownItem}
+      >
+        <Image
+          source={statusNotdisturb}
+          style={{ width: 11, height: 11, marginRight: 5 }}
+        />
+        <Text style={styles.dropdownText}>Do Not Disturb</Text>
+      </TouchableOpacity>
         </View>
       )}
 
@@ -295,8 +560,7 @@ export default function Myprofilescreen({ navigation }) {
           </View>
           <Text
             style={{ fontFamily: "manrope", margin: "10px", fontSize: "16px" }}
-          >
-            jadeapers@hotmail.com
+          >{email}
           </Text>
         </View>
         <View style={styles.profileItem}>
@@ -322,11 +586,27 @@ export default function Myprofilescreen({ navigation }) {
               />
             </TouchableOpacity>
           </View>
+          {phonenumber ? (
           <Text
-            style={{ fontFamily: "manrope", margin: "10px", fontSize: "16px" }}
+            style={{
+              fontFamily: "manrope",
+              margin: "10px",
+              fontSize: "16px",
+            }}
           >
-            +32 412 34 76 06
+            {phonenumber}
           </Text>
+        ) : (
+          <Text
+            style={{
+              fontFamily: "manrope",
+              margin: "10px",
+              fontSize: "16px",
+            }}
+          >
+            no phonenumber entered
+          </Text>
+        )}
         </View>
         <View style={styles.profileItem}>
           <View
@@ -392,15 +672,24 @@ export default function Myprofilescreen({ navigation }) {
                   fontSize: "16px",
                   color: "#A5A5A5",
                 }}
-                placeholder="jadeapers@hotmail.com"
+                placeholder={email}
+                value={newEmail}
+                onChangeText={setNewEmail}
                 onTouchStart={(event) => event.stopPropagation()} // Prevent event propagation for input field touch
               />
-              <TouchableOpacity onPress={handleCheckmarkClick}>
+              <TouchableOpacity onPress={handleCheckmarkEmail}>
                 <View style={styles.modalCheckboxContainer}>
-                  <Image
-                    source={isChecked ? checkboxChecked : checkboxEmpty}
-                    style={{ width: 24, height: 24 }}
-                  />
+                {emailPublic ? (
+                    <Image
+                      source={checkboxChecked}
+                      style={{ width: 24, height: 24 }}
+                    />
+                  ) : (
+                    <Image
+                      source={checkboxEmpty}
+                      style={{ width: 24, height: 24 }}
+                    />
+                  )}
                   <Text style={styles.modalCheckboxText}>
                     Make visible for public
                   </Text>
@@ -408,7 +697,7 @@ export default function Myprofilescreen({ navigation }) {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, { alignSelf: "center" }]}
-                onPress={() => console.log("save new email address")}
+                onPress={updateEmail}
               >
                 <Text style={styles.buttonText}>Save</Text>
               </TouchableOpacity>
@@ -453,15 +742,24 @@ export default function Myprofilescreen({ navigation }) {
                   fontSize: "16px",
                   color: "#A5A5A5",
                 }}
-                placeholder="+32 412 34 76 06"
+                placeholder={phonenumber}
+                value={newPhonenumber}
+                onChangeText={setNewPhonenumber}
                 onTouchStart={(event) => event.stopPropagation()} // Prevent event propagation for input field touch
               />
-              <TouchableOpacity onPress={handleCheckmarkClick}>
+              <TouchableOpacity onPress={handleCheckmarkPhone}>
                 <View style={styles.modalCheckboxContainer}>
-                  <Image
-                    source={isChecked ? checkboxChecked : checkboxEmpty}
-                    style={{ width: 24, height: 24 }}
-                  />
+                {phonePublic ? (
+                    <Image
+                      source={checkboxChecked}
+                      style={{ width: 24, height: 24 }}
+                    />
+                  ) : (
+                    <Image
+                      source={checkboxEmpty}
+                      style={{ width: 24, height: 24 }}
+                    />
+                  )}
                   <Text style={styles.modalCheckboxText}>
                     Make visible for public
                   </Text>
@@ -469,7 +767,7 @@ export default function Myprofilescreen({ navigation }) {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, { alignSelf: "center" }]}
-                onPress={() => console.log("save changed phone number")}
+                onPress={updatePhonenumber}
               >
                 <Text style={styles.buttonText}>Save</Text>
               </TouchableOpacity>
@@ -514,9 +812,9 @@ const styles = StyleSheet.create({
 
   dropdownMenu: {
     position: "absolute",
-    top: 182,
+    top: 200,
     right: 0,
-    width: 158,
+    width: 160,
     backgroundColor: "#fff",
     borderRadius: 5,
     elevation: 3,
