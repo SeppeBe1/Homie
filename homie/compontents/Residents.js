@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
 import {
   Share,
   Text,
@@ -10,26 +9,94 @@ import {
   Modal,
   TouchableWithoutFeedback,
   Linking,
-  Animated,
 } from "react-native";
-import { Transition } from "react-native-reanimated";
 import addButton from "../assets/icons/add.svg";
 import profilePicture from "../assets/girl.jpg";
 import messenger from "../assets/icons/messenger.svg";
 import whatsapp from "../assets/icons/whatsapp.svg";
 import share from "../assets/icons/share.svg";
 import crossIcon from "../assets/icons/close.svg";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
-const residentsData = [
-  { name: "Me", profileStatusColor: "#FFB84E" },
-  { name: "Boysangur", profileStatusColor: "#3BED6D" },
-  { name: "Yanelle", profileStatusColor: "#FF7A7A" },
-  { name: "Seppe", profileStatusColor: "#FF7A7A" },
-];
-
-export default function Residents() {
-  const navigation = useNavigation();
+const Residents = ({ houseCode }) => {
   const [showModal, setShowModal] = useState(false);
+  const [residentsData, setResidentsData] = useState([]);
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+  const getUsers = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const houseId = await AsyncStorage.getItem("houseId");
+    fetch(`http://localhost:3000/api/v1/users/house/${houseId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.status);
+        if (data.status === "failed") {
+          console.log(data.status);
+        } else if (data.status === "success") {
+          const fetchedResidents = data.result;
+          const updatedResidentsData = fetchedResidents.map((resident) => ({
+            firstname: resident.firstname,
+            lastname: resident.lastname,
+          }));
+          setResidentsData(updatedResidentsData);
+          console.log(updatedResidentsData);
+        }
+      })
+      .catch((error) => {
+        // Handle any errors
+        console.error(error);
+      });
+  };
+
+  const leaveHouse = async () => {
+    try {
+      const userId = await AsyncStorage.getItem("userId");
+
+      const handleLeaveHouse = () => {
+        setTimeout(() => {
+          navigation.navigate("ThankYouScreen");
+          setTimeout(() => {
+            navigation.navigate("Login");
+          }, 3000);
+        });
+      };
+
+      const response = await fetch(
+        `http://localhost:3000/api/v1/users/${userId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            houseId: "",
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.status === "failed") {
+        console.log(data.status);
+      } else if (data.status === "success") {
+        console.log(data.status);
+        handleLeaveHouse();
+      }
+    } catch (error) {
+      // Handle any errors
+      console.error(error);
+    }
+  };
 
   const handleShare = async () => {
     try {
@@ -48,63 +115,48 @@ export default function Residents() {
   };
 
   const toggleModal = () => {
-    setShowModal((prevShowModal) => !prevShowModal);
-  };
-
-  const handleLeaveHouse = () => {
-    setTimeout(() => {
-      navigation.navigate("ThankYouScreen");
-      setTimeout(() => {
-        navigation.navigate("Login");
-      }, 3000);
-    });
+    setShowModal((prevState) => !prevState);
   };
 
   const renderResidents = () => {
+    if (residentsData.length === 0) {
+      return <Text>Loading...</Text>; // Show loading indicator while data is being fetched
+    }
+
     return residentsData.map((resident, index) => (
       <View style={styles.residentFull} key={index}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("housemateprofile")}
-        >
-          <View style={styles.residentProfile}>
-            <View style={styles.status}>
-              <Image source={profilePicture} style={styles.profilePicture} />
-              <View
-                style={[
-                  styles.circle,
-                  { backgroundColor: resident.profileStatusColor },
-                ]}
-              />
-            </View>
-            <Text style={styles.name}>{resident.name}</Text>
+        <View style={styles.residentProfile}>
+          <View style={styles.status}>
+            <Image source={profilePicture} style={styles.profilePicture} />
+            <View
+              style={[
+                styles.circle,
+                { backgroundColor: resident.profileStatusColor },
+              ]}
+            />
           </View>
-        </TouchableOpacity>
+          <Text>
+            {resident.firstname} {resident.lastname}
+          </Text>
+        </View>
       </View>
     ));
   };
 
-  useEffect(() => {
-    // Implement any necessary cleanup or side effects
-    return () => {
-      // Cleanup logic here
-    };
-  }, []);
+  const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
+    <View>
       <View style={styles.header}>
-        <Text style={styles.h3}>Our homies</Text>
-        <TouchableOpacity
-          style={styles.addButtonContainer}
-          onPress={toggleModal}
-        >
-          <Text style={styles.addResidentText}>Add resident</Text>
-          <Image source={addButton} style={styles.addButtonIcon} />
+        <Text style={styles.h3}>Our residents</Text>
+        <TouchableOpacity style={styles.residentsTitle} onPress={toggleModal}>
+          <Text style={styles.addResident}>Add resident</Text>
+          <Image source={addButton} style={{ width: 20, height: 20 }} />
         </TouchableOpacity>
       </View>
       {renderResidents()}
-      <TouchableOpacity onPress={handleLeaveHouse} style={styles.leaveButton}>
-        <Text style={styles.leaveButtonText}>Leave House</Text>
+      <TouchableOpacity style={styles.leave} onPress={leaveHouse}>
+        <Text style={styles.leaveText}>Leave House</Text>
       </TouchableOpacity>
 
       <Modal visible={showModal} animationType="fade" transparent>
@@ -115,37 +167,105 @@ export default function Residents() {
           <TouchableOpacity style={styles.closeButton} onPress={toggleModal}>
             <Image source={crossIcon} style={styles.closeIcon} />
           </TouchableOpacity>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>New resident</Text>
-            <Text style={styles.modalText}>
+          <View style={{ flex: 1, gap: 24 }}>
+            <Text
+              style={{
+                fontFamily: "moon",
+                fontWeight: "bold",
+                fontSize: 16,
+                color: "#160635",
+              }}
+            >
+              <Text>New resident</Text>
+            </Text>
+            <Text
+              style={{
+                fontFamily: "manrope",
+                fontSize: 16,
+                color: "#160635",
+              }}
+            >
               You want to add a new resident? Perfect! Just share this personal
               code, so your roomie can register and join the house.
             </Text>
-            <Text style={styles.modalCode}>986 546</Text>
-            <View style={styles.shareButtonsContainer}>
+            <Text
+              style={{
+                fontFamily: "moon",
+                color: "#160635",
+                fontSize: 24,
+                fontWeight: "bold",
+                alignSelf: "center",
+              }}
+            >
+              {houseCode}
+            </Text>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "row",
+                gap: 15,
+                justifyContent: "center",
+                alignItems: "center",
+                paddingHorizontal: 65,
+              }}
+            >
               <TouchableOpacity
-                style={[styles.shareButton, styles.shareButtonPurple]}
+                style={{
+                  backgroundColor: "#B900F4",
+                  borderRadius: 30,
+                  width: 50,
+                  height: 50,
+                  alignSelf: "center",
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
                 onPress={handleShare}
               >
-                <Image style={styles.shareButtonIcon} source={share} />
+                <Image style={{ width: 18, height: 20 }} source={share} />
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.shareButton, styles.shareButtonBlue]}
+                style={{
+                  backgroundColor: "#0E8EF1",
+                  borderRadius: 30,
+                  width: 50,
+                  height: 50,
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
                 onPress={() =>
                   Linking.openURL("fb-messenger://share?link=<YOUR_SHARE_LINK>")
                 }
               >
-                <Image style={styles.shareButtonIcon} source={messenger} />
+                <Image style={{ width: 18, height: 18 }} source={messenger} />
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.shareButton, styles.shareButtonGreen]}
+                style={{
+                  backgroundColor: "#25D366",
+                  borderRadius: 30,
+                  width: 50,
+                  height: 50,
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
                 onPress={() =>
                   Linking.openURL(
-                    "whatsapp://send?text=Join our house with this code: 986 546"
+                    `whatsapp://send?text=Join our house with this code: ${houseCode}`
                   )
                 }
               >
-                <Image style={styles.shareButtonIcon} source={whatsapp} />
+                <Image
+                  source={whatsapp}
+                  style={{
+                    padding: 10,
+                    width: 18,
+                    height: 18,
+                    textAlign: "center",
+                    alignItems: "center",
+                  }}
+                />
               </TouchableOpacity>
             </View>
           </View>
@@ -153,48 +273,55 @@ export default function Residents() {
       </Modal>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingTop: 35,
-    paddingBottom: 20,
-  },
   h3: {
     fontFamily: "moon",
     fontSize: 14,
     color: "#160635",
+    paddingVertical: 40,
     fontWeight: "bold",
   },
-  addButtonContainer: {
+  leave: {
+    textAlign: "center",
+    fontFamily: "manrope",
+    color: "#FF7A7A",
+    paddingTop: 29,
+    textDecorationLine: "underline",
+  },
+  leaveText: {
+    textAlign: "center",
+    fontFamily: "manrope",
+    color: "#FF7A7A",
+    paddingTop: 29,
+    textDecorationLine: "underline",
+  },
+  header: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  residentsTitle: {
+    flex: 1,
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "flex-end",
-  },
-  addResidentText: {
-    fontFamily: "manrope",
-    fontSize: 13,
-    color: "#A5A5A5",
-    paddingRight: 5,
-  },
-  addButtonIcon: {
-    width: 20,
-    height: 20,
   },
   residentFull: {
     backgroundColor: "#FAFAFA",
     marginBottom: 8,
     height: 56,
     width: "100%",
-    borderRadius: 10,
-    padding: 10,
+  },
+  addResident: {
+    fontFamily: "manrope",
+    fontSize: 13,
+    color: "#A5A5A5",
+    paddingRight: 5,
   },
   residentProfile: {
+    flex: 1,
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
@@ -216,22 +343,6 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
   },
-  leaveButton: {
-    textAlign: "center",
-    fontFamily: "manrope",
-    color: "#FF7A7A",
-    paddingTop: 29,
-    textDecorationLine: "underline",
-  },
-  leaveButtonText: {
-    fontFamily: "manrope",
-    color: "#FF7A7A",
-    textDecorationLine: "underline",
-  },
-  name: {
-    fontFamily: "manrope",
-    fontSize: 16,
-  },
   overlay: {
     flex: 1,
     backgroundColor: "rgba(22, 6, 53, 0.5)",
@@ -239,15 +350,13 @@ const styles = StyleSheet.create({
   modalContainer: {
     height: 314,
     width: 342,
+    marginTop: 265,
+    marginLeft: 35,
+    marginRight: 24,
     backgroundColor: "#FFFFFF",
     borderRadius: 20,
     padding: 16,
     position: "absolute",
-    justifyContent: "center",
-    alignItems: "center",
-    top: "50%",
-    left: "50%",
-    transform: [{ translateX: -171 }, { translateY: -157 }],
   },
   closeButton: {
     position: "absolute",
@@ -258,57 +367,6 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
   },
-  modalContent: {
-    flex: 1,
-    justifyContent: "space-between",
-    paddingTop: 20,
-    paddingBottom: 20,
-  },
-  modalTitle: {
-    fontFamily: "moon",
-    fontWeight: "bold",
-    fontSize: 16,
-    color: "#160635",
-    alignSelf: "left",
-  },
-  modalText: {
-    fontFamily: "manrope",
-    fontSize: 16,
-    color: "#160635",
-  },
-  modalCode: {
-    fontFamily: "moon",
-    color: "#160635",
-    fontSize: 24,
-    fontWeight: "bold",
-    alignSelf: "center",
-  },
-  shareButtonsContainer: {
-    flexDirection: "row",
-    gap: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 65,
-    paddingBottom: 20,
-  },
-  shareButton: {
-    borderRadius: 30,
-    width: 50,
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  shareButtonPurple: {
-    backgroundColor: "#B900F4",
-  },
-  shareButtonBlue: {
-    backgroundColor: "#0E8EF1",
-  },
-  shareButtonGreen: {
-    backgroundColor: "#25D366",
-  },
-  shareButtonIcon: {
-    width: 18,
-    height: 18,
-  },
 });
+
+export default Residents;
