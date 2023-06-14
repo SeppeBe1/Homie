@@ -7,6 +7,7 @@ import {
   Modal,
   TextInput,
 } from "react-native";
+import * as FileSystem from 'expo-file-system';
 import { Header, Button } from "react-native-elements";
 import arrowLeft from "../assets/icons/arrowLeft.svg";
 import editIcon from "../assets/icons/edit.svg";
@@ -48,7 +49,6 @@ export default function Myprofilescreen({ navigation }) {
   const cameraIconColor = "#00B9F4"; // Color for the camera icon
   const imageIconColor = "#F57ED4"; // Color for the files icon
 
-  const [profilePictureURI, setProfilePictureURI] = useState(defaultProfilePic);
   const [uploadPopupVisible, setUploadPopupVisible] = useState(false);
   const [data, setData] = useState([]);
   const [firstname, setFirstname] = useState([]);
@@ -56,8 +56,8 @@ export default function Myprofilescreen({ navigation }) {
   const [phonenumber, setPhonenumber] = useState([]);
   const [email, setEmail] = useState([]);
   const [password, setPassword] = useState([]);
-  const [profilePic, setProfilePic]= useState([]);
-  const [status, setStatus]= useState([]);
+  const [profilePic, setProfilePic]= useState(defaultProfilePic);
+ // const [availability, setAvailability]= useState([]);
 
   const handleChooseFromFiles = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -67,8 +67,34 @@ export default function Myprofilescreen({ navigation }) {
     }
     const result = await ImagePicker.launchImageLibraryAsync();
     if (!result.cancelled) {
-      // Set the selected image as the background image
-      setProfilePictureURI(result.uri);
+      setProfilePic(result.uri);
+      const userId = await AsyncStorage.getItem("userId");
+      const token = await AsyncStorage.getItem("token");
+
+    const formData = new FormData();
+    formData.append("profilePic", {
+      uri: result.uri,
+      name: "profilepic.png",
+      type: "image/png" // You can customize the filename if needed
+    });
+
+    fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data"
+      },
+      body: formData,
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      // Handle the response from the server
+      console.log("Image upload success:", data);
+    })
+    .catch((error) => {
+      // Handle the error
+      console.log("Image upload error:", error);
+    });
     }
     setUploadPopupVisible(false);
   };
@@ -81,8 +107,34 @@ export default function Myprofilescreen({ navigation }) {
     }
     const result = await ImagePicker.launchCameraAsync();
     if (!result.cancelled) {
-      // Set the captured image as the background image
-      setBackgroundImageURI(result.uri);
+      setProfilePic(result.uri);
+
+      const userId = await AsyncStorage.getItem("userId");
+      const token = await AsyncStorage.getItem("token");
+
+      const formData = new FormData();
+      formData.append("profilePic", {
+        uri: result.uri,
+        name: "profilepic.png",
+        type: "image/png" // You can customize the filename if needed
+      });
+      fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+      body: formData,
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      // Handle the response from the server
+      console.log("Image upload success:", data);
+    })
+    .catch((error) => {
+      // Handle the error
+      console.log("Image upload error:", error);
+    });
     }
     setUploadPopupVisible(false);
   };
@@ -135,11 +187,15 @@ export default function Myprofilescreen({ navigation }) {
   };
 
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState("Available");
+  const [availability, setAvailability] = useState("Available");
 
   const toggleDropdown = () => {
     setIsDropdownVisible(!isDropdownVisible);
   };
+
+  const handleAvailabilityChange= (newAvailability) => {
+    setAvailability(newAvailability);
+  }
 
   const [isChecked, setIsChecked] = useState(false);
 
@@ -153,12 +209,38 @@ export default function Myprofilescreen({ navigation }) {
 
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
+  const updateAvailability= async () => {
+    try {
+      const userId = await AsyncStorage.getItem("userId");
+      const token = await AsyncStorage.getItem("token");
+  
+      const response = await fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          availability: availability, // Update the status value
+        }),
+      });
+  
+      const data = await response.json();
+      if (data.status === "success") {
+        console.log(data.data);
+      } else {
+        console.log(data.status);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   const getUser = async () => {
     const userId = await AsyncStorage.getItem("userId");
     console.log("getUserke");
     const token = await AsyncStorage.getItem('token');
-    console.log(token);
-
+    console.log(token);   
 
     fetch(`http://localhost:3000/api/v1/users/${userId}`, {
       method: "GET",
@@ -176,14 +258,15 @@ export default function Myprofilescreen({ navigation }) {
           setEmail(data.data.email);
           setPhonenumber(data.data.phonenumber);
           setPassword(data.data.password);
-          setProfilePic(data.data.profilePic);
-          setStatus(data.data.status);
-
-          // let profilePic = data.data.profilePic;
+          setAvailability(data.data.availability);
+          if (data.data.profilePic) {
+            setProfilePic(data.data.profilePic);
+          } else {
+            setProfilePic(defaultProfilePic);
+          } 
         }
       })
       .catch((error) => {
-        // Handle any errors
         console.error(error);
       });
   };
@@ -192,7 +275,6 @@ export default function Myprofilescreen({ navigation }) {
   const [newPhonenumber, setNewPhonenumber] = useState("");
 
   const updateEmail = async () => {
-    // Make the API request to update the email address in the database
     try {
       const userId = await AsyncStorage.getItem("userId");
       const token = await AsyncStorage.getItem("token");
@@ -257,7 +339,13 @@ export default function Myprofilescreen({ navigation }) {
     loadFonts().then(() => {
       setFontsLoaded(true);
     });
+
   }, []);
+
+  useEffect(() => {
+    updateAvailability();
+  }, [availability]);
+
 
   if (!fontsLoaded) {
     return null; // or a loading screen
@@ -271,11 +359,17 @@ export default function Myprofilescreen({ navigation }) {
         </TouchableOpacity>
         <View style={{ flex: 1, alignItems: "center" }}>
           <View style={{ position: "relative" }}>
-            <Image
-             source={{ uri: profilePictureURI }}
-              style={{ width: 88, height: 88, borderRadius: 50 }}
-            />
-            
+          {profilePic ? (
+                <Image
+                  source={{ uri: profilePic}}
+                  style={{ width: 88, height: 88, borderRadius: 50 }}
+                />
+              ) : (
+                <Image
+                  source={defaultProfilePic}
+                  style={{ width: 88, height: 88, borderRadius: 50 }}
+                />
+              )}            
             <TouchableOpacity
               style={{ position: "absolute", top: 0, right: 0 }}
               onPress={() => setUploadPopupVisible(true)}
@@ -315,19 +409,19 @@ export default function Myprofilescreen({ navigation }) {
               right: 95,
             }}
           >
-            {selectedStatus === "Available" && (
+            {availability === "Available" && (
               <Image
                 source={statusAvailable}
                 style={{ width: 11, height: 11, marginRight: 5 }}
               />
             )}
-            {selectedStatus === "Busy" && (
+            {availability === "Busy" && (
               <Image
                 source={statusBusy}
                 style={{ width: 11, height: 11, marginRight: 5 }}
               />
             )}
-            {selectedStatus === "Do Not Disturb" && (
+            {availability === "Do Not Disturb" && (
               <Image
                 source={statusNotdisturb}
                 style={{ width: 11, height: 11, marginRight: 5 }}
@@ -345,35 +439,35 @@ export default function Myprofilescreen({ navigation }) {
       {isDropdownVisible && (
         <View style={styles.dropdownMenu}>
           <TouchableOpacity
-            onPress={() => setSelectedStatus("Available")}
-            style={styles.dropdownItem}
-          >
-            <Image
-              source={statusAvailable}
-              style={{ width: 11, height: 11, marginRight: 5 }}
-            />
-            <Text style={styles.dropdownText}>Available</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setSelectedStatus("Busy")}
-            style={styles.dropdownItem}
-          >
-            <Image
-              source={statusBusy}
-              style={{ width: 11, height: 11, marginRight: 5 }}
-            />
-            <Text style={styles.dropdownText}>Busy</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setSelectedStatus("Do Not Disturb")}
-            style={styles.dropdownItem}
-          >
-            <Image
-              source={statusNotdisturb}
-              style={{ width: 11, height: 11, marginRight: 5 }}
-            />
-            <Text style={styles.dropdownText}>Do not disturb</Text>
-          </TouchableOpacity>
+        onPress={() => handleAvailabilityChange("Available")}
+        style={styles.dropdownItem}
+      >
+        <Image
+          source={statusAvailable}
+          style={{ width: 11, height: 11, marginRight: 5 }}
+        />
+        <Text style={styles.dropdownText}>Available</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => handleAvailabilityChange("Busy")}
+        style={styles.dropdownItem}
+      >
+        <Image
+          source={statusBusy}
+          style={{ width: 11, height: 11, marginRight: 5 }}
+        />
+        <Text style={styles.dropdownText}>Busy</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => handleAvailabilityChange("Do Not Disturb")}
+        style={styles.dropdownItem}
+      >
+        <Image
+          source={statusNotdisturb}
+          style={{ width: 11, height: 11, marginRight: 5 }}
+        />
+        <Text style={styles.dropdownText}>Do Not Disturb</Text>
+      </TouchableOpacity>
         </View>
       )}
 
