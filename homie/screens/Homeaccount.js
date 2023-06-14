@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import * as Font from "expo-font";
 import MoonFont from "../assets/fonts/Moon.otf";
-import Novatica from "../assets/fonts/Novatica-Bold.woff";
+import moonBold from "../assets/fonts/Moon Bold.otf";
+import Novatica from "../assets/fonts/Novatica.ttf";
+import NovaticaBold from "../assets/fonts/Novatica-Bold.ttf";
 import Manrope from "../assets/fonts/Manrope-Bold.ttf";
 import Residents from "../compontents/Residents";
 import Photos from "../compontents/Photos";
@@ -17,7 +19,7 @@ import {
   Image,
   ImageBackground,
   Modal,
-  Button,
+  ScrollView,
 } from "react-native";
 
 import arrowback from "../assets/icons/Arrow_back.svg";
@@ -32,18 +34,17 @@ const loadFonts = async () => {
     moon: MoonFont,
     novatica: Novatica,
     manrope: Manrope,
+    novaticaBold: NovaticaBold,
+    moonBold: moonBold,
   });
 };
 
 const cameraIconColor = "#00B9F4"; // Color for the camera icon
 const imageIconColor = "#F57ED4"; // Color for the files icon
-
 const App = () => {
   const navigation = useNavigation();
-
   const [currentView, setCurrentView] = useState("Residents");
   const [backgroundImageURI, setBackgroundImageURI] = useState(backgroundImage);
-
   const switchView = (view) => {
     setCurrentView(view);
   };
@@ -55,16 +56,15 @@ const App = () => {
   const renderView = () => {
     switch (currentView) {
       case "Residents":
-        return <Residents />;
+        return <Residents navigation={navigation} />;
       case "Photos":
-        return <Photos />;
+        return <Photos navigation={navigation} />;
       case "Houserules":
         return <Houserules />;
       default:
         return null;
     }
   };
-
   const [uploadPopupVisible, setUploadPopupVisible] = useState(false);
   const handleChooseFromFiles = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -72,13 +72,11 @@ const App = () => {
       alert("Sorry, we need camera roll permissions to select an image.");
       return;
     }
-
     const result = await ImagePicker.launchImageLibraryAsync();
     if (!result.cancelled) {
       // Set the selected image as the background image
       setBackgroundImageURI(result.uri);
     }
-
     setUploadPopupVisible(false);
   };
 
@@ -121,17 +119,17 @@ const App = () => {
               <View style={styles.uploadContainer}>
                 <TouchableOpacity
                   style={styles.uploadZone}
-                  onPress={handleChooseFromFiles}
+                  onPress={handleTakePhoto}
                 >
-                  <FontAwesome name="image" size={23} color={imageIconColor} />
-                  <Text style={styles.uploadText}>Gallery</Text>
+                  <AntDesign name="camera" size={40} color={cameraIconColor} />
+                  <Text style={styles.uploadText}>Camera</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.uploadZone}
-                  onPress={handleTakePhoto}
+                  onPress={handleChooseFromFiles}
                 >
-                  <AntDesign name="camera" size={28} color={cameraIconColor} />
-                  <Text style={styles.uploadText}>Take Photo</Text>
+                  <FontAwesome name="image" size={35} color={imageIconColor} />
+                  <Text style={styles.uploadText}>Gallery</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -143,81 +141,83 @@ const App = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F5F5F5" }}>
-      <View style={styles.header}>
-        <ImageBackground
-          source={{ uri: backgroundImageURI }}
-          style={styles.background}
-        >
-          <View style={styles.overlay} />
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image
-              source={arrowback}
-              style={{ width: 8, height: 15, marginRight: 10 }}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.link}>
-            <Text style={styles.h1}>My house</Text>
-          </TouchableOpacity>
-          <UploadImagePopup />
-        </ImageBackground>
-      </View>
-
-      <View style={styles.container}>
-        <Text style={styles.h2}> Casa Magdalena </Text>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={[
-              styles.button,
-              currentView === "Residents" && styles.activeButton,
-            ]}
-            onPress={() => switchView("Residents")}
+      <ScrollView>
+        <View style={styles.header}>
+          <ImageBackground
+            source={{ uri: backgroundImageURI }}
+            style={styles.background}
           >
-            <Text
-              style={[
-                styles.buttonText,
-                currentView === "Residents" && styles.activeButtonText,
-              ]}
-            >
-              Residents
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.button,
-              currentView === "Photos" && styles.activeButton,
-            ]}
-            onPress={() => switchView("Photos")}
-          >
-            <Text
-              style={[
-                styles.buttonText,
-                currentView === "Photos" && styles.activeButtonText,
-              ]}
-            >
-              Photos
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.button,
-              currentView === "Houserules" && styles.activeButton,
-            ]}
-            onPress={() => switchView("Houserules")}
-          >
-            <Text
-              style={[
-                styles.buttonText,
-                currentView === "Houserules" && styles.activeButtonText,
-              ]}
-            >
-              Houserules
-            </Text>
-          </TouchableOpacity>
+            <View style={styles.overlay} />
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image
+                source={arrowback}
+                style={{ width: 8, height: 15, marginRight: 10 }}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.link}>
+              <Text style={styles.h1}>My house</Text>
+            </TouchableOpacity>
+            <UploadImagePopup />
+          </ImageBackground>
         </View>
-        {renderView()}
-      </View>
+
+        <View style={styles.container}>
+          <Text style={styles.h2}> Casa Magdalena </Text>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                currentView === "Residents" && styles.activeButton,
+              ]}
+              onPress={() => switchView("Residents")}
+            >
+              <Text
+                style={[
+                  styles.buttonText,
+                  currentView === "Residents" && styles.activeButtonText,
+                ]}
+              >
+                Residents
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.button,
+                currentView === "Photos" && styles.activeButton,
+              ]}
+              onPress={() => switchView("Photos")}
+            >
+              <Text
+                style={[
+                  styles.buttonText,
+                  currentView === "Photos" && styles.activeButtonText,
+                ]}
+              >
+                Photos
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.button,
+                currentView === "Houserules" && styles.activeButton,
+              ]}
+              onPress={() => switchView("Houserules")}
+            >
+              <Text
+                style={[
+                  styles.buttonText,
+                  currentView === "Houserules" && styles.activeButtonText,
+                ]}
+              >
+                Houserules
+              </Text>
+            </TouchableOpacity>
+          </View>
+          {renderView()}
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -252,9 +252,8 @@ const styles = StyleSheet.create({
     color: "white",
   },
   h2: {
-    fontFamily: "novatica",
+    fontFamily: "novaticaBold",
     fontSize: 16,
-    fontWeight: "bold",
     color: "#160635",
     paddingVertical: 30,
     textAlign: "center",
