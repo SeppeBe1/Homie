@@ -94,7 +94,11 @@ export default function AddEvent() {
 
   return (
     <View>
-      <SaveAndCancel navigation={navigation} title="Add an event" />
+      <SaveAndCancel
+        navigation={navigation}
+        title="Plan an event"
+        destination="EventsScreen"
+      />
 
       <View style={styles.container}>
         <TextInput

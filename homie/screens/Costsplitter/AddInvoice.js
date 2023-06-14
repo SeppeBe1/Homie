@@ -161,7 +161,11 @@ const AddInvoice = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <SaveAndCancel navigation={navigation} title="Add an invoice" />
+      <SaveAndCancel
+        navigation={navigation}
+        title="Add an invoice"
+        destination="ViewInvoices"
+      />
 
       <View style={styles.formContainer}>
         <TextInput
