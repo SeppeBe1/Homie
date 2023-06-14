@@ -16,6 +16,7 @@ import arrowLeft from "../../assets/icons/arrowLeft.svg";
 import upload from "../../assets/icons/upload.svg";
 import dropdown from "../../assets/icons/dropdown.svg";
 import manrope from "../../assets/fonts/Manrope-Regular.ttf";
+import SaveAndCancel from "../../compontents/SaveAndCancel"; // Voeg deze importregel toe
 
 import * as ImagePicker from "expo-image-picker";
 
@@ -29,6 +30,7 @@ export default function AddEvent() {
   const [eventPicture, setEventPicture] = useState("");
   const [eventNote, setEventNote] = useState("");
   const [eventDate, setEventDate] = useState("");
+  const [selectedFileName, setSelectedFileName] = useState("");
 
   const handleSelectPicture = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -40,6 +42,7 @@ export default function AddEvent() {
     const result = await ImagePicker.launchImageLibraryAsync();
     if (!result.cancelled) {
       setEventPicture(result.uri);
+      setSelectedFileName(result.uri.split("/").pop()); // Hier wordt de bestandsnaam opgeslagen
     }
   };
 
@@ -91,21 +94,7 @@ export default function AddEvent() {
 
   return (
     <View>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image
-            source={arrowLeft}
-            style={{ width: 8, height: 15, marginRight: 10 }}
-          />
-        </TouchableOpacity>
-        <View style={{ flex: 1, alignItems: "center" }}>
-          <Text
-            style={{ color: "#fff", fontFamily: "novaticaBold", fontSize: 20 }}
-          >
-            Plan an event
-          </Text>
-        </View>
-      </View>
+      <SaveAndCancel navigation={navigation} title="Add an event" />
 
       <View style={styles.container}>
         <TextInput
@@ -155,7 +144,14 @@ export default function AddEvent() {
           onPress={handleSelectPicture}
         >
           <View style={styles.inputPicture}>
-            <Text style={styles.text}>Add a fun picture</Text>
+            <Text
+              style={[
+                styles.text,
+                { color: selectedFileName ? "black" : "#A5A5A5" },
+              ]}
+            >
+              {selectedFileName || "Add a fun picture"}
+            </Text>
             <Image source={upload} style={{ width: 30, height: 30 }} />
           </View>
         </TouchableOpacity>
@@ -175,12 +171,12 @@ export default function AddEvent() {
           <Image source={{ uri: eventPicture }} style={styles.picture} />
         </View>
       </View>
-
+      {/* 
       <View style={styles.buttoncontainer}>
         <TouchableOpacity style={[styles.button]}>
           <Text style={styles.buttonText}>submit</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 }
@@ -283,6 +279,8 @@ const styles = StyleSheet.create({
     height: 20,
   },
   picture: {
+    marginLeft: "auto",
+    marginRight: "auto",
     width: 150,
     height: 150,
     marginTop: 10,

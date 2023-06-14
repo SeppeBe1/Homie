@@ -1,7 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 
 const Event = ({ date, title, description, image }) => {
+  const [buttonText, setButtonText] = useState("Join the party");
+  const [buttonStyle, setButtonStyle] = useState(styles.joinButton);
+  const [buttonTextStyle, setButtonTextStyle] = useState(styles.joinButtonText);
+
+  const handleButtonClick = () => {
+    if (buttonText === "Join the party") {
+      setButtonText("You're in 🎉");
+      setButtonStyle(styles.joinButtonClicked);
+      setButtonTextStyle(styles.joinButtonTextClicked);
+    } else {
+      setButtonText("Join the party");
+      setButtonStyle(styles.joinButton);
+      setButtonTextStyle(styles.joinButtonText);
+    }
+  };
+
   return (
     <View style={styles.eventContainer}>
       <View style={styles.event}>
@@ -14,8 +30,8 @@ const Event = ({ date, title, description, image }) => {
           <Text style={styles.descriptionText}>{description}</Text>
           <Image source={image} style={styles.image} />
         </View>
-        <TouchableOpacity style={styles.joinButton}>
-          <Text style={styles.joinButtonText}>Join the party</Text>
+        <TouchableOpacity style={buttonStyle} onPress={handleButtonClick}>
+          <Text style={buttonTextStyle}>{buttonText}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -70,11 +86,28 @@ const styles = {
     backgroundColor: "#00B9F4",
     padding: 12,
     borderRadius: 55,
+    width: 120,
   },
   joinButtonText: {
     color: "white",
     fontFamily: "moon",
     fontSize: 12,
+  },
+  joinButtonClicked: {
+    alignSelf: "flex-end",
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "#00B9F4",
+    padding: 10,
+    borderRadius: 55,
+    width: 120,
+    textAlign: "center",
+  },
+  joinButtonTextClicked: {
+    color: "#00B9F4",
+    fontFamily: "moon",
+    fontSize: 12,
+    fontWeight: "bold",
   },
 };
 

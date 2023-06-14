@@ -19,7 +19,7 @@ const CategoryHeader = ({ title, image }) => {
       <View style={styles.header}>
         <View style={styles.headerContent}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image source={arrowLeft} style={{ width: 8, height: 15 }} />
+            <Image source={arrowLeft} style={styles.arrowLeftIcon} />
           </TouchableOpacity>
           <Text style={styles.title}>{title}</Text>
         </View>
@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
     height: 292,
     paddingTop: 57,
   },
-
   headerContent: {
     flexDirection: "row",
     alignItems: "center",
@@ -58,7 +57,10 @@ const styles = StyleSheet.create({
     width: "80%",
     marginLeft: 25,
   },
-
+  arrowLeftIcon: {
+    width: 8,
+    height: 15,
+  },
   title: {
     color: "#fff",
     fontFamily: "novaticaBold",
@@ -67,38 +69,32 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 28,
   },
-
   contentContainer: {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
   },
-
   image: {
     marginTop: 19,
     width: "100%",
     height: undefined,
     aspectRatio: 4,
   },
-
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#ffffff",
     borderRadius: 10,
-    paddingHorizontal: 10,
     height: 55,
     width: 342,
     marginTop: 10,
-    marginHorizontal: 28,
+    paddingHorizontal: 10,
   },
-
   searchInput: {
+    flex: 1,
     fontSize: 16,
-    paddingHorizontal: 28,
   },
-
   searchIcon: {
     width: 20,
     height: 20,
