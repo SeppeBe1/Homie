@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { View, Text, StyleSheet, Image, TextInput, ScrollView, Modal, TouchableOpacity } from 'react-native'
+=======
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, TextInput } from 'react-native'
+>>>>>>> casa
 import { Header, Button } from 'react-native-elements'
 import calendarIcon from '../assets/calendar.png'
 import like from '../assets/like.png'
@@ -11,7 +15,7 @@ import * as Font from 'expo-font';
 import Nearby from "../compontents/Nearby";
 import Discover from '../compontents/Discover';
 
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef } from 'react'
 
 // Load the font
 const loadFonts = async () => {
@@ -24,6 +28,7 @@ const loadFonts = async () => {
 }
 ;
 
+<<<<<<< HEAD
 export default function Behomiescreen({navigation}) {
   const [isLikesVisible, setLikesVisible] = useState(false);
   const toggleLikes = () => {
@@ -35,10 +40,18 @@ export default function Behomiescreen({navigation}) {
     setHideImages(true);
   };
 
+=======
+export default function Behomiescreen({ navigation }) {
+>>>>>>> casa
   const [currentView, setCurrentView] = useState("Nearby");
+  const scrollViewRef = useRef();
+  const stickyButtonsRef = useRef();
+  const [scrollViewMarginTop, setScrollViewMarginTop] = useState(0);
+
 
   const switchView = (view) => {
     setCurrentView(view);
+
   };
 
   useEffect(() => {
@@ -56,8 +69,17 @@ export default function Behomiescreen({navigation}) {
     }
   };
 
+  const handleScroll = (event) => {
+    const { y } = event.nativeEvent.contentOffset;
+    const newMarginTop = y > 0 ? -y : 0;
+    setScrollViewMarginTop(newMarginTop);
+  };
+
+
   return (
+
     <View style={{ backgroundColor: '#160635', flex: 1 }}>
+<<<<<<< HEAD
   <View style={styles.headerContainer}>
     <Text style={styles.heading}>
       Homie moments
@@ -116,29 +138,20 @@ export default function Behomiescreen({navigation}) {
             >
               Nearby
             </Text>
+=======
+      <View style={styles.headerContainer}>
+      <Text style={styles.heading}>
+          Homie moments
+        </Text>
+        <View style={styles.iconContainer}>
+          <TouchableOpacity onPress={() => navigation.navigate("memorywall")}>
+            <Image source={calendarIcon} style={{ width: 24, height: 24 }} />
+>>>>>>> casa
           </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.btnBorder,
-              currentView === "Discover" && styles.btnFull,
-            ]}
-            onPress={() => switchView("Discover")}
-          >
-            <Text
-              style={[
-                styles.btnTextActive,
-                currentView === "Discover" && styles.btnTextPassive,
-              ]}
-            >
-              Discover
-            </Text>
-          </TouchableOpacity>
-
-
+        </View>
       </View>
-      {renderView()}
 
+<<<<<<< HEAD
   </ScrollView>
   </View>
 
@@ -183,8 +196,69 @@ export default function Behomiescreen({navigation}) {
 </Modal>
 
   </View>
+=======
+      <View style={styles.imagecontainer}>
+        <Image source={require('../assets/groupfoto.jpg')} style={{ width: 160, height: 220, marginBottom: 5 }} />
+        <View style={styles.dateLikes}>
+          <View style={styles.likes}>
+            <Image source={like} style={{ width: 20, height: 17 }} />
+            <Text style={{ color: '#fff', fontFamily: 'manrope', fontSize: 13, paddingLeft: 5 }}>2</Text>
+          </View>
+          <Text style={{ color: '#3BEDBF', fontFamily: 'manrope', fontSize: 13 }}>20 minutes ago</Text>
+          </View>
+        <Text style={{ color: '#fff', fontFamily: 'manrope', fontSize: 14, marginTop: 20, marginBottom: 20 }}>Add a description...</Text>
+      </View>
+>>>>>>> casa
 
-  )
+      <View style={[styles.stickyButtons, {  marginTop: scrollViewMarginTop  }]}>
+          <TouchableOpacity
+              style={[
+                styles.btnBorder,
+                currentView === "Nearby" && styles.btnFull,
+              ]}
+              onPress={() => switchView("Nearby")}
+            >
+              <Text
+                style={[
+                  styles.btnTextActive,
+                  currentView === "Nearby" && styles.btnTextPassive,
+                ]}
+              >
+                Nearby
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.btnBorder,
+                currentView === "Discover" && styles.btnFull,
+              ]}
+              onPress={() => switchView("Discover")}
+            >
+              <Text
+                style={[
+                  styles.btnTextActive,
+                  currentView === "Discover" && styles.btnTextPassive,
+                ]}
+              >
+                Discover
+              </Text>
+            </TouchableOpacity>
+        </View>
+
+        {currentView && (
+      <ScrollView
+        style={[styles.homiefeed, {  marginTop: scrollViewMarginTop  }]}
+        showsVerticalScrollIndicator={false}
+        ref={scrollViewRef}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+      >
+        {renderView()}
+      </ScrollView>
+    )}
+    </View>
+
+  );
 }
 
 const styles = StyleSheet.create({
@@ -197,13 +271,28 @@ const styles = StyleSheet.create({
   },
   heading: {
     color: "#fff",
-    fontSize: 20,
     flex: 1,
     textAlign: 'center',
     position: 'absolute',
     fontFamily: 'novaticaBold', 
-    fontSize: '20px'
+    fontSize: 20,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+
   },
+
+  dateLikes: {
+    display: "flex",
+    flexDirection:'row',
+    justifyContent: 'space-between'
+
+  },
+
+  likes:{
+    display: "flex",
+    flexDirection:'row',
+  },
+
   iconContainer: {
     justifyContent: "flex-start",
     alignItems: "flex-end",
@@ -212,6 +301,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
+<<<<<<< HEAD
   popupText: {
     marginLeft: '15px',
     marginTop: '15px', 
@@ -224,15 +314,47 @@ const styles = StyleSheet.create({
     width: 200,
     paddingHorizontal: 20,
     margin: 10,
+=======
+  imagecontainer:{
+    textAlign: 'center',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    
+>>>>>>> casa
   },
 
-  homiefeed: {
-    backgroundColor: "#fff",
+  stickyButtons: {
+    zIndex: 1,
+    position: 'sticky',
+    top: 0,
+    backgroundColor: "#ffff",
+
+    // backgroundColor: "#ffff",
+    flexDirection:'row',
+    justifyContent: 'space-between',
+
+    marginTop:10,
+
+    paddingTop:20,
+    paddingBottom: 20,
+    paddingLeft: 35,
+    paddingRight:35,
+
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    padding: 35,
-    marginTop: -30,
   },
+
+
+  homiefeed: {
+    paddingTop:10,
+    flexGrow: 1,
+    zIndex:0,
+    paddingLeft: 35,
+    paddingRight: 35,
+    backgroundColor: "#ffff",
+
+  },
+
 
   btnFull: {
     borderRadius: 35,
@@ -242,8 +364,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     width: "48%",
     paddingVertical: 15,
-    marginBottom: 40,
-    marginTop: 10,
     textAlign: 'center',
     fontFamily:'moon'
   }, 
@@ -255,8 +375,6 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderWidth: 2,
     width: "48%",
-    marginBottom: 40,
-    marginTop: 10,
     paddingVertical: 15,
     textAlign: 'center',
   }, 
@@ -265,13 +383,14 @@ const styles = StyleSheet.create({
     color:'#D9B2EE', 
     fontStyle: 'normal', 
     fontWeight: '700', 
-    fontSize: '14px',  
+    fontSize: 14,  
     fontFamily:'moon'
   }, 
 
   btnTextPassive: {
-    color:'#fff', fontStyle: 'normal', fontWeight: '700', fontSize: '14px',  
+    color:'#fff', fontStyle: 'normal', fontWeight: '700', fontSize: 14,  
     fontFamily:'moon'
+<<<<<<< HEAD
   }, 
   buttonHide: {
     textAlign:"center",
@@ -293,4 +412,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     marginLeft: '15px'
   }
+=======
+  },
+
+  
+
+>>>>>>> casa
 });

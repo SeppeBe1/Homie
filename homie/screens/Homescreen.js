@@ -29,29 +29,28 @@ export default function Homescreen({ navigation }) {
   const [data, setData] = useState([]);
   const [firstname, setFirstname] = useState([]);
   const [lastname, setLastname] = useState([]);
-  const [houseIdd, setHouseId] = useState([]);
   const [housenamee, setHousename] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+<<<<<<< HEAD
   const [inputValue, setInputValue] = useState("");
+=======
+  const [isChanged, setIsChanged] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+>>>>>>> casa
   const [announcements, setAnnouncements] = useState([]);
   const currentDate = new Date();
 
   useEffect(() => {
-    const fetchData = async () => {
-      await loadFonts();
-  
-      getUser();
-    };
-  
-    fetchData();
-  }, []);
+     loadFonts();
 
-  useEffect(() => {
-    if (houseIdd.length > 0) {
+      getUser();
       getHouse();
-      getAnnouncement(houseIdd);
-    }
-  }, [houseIdd]);
+      getAnnouncement(); // Fetch announcements initially
+
+  }, [isChanged]);
+
+
+
 
   const handleDeleteItem = (itemId) => {
     setAnnouncements((prevAnnouncements) =>
@@ -85,12 +84,17 @@ export default function Homescreen({ navigation }) {
     .replace("om", "-");
 
   const getUser = async () => {
+<<<<<<< HEAD
     const userId = await AsyncStorage.getItem("userId");
     console.log("yeet");
+=======
+    const userId = await AsyncStorage.getItem('userId');
+>>>>>>> casa
 
     fetch(`http://localhost:3000/api/v1/users/${userId}`, {
       method: "GET",
       headers: {
+<<<<<<< HEAD
         "Content-Type": "application/json",
       },
     })
@@ -102,6 +106,123 @@ export default function Homescreen({ navigation }) {
           setFirstname(data.data.firstname);
           setLastname(data.data.lastname);
           setHouseId(data.data.houseId);
+=======
+          'Content-Type': 'application/json',
+      }
+      })
+      .then(response => response.json())
+      .then(data => {        
+          if(data.status == "failed"){
+            console.log(data.status);
+          } else if(data.status == "succes"){
+            setFirstname(data.data.firstname);
+            setLastname(data.data.lastname);
+            AsyncStorage.setItem('houseId', data.data.houseId);
+
+            // let profilePic = data.data.profilePic;
+          }
+      })
+      .catch(error => {
+          // Handle any errors
+          console.error(error);
+      });
+  }
+
+  const getHouse = async () => {
+    const token = await AsyncStorage.getItem('token');
+    const houseId = await AsyncStorage.getItem('houseId');
+
+    const response = await fetch(`http://localhost:3000/api/v1/house/${houseId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    console.log(data)
+    if (data.status === 'failed') {
+    } else if (data.status === 'succes') {
+      setHousename(data.data.housename);
+      console.log(data.data.housename)
+  }
+}
+
+const createAnnouncement = async () => {
+  const userId = await AsyncStorage.getItem('userId');
+  const houseId = await AsyncStorage.getItem('houseId');
+  console.log(userId);
+  const token = await AsyncStorage.getItem('token');
+  fetch('http://localhost:3000/api/v1/anouncement', {
+    
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                type: 'Announcement',
+                description: inputValue,
+                creatorId: userId,
+                houseId: houseId,
+                dateCreated: formattedDate,
+            }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Process the response data
+                console.log(data);
+
+                if(data.status == "failed"){
+
+                } else if(data.status == "succes"){
+                  setInputValue("");
+                  if(isChanged == false){
+                    setIsChanged(true)  
+                  } else {
+                  setIsChanged(false)
+                  }
+                  handleCloseModal();
+                }
+                // Perform any necessary actions after successful login
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error(error);
+            });
+}
+
+
+  const getAnnouncement = async () => {
+      const token = await AsyncStorage.getItem('token');
+      const houseId = await AsyncStorage.getItem('houseId');
+      console.log(token)
+      if(houseId){
+        fetch(`http://localhost:3000/api/v1/anouncement/${houseId}`, {
+          method: 'GET',
+          headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+          }
+          })
+          .then(response =>  response.json())
+          .then(data => {   
+            if (data.status === "success") {
+              const fetchedAnnouncements = data.result.map((announcement) => announcement);
+              console.log(fetchedAnnouncements)
+              setAnnouncements(fetchedAnnouncements);
+              } 
+              else if(data === "failed"){
+                console.log(data.result);
+              }
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      } else {
+        console.log(kaas);
+      }
+>>>>>>> casa
 
           // let profilePic = data.data.profilePic;
         }
@@ -378,6 +499,7 @@ export default function Homescreen({ navigation }) {
           </View>
         </View>
       </View>
+<<<<<<< HEAD
       <View
         style={{
           height: "100%",
@@ -402,6 +524,60 @@ export default function Homescreen({ navigation }) {
             // : null
           )}
         />
+=======
+      <View>
+        {announcements.length === 0 ? (
+          <Text style={styles.nothingFound}>No announcements found</Text>
+        ) : (
+          <FlatList
+            keyExtractor={(item) => item._id}
+            data={announcements}
+            renderItem={({ item }) => {
+              let announcementStyle;
+              let announcementTextStyle;
+
+              switch (item.type) {
+                case "Announcement":
+                  announcementStyle = styles.announcement;
+                  announcementTextStyle = styles.announcementText;
+                  return (
+                    <>
+                      <View style={announcementStyle}>
+                        <Text style={announcementTextStyle}>{item.description}</Text>
+                        <Text style={styles.announcementTime}>1 sec ago</Text>
+                      </View>
+                    </>
+                    
+                  );
+                case "Payment":
+                  announcementStyle = styles.payment;
+                  announcementTextStyle = styles.announcementTextEventPayment;
+
+                  return (
+                    <>
+                      <View style={announcementStyle}>
+                        <Text style={announcementTextStyle}><Text>19$: </Text>{item.description}</Text>
+                      </View>
+                    </>
+                    
+                  );
+                case "Event":
+                  announcementStyle = styles.event;
+                  announcementTextStyle = styles.announcementTextEventPayment;
+                  return (
+                    <>
+                      <View style={announcementStyle}>
+                      <Text style={announcementTextStyle}><Text>19h00: </Text>{item.description}</Text>
+                      </View>
+                    </>
+                    
+                  );
+              }
+
+            }}
+          />
+        )}
+>>>>>>> casa
       </View>
     </View>
   );
@@ -502,10 +678,85 @@ const styles = StyleSheet.create({
     fontFamily: Moon,
     color: "white",
 
+<<<<<<< HEAD
     marginLeft: "auto",
     marginRight: "auto",
     fontSize: 18,
   },
+=======
+createAnnouncement: {
+  fontFamily: Moon,
+  color:'white',
+
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  fontSize: 18,
+},
+
+nothingFound:{
+  fontFamily: Manrope,
+  textAlign: 'center',
+  marginLeft:'auto',
+  marginRight:'auto',
+  color: '#FF7A7A',
+  marginTop: 20,
+
+},
+
+announcement:{
+  backgroundColor: '#FF7A7A',
+  fontFamily: Manrope,
+  borderRadius: 10,
+  height: 41,
+  marginLeft: 30,
+  marginRight: 30,
+  marginTop: 8,
+},
+
+payment:{
+  backgroundColor: '#F57ED4',
+  fontFamily: Manrope,
+  borderRadius: 10,
+  height: 41,
+  marginLeft: 30,
+  marginRight: 30,
+  marginTop: 8,
+},
+
+event:{
+  backgroundColor: '#00B9F4',
+  fontFamily: Manrope,
+  borderRadius: 10,
+  height: 41,
+  marginLeft: 30,
+  marginRight: 30,
+  marginTop: 8,
+},
+
+announcementText:{
+  fontSize: 14,
+  color:'white',
+  marginLeft: 17,
+  marginRight: 17,
+  marginTop: 4,
+  marginBottom: -2,
+},
+
+announcementTextEventPayment:{
+  fontSize: 14,
+  color:'white',
+  marginLeft: 17,
+  marginRight: 17,
+  marginTop: 11,
+  marginBottom: 11,
+},
+announcementTime:{
+  marginLeft: 17,
+  marginRight: 17,
+  fontSize: 10,
+  color:'white',
+},
+>>>>>>> casa
 
   announcement: {
     backgroundColor: "#FF7A7A",

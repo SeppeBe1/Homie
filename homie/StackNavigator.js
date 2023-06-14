@@ -43,6 +43,7 @@ const Tab = createBottomTabNavigator();
 
 const LoginscreenStack = () => {
   return (
+<<<<<<< HEAD
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {/* <Stack.Screen
         name="Login"
@@ -98,6 +99,19 @@ const LoginscreenStack = () => {
       />
 
       <Stack.Screen name="Memorywall" component={Memorywall} />
+=======
+    <Stack.Navigator screenOptions={{headerShown: false}} >
+      <Stack.Screen name="Login" component={Login} options={{tabBarVisible: true}} />
+      <Stack.Screen name="SignUp" component={SignUp} options={{tabBarVisible: true}} />
+      <Stack.Screen name="HouseChoice" component={HouseChoice} options={{tabBarVisible: true}} />
+      <Stack.Screen name="JoinHouse" component={JoinHouse} options={{tabBarVisible: true}} />
+      <Stack.Screen name="CreateHouse" component={CreateHouse} options={{tabBarVisible: true}} />
+      <Stack.Screen name="CreateHouseAdress" component={CreateHouseAdress} options={{tabBarVisible: true}} />
+      <Stack.Screen name="CreateHouseRule" component={CreateHouseRule} options={{tabBarVisible: true}} />
+      <Stack.Screen name="ShareHomie" component={ShareHomie} options={{tabBarVisible: true}} />
+        
+    <Stack.Screen name="TabNavigator" component={TabNavigator} options={{tabBarVisible: true}} />
+>>>>>>> casa
     </Stack.Navigator>
   );
 };
@@ -106,6 +120,7 @@ const HomescreenStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Login" component={Login} options={{tabBarVisible: true}} />
       <Stack.Screen name="homeaccount" component={Homeaccount} />
       <Stack.Screen name="myprofilescreen" component={Myprofilescreen} />
       <Stack.Screen name="settingsscreen" component={Settingsscreen} />

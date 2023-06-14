@@ -10,6 +10,7 @@ import Photos from "../compontents/Photos";
 import Houserules from "../compontents/Houserules";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
   View,
@@ -39,24 +40,68 @@ const loadFonts = async () => {
   });
 };
 
+
 const cameraIconColor = "#00B9F4"; // Color for the camera icon
 const imageIconColor = "#F57ED4"; // Color for the files icon
 const App = () => {
   const navigation = useNavigation();
   const [currentView, setCurrentView] = useState("Residents");
   const [backgroundImageURI, setBackgroundImageURI] = useState(backgroundImage);
+  const [houseIdd, setHouseId] = useState([]);
+  const [housenamee, setHousename] = useState([]);
+  const [houseCode, setHouseCode] = useState('');
+
+  const getHouse = async () => {
+    const token = await AsyncStorage.getItem('token');
+    const houseId = await AsyncStorage.getItem('houseId');
+
+    const response = await fetch(`http://localhost:3000/api/v1/house/${houseId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    console.log(data);
+
+    if (data.status === 'failed') {
+    } else if (data.status === 'succes') {
+      setHousename(data.data.housename);
+      setHouseCode(data.data.houseCode);
+  }
+}
+
+getHouse()
+
+  
+
   const switchView = (view) => {
     setCurrentView(view);
   };
 
   useEffect(() => {
-    loadFonts();
+    const fetchData = async () => {
+      await loadFonts();
+  
+      // getUser();
+    };
+  
+    fetchData();
   }, []);
+
+  useEffect(() => {
+    if (houseIdd.length > 0) {
+      getHouse();
+    }
+  }, [houseIdd]);
+
+  console.log(houseCode)
 
   const renderView = () => {
     switch (currentView) {
       case "Residents":
-        return <Residents navigation={navigation} />;
+        return <Residents  houseCode={houseCode} />;
       case "Photos":
         return <Photos navigation={navigation} />;
       case "Houserules":

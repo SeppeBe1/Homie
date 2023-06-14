@@ -112,13 +112,13 @@ export default function Login({ navigation }) {
           value={email}
         />
 
-        <TextInput
+        {/* <TextInput
           style={[styles.input, { borderColor: color }]}
           placeholder="Password"
           secureTextEntry
           onChangeText={(text) => setPassword(text)}
           value={password}
-        />
+        /> */}
 
         <Text style={styles.forgotPw} onPress={() => console.log("hallo")}>
           Forget password
