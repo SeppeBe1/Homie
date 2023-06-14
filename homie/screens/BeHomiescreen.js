@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { View, Text, StyleSheet, Image, TextInput, ScrollView, Modal, TouchableOpacity } from 'react-native'
-=======
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, TextInput } from 'react-native'
->>>>>>> casa
 import { Header, Button } from 'react-native-elements'
 import calendarIcon from '../assets/calendar.png'
 import like from '../assets/like.png'
@@ -28,21 +24,7 @@ const loadFonts = async () => {
 }
 ;
 
-<<<<<<< HEAD
-export default function Behomiescreen({navigation}) {
-  const [isLikesVisible, setLikesVisible] = useState(false);
-  const toggleLikes = () => {
-    setLikesVisible(!isLikesVisible);
-  };
-
-  const [hideImages, setHideImages] = useState(false);
-  const hideAllImages = () => {
-    setHideImages(true);
-  };
-
-=======
 export default function Behomiescreen({ navigation }) {
->>>>>>> casa
   const [currentView, setCurrentView] = useState("Nearby");
   const scrollViewRef = useRef();
   const stickyButtonsRef = useRef();
@@ -79,66 +61,6 @@ export default function Behomiescreen({ navigation }) {
   return (
 
     <View style={{ backgroundColor: '#160635', flex: 1 }}>
-<<<<<<< HEAD
-  <View style={styles.headerContainer}>
-    <Text style={styles.heading}>
-      Homie moments
-    </Text>
-    <View style={styles.iconContainer}>
-      <TouchableOpacity onPress={() => navigation.navigate("memorywall")}>
-      <Image source={calendarIcon} style={{width: 24, height: 24}}/>
-      </TouchableOpacity>
-    </View>
-  </View>
-  <View style={{ flex: 1,  alignItems: 'center', color: '#fff' }}>
-  {hideImages ? (
-    <TouchableOpacity onPress={hideAllImages} style={styles.buttonHide}>
-      <Image source={photoIcon} style={{width: 29, height: 25}} />
-      <Text style={styles.buttonHideText}>Take a picture</Text>
-  </TouchableOpacity>
-) : (
-    <Image source={require('../assets/groupfoto.jpg')} style={{ width: 160, height: 220, marginBottom:5, marginTop: '-20px'}} />
-)}
-{!hideImages && (
-  <>
-    <View style={styles.details}>
-      <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-      <TouchableOpacity onPress={toggleLikes}>
-        <Image source={like} style={{width: 20, height: 17}}/>
-      </TouchableOpacity>
-      <Text style={{ color: '#fff', fontFamily:'manrope', fontSize: '13px', paddingLeft: 5 }}>2</Text>
-      </View>
-      <Text style={{ color: '#3BEDBF', fontFamily:'manrope', fontSize: '13px' }}>20 minutes ago</Text>
-    
-    </View>
-       <TextInput
-                style={{color: '#fff', textAlign:'center', fontFamily:'manrope', fontSize: '14px'}}
-                placeholder="Add a description..."
-              />
-    </>
-    )}
-  </View>
-
-  <View style={{ flex: 1 }}>
-  <ScrollView style={styles.homiefeed}>
-    <View style={{ flexDirection:'row', justifyContent: 'space-between' }}>
-        
-          <TouchableOpacity
-            style={[
-              styles.btnBorder,
-              currentView === "Nearby" && styles.btnFull,
-            ]}
-            onPress={() => switchView("Nearby")}
-          >
-            <Text
-              style={[
-                styles.btnTextActive,
-                currentView === "Nearby" && styles.btnTextPassive,
-              ]}
-            >
-              Nearby
-            </Text>
-=======
       <View style={styles.headerContainer}>
       <Text style={styles.heading}>
           Homie moments
@@ -146,57 +68,10 @@ export default function Behomiescreen({ navigation }) {
         <View style={styles.iconContainer}>
           <TouchableOpacity onPress={() => navigation.navigate("memorywall")}>
             <Image source={calendarIcon} style={{ width: 24, height: 24 }} />
->>>>>>> casa
           </TouchableOpacity>
         </View>
       </View>
 
-<<<<<<< HEAD
-  </ScrollView>
-  </View>
-
-  <Modal visible={isLikesVisible} animationType="fade" transparent>
-<TouchableOpacity
-  style={{
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(22, 6, 53, 0.5)",
-  }}
-  activeOpacity={1}
->
-  <View
-    style={{
-      backgroundColor: "white",
-      width: 342,
-      height: 194,
-      borderRadius: 10,
-      textAlign: "center",
-      padding: 21,
-    }}
-  >
-    <TouchableOpacity
-      style={{ position: "absolute", top: 16, right: 16, zIndex: 2 }}
-      onPress={toggleLikes}
-    >
-      <Image source={crossIcon} style={{ width: 30, height: 30 }} />
-    </TouchableOpacity>
-    <View style={styles.popupText}>
-    <View style={{ flexDirection:'row', alignItems: 'center', marginBottom: 20 }}>
-      <Image source={require('../assets/groupfoto.jpg')} style={{ width: 50, height: 50, borderRadius:50 }} />
-      <Text style={{ color: '#160635', marginLeft:'15px', fontFamily:'novaticaBold', fontSize: '16px' }}>Casa Frankie</Text>
-    </View>
-    <View style={{ flexDirection:'row', alignItems: 'center', marginBottom: 20 }}>
-      <Image source={require('../assets/grouppicture.jpg')} style={{ width: 50, height: 50, borderRadius:50 }} />
-      <Text style={{ color: '#160635', marginLeft:'15px', fontFamily:'novaticaBold', fontSize: '16px' }}>Lange Leemstraat</Text>
-    </View>
-  </View>
-  </View>
-</TouchableOpacity>
-</Modal>
-
-  </View>
-=======
       <View style={styles.imagecontainer}>
         <Image source={require('../assets/groupfoto.jpg')} style={{ width: 160, height: 220, marginBottom: 5 }} />
         <View style={styles.dateLikes}>
@@ -208,7 +83,6 @@ export default function Behomiescreen({ navigation }) {
           </View>
         <Text style={{ color: '#fff', fontFamily: 'manrope', fontSize: 14, marginTop: 20, marginBottom: 20 }}>Add a description...</Text>
       </View>
->>>>>>> casa
 
       <View style={[styles.stickyButtons, {  marginTop: scrollViewMarginTop  }]}>
           <TouchableOpacity
@@ -301,26 +175,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-<<<<<<< HEAD
-  popupText: {
-    marginLeft: '15px',
-    marginTop: '15px', 
-    alignContent: 'center'
-  },
-
-  details: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: 200,
-    paddingHorizontal: 20,
-    margin: 10,
-=======
   imagecontainer:{
     textAlign: 'center',
     marginLeft: 'auto',
     marginRight: 'auto',
     
->>>>>>> casa
   },
 
   stickyButtons: {
@@ -390,32 +249,8 @@ const styles = StyleSheet.create({
   btnTextPassive: {
     color:'#fff', fontStyle: 'normal', fontWeight: '700', fontSize: 14,  
     fontFamily:'moon'
-<<<<<<< HEAD
-  }, 
-  buttonHide: {
-    textAlign:"center",
-    alignSelf: 'center',
-    backgroundColor:"#B900F4",
-    color: "#fff",
-    borderRadius: 100,
-    width: 240,
-    paddingVertical: 16,
-    flexDirection: 'row',
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    marginTop: '45px'
-  },
-  buttonHideText: {
-    fontFamily:'moon', 
-    fontSize:'18px',
-    fontWeight: 'bold',
-    color: "#fff",
-    marginLeft: '15px'
-  }
-=======
   },
 
   
 
->>>>>>> casa
 });

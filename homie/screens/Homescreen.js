@@ -31,12 +31,8 @@ export default function Homescreen({ navigation }) {
   const [lastname, setLastname] = useState([]);
   const [housenamee, setHousename] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-<<<<<<< HEAD
-  const [inputValue, setInputValue] = useState("");
-=======
   const [isChanged, setIsChanged] = useState(false);
   const [inputValue, setInputValue] = useState('');
->>>>>>> casa
   const [announcements, setAnnouncements] = useState([]);
   const currentDate = new Date();
 
@@ -84,29 +80,11 @@ export default function Homescreen({ navigation }) {
     .replace("om", "-");
 
   const getUser = async () => {
-<<<<<<< HEAD
-    const userId = await AsyncStorage.getItem("userId");
-    console.log("yeet");
-=======
     const userId = await AsyncStorage.getItem('userId');
->>>>>>> casa
 
     fetch(`http://localhost:3000/api/v1/users/${userId}`, {
       method: "GET",
       headers: {
-<<<<<<< HEAD
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status == "failed") {
-          console.log(data.status);
-        } else if (data.status == "succes") {
-          setFirstname(data.data.firstname);
-          setLastname(data.data.lastname);
-          setHouseId(data.data.houseId);
-=======
           'Content-Type': 'application/json',
       }
       })
@@ -222,7 +200,6 @@ const createAnnouncement = async () => {
       } else {
         console.log(kaas);
       }
->>>>>>> casa
 
           // let profilePic = data.data.profilePic;
         }
@@ -499,32 +476,6 @@ const createAnnouncement = async () => {
           </View>
         </View>
       </View>
-<<<<<<< HEAD
-      <View
-        style={{
-          height: "100%",
-          width: "100%",
-          backgroundColor: "blue",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <FlatList
-          keyExtractor={(item) => item._id}
-          data={announcements}
-          renderItem={({ item }) => (
-            // item.id == houseId ?
-            <>
-              <View style={styles.announcement}>
-                <Text style={styles.announcementText}>{item.description}</Text>
-                <Text style={styles.announcementTime}>1 sec ago</Text>
-              </View>
-            </>
-            // : null
-          )}
-        />
-=======
       <View>
         {announcements.length === 0 ? (
           <Text style={styles.nothingFound}>No announcements found</Text>
@@ -577,7 +528,6 @@ const createAnnouncement = async () => {
             }}
           />
         )}
->>>>>>> casa
       </View>
     </View>
   );
@@ -678,12 +628,6 @@ const styles = StyleSheet.create({
     fontFamily: Moon,
     color: "white",
 
-<<<<<<< HEAD
-    marginLeft: "auto",
-    marginRight: "auto",
-    fontSize: 18,
-  },
-=======
 createAnnouncement: {
   fontFamily: Moon,
   color:'white',
@@ -756,7 +700,6 @@ announcementTime:{
   fontSize: 10,
   color:'white',
 },
->>>>>>> casa
 
   announcement: {
     backgroundColor: "#FF7A7A",

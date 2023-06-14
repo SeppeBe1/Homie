@@ -11,16 +11,10 @@ import {
   Modal,
 } from "react-native";
 
-<<<<<<< HEAD
-import arrowLeft from "../assets/icons/arrowLeft.svg";
-import sharebtn from "../assets/icons/share.svg";
-import closebtn from "../assets/icons/cross.svg";
-=======
 import arrowLeft from '../assets/icons/arrowLeft.svg';
 import sharebtn from '../assets/icons/share.svg';
 import closebtn from '../assets/icons/cross.svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
->>>>>>> casa
 
 import * as Font from "expo-font";
 
