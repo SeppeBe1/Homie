@@ -19,92 +19,19 @@ import messenger from "../assets/icons/messenger.svg";
 import whatsapp from "../assets/icons/whatsapp.svg";
 import share from "../assets/icons/share.svg";
 import crossIcon from "../assets/icons/close.svg";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default class Residents extends Component {
+const residentsData = [
+  { name: "Me", profileStatusColor: "#FFB84E" },
+  { name: "Boysangur", profileStatusColor: "#3BED6D" },
+  { name: "Yanelle", profileStatusColor: "#FF7A7A" },
+  { name: "Seppe", profileStatusColor: "#FF7A7A" },
+];
 
-  residentsData = [];
+export default function Residents() {
+  const navigation = useNavigation();
+  const [showModal, setShowModal] = useState(false);
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      showModal: false,
-      residentsData: [],
-    };
-  }
-
-  componentDidMount() {
-    this.getUsers();
-  }
-
-
-  getUsers = async () => {
-    const token = await AsyncStorage.getItem("token");
-    const houseId = await AsyncStorage.getItem("houseId");
-    fetch(`http://localhost:3000/api/v1/users/house/${houseId}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data.status);
-        if (data.status === "failed") {
-          console.log(data.status);
-        } else if (data.status === "success") {
-          const fetchedResidents = data.result;
-          for (let i = 0; i < fetchedResidents.length; i++) {
-            const resident = fetchedResidents[i];
-            console.log(resident);
-            this.residentsData.push({
-              firstname: resident.firstname,
-              lastname: resident.lastname,
-            });
-          }
-          this.setState({ residentsData: this.residentsData });
-          console.log(this.residentsData);
-        }
-      })
-      .catch((error) => {
-        // Handle any errors
-        console.error(error);
-      });
-  };
-
-   leaveHouse = async () => {
-    const userId = await AsyncStorage.getItem('userId');
-  
-    fetch(`http://localhost:3000/api/v1/users/${userId}`, {
-      method: 'PUT',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        houseId: "",
-      }),
-      })
-      .then(response => response.json())
-      .then(data => {        
-          if(data.status == "failed"){
-            console.log(data.status);
-  
-          } else if(data.status == "success"){
-            console.log(data.status);
-            navigation.navigate("Login");
-  
-          }
-          // Perform any necessary actions after successful login
-      })
-      .catch(error => {
-          // Handle any errors
-          console.error(error);
-      });
-    }
-
-
-  handleShare = async () => {
+  const handleShare = async () => {
     try {
       const shareOptions = {
         title: "Share Code",
@@ -120,20 +47,21 @@ export default class Residents extends Component {
     }
   };
 
-
-  toggleModal = () => {
-    this.setState((prevState) => ({
-      showModal: !prevState.showModal,
-    }));
+  const toggleModal = () => {
+    setShowModal((prevShowModal) => !prevShowModal);
   };
 
-  renderResidents() {
-    if (this.residentsData.length === 0) {
-      return <Text>Loading...</Text>; // Show loading indicator while data is being fetched
-    }
-    
-    
-    return this.residentsData.map((resident, index) => (
+  const handleLeaveHouse = () => {
+    setTimeout(() => {
+      navigation.navigate("ThankYouScreen");
+      setTimeout(() => {
+        navigation.navigate("Login");
+      }, 3000);
+    });
+  };
+
+  const renderResidents = () => {
+    return residentsData.map((resident, index) => (
       <View style={styles.residentFull} key={index}>
         <TouchableOpacity
           onPress={() => navigation.navigate("housemateprofile")}
@@ -150,16 +78,17 @@ export default class Residents extends Component {
             </View>
             <Text style={styles.name}>{resident.name}</Text>
           </View>
-          <Text>{resident.firstname} {resident.lastname}</Text>
-          </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
+      </View>
     ));
   };
 
-  render() {
-
-    const { showModal } = this.state;
-    const { houseCode } = this.props;
+  useEffect(() => {
+    // Implement any necessary cleanup or side effects
+    return () => {
+      // Cleanup logic here
+    };
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -186,44 +115,25 @@ export default class Residents extends Component {
           <TouchableOpacity style={styles.closeButton} onPress={toggleModal}>
             <Image source={crossIcon} style={styles.closeIcon} />
           </TouchableOpacity>
-        </View>
-        {this.renderResidents()}
-        <View>
-          <TouchableOpacity
-            style={styles.leave}
-          >
-            <Text style={styles.leave} onPress={this.leaveHouse}>Leave House</Text>
-          </TouchableOpacity>
-        </View>
-
-        <Modal visible={showModal} animationType="fade" transparent>
-          <TouchableWithoutFeedback onPress={this.toggleModal}>
-            <View style={styles.overlay} />
-          </TouchableWithoutFeedback>
-          <View style={styles.modalContainer}>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={this.toggleModal}
-            >
-              <Image source={crossIcon} style={styles.closeIcon} />
-            </TouchableOpacity>
-            <View style={{ flex: 1, gap: 24 }}>
-              <Text
-                style={{
-                  fontFamily: "moon",
-                  fontWeight: "bold",
-                  fontSize: 16,
-                  color: "#160635",
-                }}
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>New resident</Text>
+            <Text style={styles.modalText}>
+              You want to add a new resident? Perfect! Just share this personal
+              code, so your roomie can register and join the house.
+            </Text>
+            <Text style={styles.modalCode}>986 546</Text>
+            <View style={styles.shareButtonsContainer}>
+              <TouchableOpacity
+                style={[styles.shareButton, styles.shareButtonPurple]}
+                onPress={handleShare}
               >
-                <Text>New resident</Text>
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "manrope",
-                  fontSize: 16,
-                  color: "#160635",
-                }}
+                <Image style={styles.shareButtonIcon} source={share} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.shareButton, styles.shareButtonBlue]}
+                onPress={() =>
+                  Linking.openURL("fb-messenger://share?link=<YOUR_SHARE_LINK>")
+                }
               >
                 <Image style={styles.shareButtonIcon} source={messenger} />
               </TouchableOpacity>
@@ -235,79 +145,8 @@ export default class Residents extends Component {
                   )
                 }
               >
-                {this.props.houseCode}
-              </Text>
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: "row",
-                  gap: 15,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  paddingHorizontal: 65,
-                }}
-              >
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#B900F4",
-                    borderRadius: 30,
-                    width: 50,
-                    height: 50,
-                    alignSelf: "center",
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  onPress={this.handleShare}
-                >
-                  <Image style={{ width: 18, height: 20 }} source={share} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#0E8EF1",
-                    borderRadius: 30,
-                    width: 50,
-                    height: 50,
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  onPress={() =>
-                    Linking.openURL(
-                      "fb-messenger://share?link=<YOUR_SHARE_LINK>"
-                    )
-                  }
-                >
-                  <Image style={{ width: 18, height: 18 }} source={messenger} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#25D366",
-                    borderRadius: 30,
-                    width: 50,
-                    height: 50,
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                  onPress={() =>
-                    Linking.openURL(
-                      `whatsapp://send?text=Join our house with this code: ${this.props.houseCode}`
-                    )
-                  }
-                >
-                  <Image
-                    source={whatsapp}
-                    style={{
-                      padding: 10,
-                      width: 18,
-                      height: 18,
-                      textAlign: "center",
-                      alignItems: "center",
-                    }}
-                  />
-                </TouchableOpacity>
-              </View>
+                <Image style={styles.shareButtonIcon} source={whatsapp} />
+              </TouchableOpacity>
             </View>
           </View>
         </View>

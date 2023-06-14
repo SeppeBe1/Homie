@@ -140,7 +140,7 @@ export default class Nearby extends Component {
   );
 };
 }
- styles = StyleSheet.create({
+ const styles = StyleSheet.create({
   overlay: {
     position: 'relative',
     width: 340,

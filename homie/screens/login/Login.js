@@ -10,28 +10,15 @@ import React, { useState, useEffect } from "react";
 import navigation from "@react-navigation/native";
 import logo from "../../assets/logo.png";
 import logoHomie from "../../assets/logoHomie.svg";
+import Manrope from "../../assets/fonts/Manrope.ttf";
+import Moon from "../../assets/fonts/Moon.otf";
+import Novatica from "../../assets/fonts/Novatica-Bold.woff";
 
 //import MoonFont from "../../assets/fonts/Moon.otf";
 //import Novatica from "../../assets/fonts/Novatica-Bold.woff";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const loadFonts = async () => {
-  await Font.loadAsync({
-    moon: require("../../assets/fonts/Moon.otf"),
-    manrope: require("../../assets/fonts/Manrope.ttf"),
-    novatica: require("../../assets/fonts/Novatica.ttf"),
-    novaticaBold: require("../../assets/fonts/Novatica-Bold.ttf"),
-  });
-};
-
 export default function Login({ navigation }) {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
-
-  useEffect(() => {
-    loadFonts().then(() => {
-      setFontsLoaded(true);
-    });
-  }, []);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -112,13 +99,13 @@ export default function Login({ navigation }) {
           value={email}
         />
 
-        {/* <TextInput
+        <TextInput
           style={[styles.input, { borderColor: color }]}
           placeholder="Password"
           secureTextEntry
           onChangeText={(text) => setPassword(text)}
           value={password}
-        /> */}
+        />
 
         <Text style={styles.forgotPw} onPress={() => console.log("hallo")}>
           Forget password
@@ -173,7 +160,7 @@ const styles = StyleSheet.create({
   h2: {
     textAlign: "center",
     fontSize: 25,
-    fontFamily: "moon",
+    fontFamily: Moon,
     marginTop: 60,
     marginBottom: 40,
   },
@@ -188,12 +175,12 @@ const styles = StyleSheet.create({
 
   forgotPw: {
     color: "#D9B2EE",
-    marginTop: 10,
+    marginLeft: 30,
   },
 
   input: {
     fontSize: 16,
-    fontFamily: "novatica",
+    fontFamily: Novatica,
     placeholderTextColor: "#A5A5A5",
     backgroundColor: "white",
 
@@ -205,6 +192,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
 
     width: "300",
+
+    marginLeft: 26,
+    marginRight: 26,
   },
 
   login: {
@@ -226,7 +216,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20,
     color: "white",
-    fontFamily: "moon",
+    fontFamily: Moon,
   },
 
   noAcc: {

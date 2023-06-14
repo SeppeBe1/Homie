@@ -25,7 +25,6 @@ import { color } from "react-native-elements/dist/helpers";
 // Load the font
 
 export default function Homescreen({ navigation }) {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
   const [data, setData] = useState([]);
   const [firstname, setFirstname] = useState([]);
   const [lastname, setLastname] = useState([]);
@@ -37,16 +36,11 @@ export default function Homescreen({ navigation }) {
   const currentDate = new Date();
 
   useEffect(() => {
-     loadFonts();
-
       getUser();
       getHouse();
       getAnnouncement(); // Fetch announcements initially
 
   }, [isChanged]);
-
-
-
 
   const handleDeleteItem = (itemId) => {
     setAnnouncements((prevAnnouncements) =>
@@ -107,114 +101,11 @@ export default function Homescreen({ navigation }) {
   }
 
   const getHouse = async () => {
-    const token = await AsyncStorage.getItem('token');
-    const houseId = await AsyncStorage.getItem('houseId');
-
-    const response = await fetch(`http://localhost:3000/api/v1/house/${houseId}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    const data = await response.json();
-    console.log(data)
-    if (data.status === 'failed') {
-    } else if (data.status === 'succes') {
-      setHousename(data.data.housename);
-      console.log(data.data.housename)
-  }
-}
-
-const createAnnouncement = async () => {
-  const userId = await AsyncStorage.getItem('userId');
-  const houseId = await AsyncStorage.getItem('houseId');
-  console.log(userId);
-  const token = await AsyncStorage.getItem('token');
-  fetch('http://localhost:3000/api/v1/anouncement', {
-    
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                type: 'Announcement',
-                description: inputValue,
-                creatorId: userId,
-                houseId: houseId,
-                dateCreated: formattedDate,
-            }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Process the response data
-                console.log(data);
-
-                if(data.status == "failed"){
-
-                } else if(data.status == "succes"){
-                  setInputValue("");
-                  if(isChanged == false){
-                    setIsChanged(true)  
-                  } else {
-                  setIsChanged(false)
-                  }
-                  handleCloseModal();
-                }
-                // Perform any necessary actions after successful login
-            })
-            .catch(error => {
-                // Handle any errors
-                console.error(error);
-            });
-}
-
-
-  const getAnnouncement = async () => {
-      const token = await AsyncStorage.getItem('token');
-      const houseId = await AsyncStorage.getItem('houseId');
-      console.log(token)
-      if(houseId){
-        fetch(`http://localhost:3000/api/v1/anouncement/${houseId}`, {
-          method: 'GET',
-          headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-          }
-          })
-          .then(response =>  response.json())
-          .then(data => {   
-            if (data.status === "success") {
-              const fetchedAnnouncements = data.result.map((announcement) => announcement);
-              console.log(fetchedAnnouncements)
-              setAnnouncements(fetchedAnnouncements);
-              } 
-              else if(data === "failed"){
-                console.log(data.result);
-              }
-          })
-          .catch(error => {
-            console.error(error);
-          });
-      } else {
-        console.log(kaas);
-      }
-
-          // let profilePic = data.data.profilePic;
-        }
-      })
-      .catch((error) => {
-        // Handle any errors
-        console.error(error);
-      });
-  };
-
-  const getHouse = async () => {
     const token = await AsyncStorage.getItem("token");
+    const houseId = await AsyncStorage.getItem("houseId");
 
     const response = await fetch(
-      `http://localhost:3000/api/v1/house/${houseIdd}`,
+      `http://localhost:3000/api/v1/house/${houseId}`,
       {
         method: "GET",
         headers: {
@@ -230,9 +121,11 @@ const createAnnouncement = async () => {
     }
   };
 
+
   const createAnnouncement = async () => {
     const userId = await AsyncStorage.getItem("userId");
     const token = await AsyncStorage.getItem("token");
+    const houseId = await AsyncStorage.getItem("houseId");
     fetch("http://localhost:3000/api/v1/anouncement", {
       method: "POST",
       headers: {
@@ -243,7 +136,7 @@ const createAnnouncement = async () => {
         type: "Announcement",
         description: inputValue,
         creatorId: userId,
-        houseId: houseIdd,
+        houseId: houseId,
         dateCreated: formattedDate,
       }),
     })
@@ -309,11 +202,6 @@ const createAnnouncement = async () => {
       console.log(kaas);
     }
   };
-
-  if (!fontsLoaded) {
-    return null; // or a loading screen
-  }
-
 
 
   return (
@@ -386,7 +274,7 @@ const createAnnouncement = async () => {
           <Text
             style={{
               fontSize: "1rem",
-              fontFamily: "moon",
+              fontFamily: Moon,
               fontWeight: "bold",
               color: "#160635",
             }}
@@ -406,7 +294,7 @@ const createAnnouncement = async () => {
           <Text
             style={{
               fontSize: "0.875rem",
-              fontFamily: "moon",
+              fontFamily: Moon,
               fontWeight: "bold",
             }}
           >
@@ -428,7 +316,7 @@ const createAnnouncement = async () => {
               <Text
                 style={{
                   fontSize: "0.875rem",
-                  fontFamily: "manrope",
+                  fontFamily: Manrope,
                   fontWeight: "regular",
                   color: "#939393",
                 }}
@@ -624,10 +512,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 
-  createAnnouncement: {
-    fontFamily: Moon,
-    color: "white",
-
 createAnnouncement: {
   fontFamily: Moon,
   color:'white',
@@ -726,4 +610,5 @@ announcementTime:{
     color: "white",
   },  
 });
+
 
