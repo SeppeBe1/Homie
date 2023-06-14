@@ -14,6 +14,7 @@ import * as Font from "expo-font";
 import MoonFont from "../../assets/fonts/Moon.otf";
 import Novatica from "../../assets/fonts/Novatica-Bold.woff";
 import Manrope from "../../assets/fonts/Manrope-Bold.ttf";
+import { useNavigation } from "@react-navigation/native";
 
 import debtIcon from "../../assets/debtIcon.svg";
 import arrowback from "../../assets/icons/Arrow_back.svg";
@@ -28,7 +29,7 @@ const loadFonts = async () => {
 
 
 const SplitCosts = () => {
-
+  const navigation = useNavigation();
   useEffect(() => {
     loadFonts();
   }, []);
@@ -37,7 +38,7 @@ const SplitCosts = () => {
     <View style={{ flex: 1}}>
       <View style={styles.headerContainer}>
         <View style={styles.title}>
-          <TouchableOpacity style={{marginLeft: 10}}>
+          <TouchableOpacity style={{marginLeft: 10}} onPress={() => navigation.goBack()}>
             <Image
               source={arrowback}
               style={{ width: 8, height: 15}}
@@ -52,15 +53,54 @@ const SplitCosts = () => {
           />
           <View style={styles.debtTextContainer}>
             <Text style={styles.debtText}>You are still</Text>
+            <Text style={styles.debtCost}> $40</Text>
             <Text style={styles.debtText}> in debt</Text>
           </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>Pay off debts</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.debtShowContainer}>
+            <View style={styles.debtShow}>
+              <Text style={styles.showAmount}>$320</Text>
+              <Text style={styles.showText}>My total spendings</Text>
+            </View>
+            <View style={styles.debtShow}>
+              <Text style={styles.showAmount}>$1250</Text>
+              <Text style={styles.showText}>House total spendings</Text>
+            </View>
+          </View>
         </View>
+      </View>
+      <View>
+        
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  button: {
+    width: 200,
+    height: 50,
+    borderRadius: 30,
+    backgroundColor: "#B900F4",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontFamily: "moon",
+    fontWeight: "bold",
+    fontSize: 18,
+  },
+  buttonContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 18,
+  },
   headerContainer: {
     width: "100%",
     height: "370px",
@@ -100,7 +140,40 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "bold",
     color: "white",
-  }
+  },
+  debtCost: {
+    fontFamily: "novatica",
+    fontWeight: "700",
+    fontSize: 17,
+    fontWeight: "bold",
+    color: "#3BEDBF",
+    textTransform: "uppercase",
+  },
+  debtShowContainer: {
+    flexDirection: "row",
+  },
+  debtShow: {
+    width: "160px",
+    height: "55px",
+    backgroundColor: "white",
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 10,
+    marginTop: 20,
+  },
+  showText: {
+    fontFamily: "manrope",
+    fontWeight: "400",
+    fontSize: 12,
+    color: "#160635",
+  },
+  showAmount: {
+    fontFamily: "moon",
+    fontWeight: "700",
+    fontSize: 20,
+    color: "#160635",
+  },
 });
 
 export default SplitCosts;
