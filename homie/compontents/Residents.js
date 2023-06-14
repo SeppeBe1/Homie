@@ -84,7 +84,6 @@ export default class Residents extends Component {
       })
       .then(response => response.json())
       .then(data => {        
-        console.log(data);
           if(data.status == "failed"){
             console.log(data.status);
   
@@ -143,7 +142,7 @@ export default class Residents extends Component {
               ]}
             />
           </View>
-          <Text>{resident.firstname}</Text>
+          <Text>{resident.firstname} {resident.lastname}</Text>
         </View>
       </View>
     ));

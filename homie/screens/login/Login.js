@@ -85,7 +85,6 @@ export default function Login({ navigation }) {
                 <Text style={styles.validation}>Email or password incorrect</Text>
              )}
 
-
             <TextInput
             style={[styles.input, { borderColor: color }]}
             placeholder="Email"

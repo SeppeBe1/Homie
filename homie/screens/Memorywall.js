@@ -14,6 +14,7 @@ import {
 import arrowLeft from '../assets/icons/arrowLeft.svg';
 import sharebtn from '../assets/icons/share.svg';
 import closebtn from '../assets/icons/cross.svg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import * as Font from 'expo-font';
 
@@ -41,6 +42,7 @@ export default function Memorywall({ navigation }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
+    getPhotosHouse();
     const updateScreenWidth = () => {
       setScreenWidth(Dimensions.get('window').width);
     };
@@ -51,6 +53,41 @@ export default function Memorywall({ navigation }) {
       Dimensions.removeEventListener('change', updateScreenWidth);
     };
   }, []);
+
+  const getPhotosHouse = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const houseId = await AsyncStorage.getItem("houseId");
+    console.log(houseId)
+    fetch(`http://localhost:3000/api/v1/photo/house/${houseId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "failed") {
+          console.log(data.status);
+        } else if (data.status === "success") {
+          const photos = data.result;
+          console.log(photos[0].dateTaken)
+          const currentDate = new Date(Date.parse('2023-06-13T18:47:00'));
+          const formattedDate = currentDate.toLocaleDateString('en-US', {
+            month: '2-digit',
+            day: '2-digit',
+            year: 'numeric'
+          });
+          console.log(formattedDate);
+
+        }
+      })
+      .catch((error) => {
+        // Handle any errors
+        console.error(error);
+      });
+  };
+
 
   const getPreviousMonth = () => {
     const previousMonth = new Date(

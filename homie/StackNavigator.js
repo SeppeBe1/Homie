@@ -46,7 +46,7 @@ const LoginscreenStack = () => {
       <Stack.Screen name="CreateHouseAdress" component={CreateHouseAdress} options={{tabBarVisible: true}} />
       <Stack.Screen name="CreateHouseRule" component={CreateHouseRule} options={{tabBarVisible: true}} />
       <Stack.Screen name="ShareHomie" component={ShareHomie} options={{tabBarVisible: true}} />
-      <Stack.Screen name="homeaccount" component={Homeaccount} />
+        
     <Stack.Screen name="TabNavigator" component={TabNavigator} options={{tabBarVisible: true}} />
     </Stack.Navigator>
   );
@@ -57,7 +57,7 @@ const HomescreenStack = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Login" component={Login} options={{tabBarVisible: true}} />
-      {/* <Stack.Screen name="homeaccount" component={Homeaccount} /> */}
+      <Stack.Screen name="homeaccount" component={Homeaccount} />
       <Stack.Screen name="myprofilescreen" component={Myprofilescreen} />
       <Stack.Screen name="settingsscreen" component={Settingsscreen} />
       <Stack.Screen name="changepassword" component={ChangePassword} />
