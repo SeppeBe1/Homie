@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   TouchableOpacity,
@@ -8,97 +8,136 @@ import {
   Modal,
   TextInput,
 } from "react-native";
-
 import checkbox from "../assets/icons/check.svg";
 import addRule from "../assets/icons/add.svg";
 import crossIcon from "../assets/icons/close.svg";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default class Houserules extends Component {
-  state = {
-    isPopupVisible: false,
-    newRule: "",
-    houseRules: [
-      "No smoking",
-      "No pets allowed",
-      "Quiet hours from 10 PM to 8 AM",
-    ],
+export default function Houserules(props) {
+  const [isPopupVisible, setPopupVisible] = useState(false);
+  const [newRule, setNewRule] = useState("");
+  const [houseRules, setHouseRules] = useState([]);
+  const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    getHouserule();
+  }, []);
+
+  const getHouserule = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const houseId = await AsyncStorage.getItem("houseId");
+
+    fetch(`http://localhost:3000/api/v1/users/${houseId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "success") {
+          setDescription(data.data.description);
+          setHouseRules(data.data.houseRules);
+          AsyncStorage.setItem("houseId", data.data.houseId);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
-  togglePopupVisibility = () => {
-    this.setState((prevState) => ({
-      isPopupVisible: !prevState.isPopupVisible,
-    }));
+  const createHouserule = async () => {
+    const houseId = await AsyncStorage.getItem("houseId");
+    const token = await AsyncStorage.getItem("token");
+
+    fetch(`http://localhost:3000/api/v1/houserules/`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        type: "Announcement",
+        description: description,
+        houseId: houseId,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+
+        if (data.status === "success") {
+          const updatedHouseRules = [...houseRules, description];
+
+          setNewRule("");
+          setHouseRules(updatedHouseRules);
+
+          AsyncStorage.setItem("houseRules", JSON.stringify(updatedHouseRules))
+            .then(() => {
+              togglePopupVisibility();
+            })
+            .catch((error) => {
+              console.error("Error saving houseRules to AsyncStorage:", error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
-  handleRuleChange = (text) => {
-    this.setState({
-      newRule: text,
-    });
+  const togglePopupVisibility = () => {
+    setPopupVisible((prevState) => !prevState);
   };
 
-  addRuleToList = () => {
-    if (this.state.newRule.trim() !== "") {
-      this.setState((prevState) => ({
-        isPopupVisible: false,
-        newRule: "",
-        houseRules: [...prevState.houseRules, prevState.newRule],
-      }));
-    }
+  const handleRuleChange = (text) => {
+    setNewRule(text);
   };
 
-  render() {
-    return (
-      <View>
-        <Text style={styles.h3}>Our House Rules</Text>
-        {this.state.houseRules.map((rule, index) => (
-          <View key={index} style={styles.ruleContainer}>
-            <Image source={checkbox} style={styles.checkbox} />
-            <Text style={styles.rule}>{rule}</Text>
+  return (
+    <View>
+      <Text style={styles.h3}>Our House Rules</Text>
+      {houseRules.map((rule, index) => (
+        <View key={index} style={styles.ruleContainer}>
+          <Image source={checkbox} style={styles.checkbox} />
+          <Text style={styles.rule}>{rule}</Text>
+        </View>
+      ))}
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={togglePopupVisibility}
+      >
+        <Image source={addRule} style={{ width: 50, height: 50 }} />
+      </TouchableOpacity>
+
+      <Modal visible={isPopupVisible} animationType="fade" transparent={true}>
+        <TouchableOpacity style={styles.overlay} activeOpacity={1}>
+          <View style={styles.popup}>
+            <Text style={styles.popupTitle}>New houserule</Text>
+            <TouchableOpacity
+              style={styles.closeButtonContainer}
+              onPress={togglePopupVisibility}
+            >
+              <Image source={crossIcon} style={styles.closeIcon} />
+            </TouchableOpacity>
+            <TextInput
+              style={styles.input}
+              multiline={true}
+              numberOfLines={5}
+              value={newRule}
+              onChangeText={handleRuleChange}
+              placeholder="Type here..."
+              placeholderTextColor="#999999"
+            />
+            <TouchableOpacity style={styles.addList} onPress={createHouserule}>
+              <Text style={styles.addButtonTitle}>Add to list</Text>
+            </TouchableOpacity>
           </View>
-        ))}
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={this.togglePopupVisibility}
-        >
-          <Image source={addRule} style={{ width: 50, height: 50 }} />
         </TouchableOpacity>
-
-        <Modal
-          visible={this.state.isPopupVisible}
-          animationType="fade"
-          transparent={true}
-        >
-          <TouchableOpacity style={styles.overlay} activeOpacity={1}>
-            <View style={styles.popup}>
-              <Text style={styles.popupTitle}>New houserule</Text>
-              <TouchableOpacity
-                style={styles.closeButtonContainer}
-                onPress={this.togglePopupVisibility}
-              >
-                <Image source={crossIcon} style={styles.closeIcon} />
-              </TouchableOpacity>
-              <TextInput
-                style={styles.input}
-                multiline={true}
-                numberOfLines={5}
-                value={this.state.newRule}
-                onChangeText={this.handleRuleChange}
-                onSubmitEditing={this.addRuleToList}
-                placeholder="Type here..."
-                placeholderTextColor="#999999"
-              />
-              <TouchableOpacity
-                style={styles.addList}
-                onPress={this.addRuleToList}
-              >
-                <Text style={styles.addButtonTitle}>Add to list</Text>
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
-        </Modal>
-      </View>
-    );
-  }
+      </Modal>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
