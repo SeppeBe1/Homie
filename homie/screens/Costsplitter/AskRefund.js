@@ -84,7 +84,7 @@ const AskRefund = () => {
                 </View>
                 <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20, position: "relative", zIndex:99 }}>
                     <Text style={{ fontSize: 14, fontFamily: "moon", fontWeight: "bold" }}>History</Text>
-                    
+
                     <TouchableOpacity onPress={toggleDropdown} style={{ flexDirection: "row", alignItems: "center" }}>
                         <Text style={{ fontSize: 14, fontFamily: "manrope", fontWeight: "regular", color: "#939393", marginRight: 7 }}>{selectedStatus}</Text>
                         {isDropdownVisible ? (
@@ -94,7 +94,10 @@ const AskRefund = () => {
                         )}
                     </TouchableOpacity>
                     {isDropdownVisible && (
-                        <View style={{ position: "absolute", top: 25, right: 0, width: 80, backgroundColor: "#fff", borderRadius: 5, elevation: 3, zIndex:99, justifyContent: "center", alignItems: "center" }}>
+                        <View style={{ position: "absolute", top: 25, right: 0, width: 80, backgroundColor: "#fff", borderRadius: 5, elevation: 3, zIndex:99, justifyContent: "center", alignItems: "center", shadowColor: "#000",
+                        shadowOffset: { width: 0, height: 2 },
+                        shadowOpacity: 0.3,
+                        shadowRadius: 4, }}>
                             <TouchableOpacity onPress={() => handleStatusSelection('Newest')} style={styles.dropdownItem}>
                                 <Text style={styles.dropdownText}>Newest</Text>
                             </TouchableOpacity>

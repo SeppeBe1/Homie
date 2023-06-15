@@ -16,7 +16,9 @@ import Manrope from "../../assets/fonts/Manrope-Bold.ttf";
 import { useNavigation } from "@react-navigation/native";
 import DatePicker from 'react-native-datepicker';
 import arrowDown from "../../assets/icons/arrowDown.svg";
-import arrowUp from "../../assets/icons/arrowUp.svg"; 
+import arrowUp from "../../assets/icons/arrowUp.svg";
+import pf1 from "../../assets/pf1.png";
+import pf2 from "../../assets/pf2.png";
 
 const loadFonts = async () => {
     await Font.loadAsync({
@@ -29,16 +31,17 @@ const loadFonts = async () => {
 const AddSpending = () => {
 
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-    const [selectedStatus, setSelectedStatus] = useState('Paid by');
+    const [selectedStatus, setSelectedStatus] = useState("Paid by");
 
     const toggleDropdown = () => {
     setIsDropdownVisible(!isDropdownVisible);
     };
 
     const handleStatusSelection = (status) => {
-    setSelectedStatus(status);
-    setIsDropdownVisible(false);
-    };
+        setSelectedStatus(status);
+        setIsDropdownVisible(false);
+      };
+      
 
     const datePickerRef = useRef(null);
     const [selectedDate, setSelectedDate] = useState(null);
@@ -71,7 +74,7 @@ const AddSpending = () => {
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={{marginTop: 25, paddingHorizontal: 25}}>
+            <View style={{marginTop: 25, paddingHorizontal: 25, position:"relative", zIndex:99}}>
                 <TextInput style={styles.input}
                     placeholder="Title"
                     placeholderTextColor="#A5A5A5"
@@ -92,21 +95,63 @@ const AddSpending = () => {
                         borderWidth={0}
                     />
                 </View>
-                <TouchableOpacity onPress={toggleDropdown} style={styles.input3}>
-                    <Text style={{color: "#A5A5A5", fontFamily: "manrope", fontWeight: "regular", fontSize: 16}}>{selectedStatus}</Text>
-                        {isDropdownVisible ? (
-                        <Image source={arrowUp} style={{ width: 10, height: 6 }} />
-                        ) : (
-                        <Image source={arrowDown} style={{ width: 10, height: 6 }} />
-                        )}
-                </TouchableOpacity>
-    
+                <View style={{position:"relative", zIndex:99}}>
+                    <TouchableOpacity onPress={toggleDropdown} style={styles.input3}>
+                        <Text style={{color: "#A5A5A5", fontFamily: "manrope", fontWeight: "regular", fontSize: 16}}>{selectedStatus}</Text>
+                            {isDropdownVisible ? (
+                            <Image source={arrowUp} style={{ width: 10, height: 6 }} />
+                            ) : (
+                            <Image source={arrowDown} style={{ width: 10, height: 6 }} />
+                            )}
+                    </TouchableOpacity>
+
+                    {isDropdownVisible && (
+                        <View style={{ position: "absolute", top: 25, right: 0, width: 200, backgroundColor: "#fff", borderRadius: 5, elevation: 3, zIndex: 99, flexDirection: "row", justifyContent: "center", alignItems: "center", shadowColor: "#000", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.3, shadowRadius: 4 }}>
+                        <TouchableOpacity onPress={() => handleStatusSelection(<Image source={pf1} style={{ width: 40, height: 40, borderRadius: 50, marginRight: 10 }} />)} style={styles.dropdownItem}>
+                          <Image source={pf1} style={{ width: 50, height: 50, borderRadius: 50, marginRight: 10 }} />
+                        </TouchableOpacity>
+                      
+                        <TouchableOpacity onPress={() => handleStatusSelection(<Image source={pf2} style={{ width: 40, height: 40, borderRadius: 50, marginRight: 10 }} />)} style={styles.dropdownItem}>
+                          <Image source={pf2} style={{ width: 50, height: 50, borderRadius: 50, marginRight: 10 }} />
+                        </TouchableOpacity>
+                      </View>
+                    )}
+
+                </View>
+            </View>
+            <View style={{ flexDirection: "row", alignItems: "center", marginTop: "40px", position: "relative", paddingHorizontal:25 }}>
+                <Text style={{ fontSize: 14, fontFamily: "moon", fontWeight: "bold" }}>Shared by which homies</Text>
+            </View>
+            <View style={{paddingHorizontal:25}}>
+                <View style={styles.input3}>
+                    <View style={{flexDirection:"row", alignItems:"center"}}>
+                        <Image source={pf1} style={{ width: 40, height: 40, borderRadius: 50, marginRight: 10 }} />
+                        <Text style={{color: "#A5A5A5", fontFamily: "manrope", fontWeight: "regular", fontSize: 16}}>Yanelle</Text>
+                    </View>
+                    <View style={{flexDirection:"row", alignItems:"center"}}> 
+                        <Text style={{paddingRight:25,color: "#160635", fontFamily: "novatica", fontWeight: "bold", fontSize: 14, textDecorationLine:"underline"}}>0%</Text>
+                        <Text style={{color: "#160635", fontFamily: "novatica", fontWeight: "bold", fontSize: 14, textDecorationLine:"underline"}}>€0,00</Text>
+                    </View>
+                </View>
+                <View style={styles.input3}>
+                    <View style={{flexDirection:"row", alignItems:"center"}}>
+                        <Image source={pf2} style={{ width: 40, height: 40, borderRadius: 50, marginRight: 10 }} />
+                        <Text style={{color: "#A5A5A5", fontFamily: "manrope", fontWeight: "regular", fontSize: 16}}>Jade</Text>
+                    </View>
+                    <View style={{flexDirection:"row", alignItems:"center"}}> 
+                        <Text style={{paddingRight:25,color: "#160635", fontFamily: "novatica", fontWeight: "bold", fontSize: 14, textDecorationLine:"underline"}}>0%</Text>
+                        <Text style={{color: "#160635", fontFamily: "novatica", fontWeight: "bold", fontSize: 14, textDecorationLine:"underline"}}>€0,00</Text>
+                    </View>
+                </View>
             </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+    dropdownItem: {
+        paddingVertical: 10,
+    },
     input3: {
         width: "100%", 
         backgroundColor: "white", 
