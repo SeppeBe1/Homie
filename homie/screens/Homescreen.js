@@ -20,6 +20,8 @@ import Moon from "../assets/fonts/Moon.otf";
 import Novatica from "../assets/fonts/Novatica-Bold.woff";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import close from "../assets/icons/close.svg";
+import arrow from "../assets/icons/Arrow-Right.svg";
+
 import { color } from "react-native-elements/dist/helpers";
 
 // Load the font
@@ -251,6 +253,7 @@ export default function Homescreen({ navigation }) {
                 onPress={() => navigation.navigate("homeaccount")}
               >
                 <Text style={styles.buttonText}>{housenamee}</Text>
+                <Image source={arrow} style={styles.arrow} />
               </TouchableOpacity>
             </View>
           }
@@ -474,6 +477,10 @@ const styles = StyleSheet.create({
     border: "none",
     marginTop: 40,
   },
+  arrow: {
+    width: 15,
+    height: 15,
+  },
   imageContainer: {
     position: "absolute",
     top: 100,
@@ -497,7 +504,13 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 
-  button: {},
+  button: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 10,
+    alignItems: "baseline",
+  },
 
   buttonText: {
     color: "white",

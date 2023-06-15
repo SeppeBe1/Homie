@@ -32,14 +32,12 @@ export default function AddTask() {
     setDatePickerVisibility(false);
   };
 
- 
   const addTaskToList = () => {
     if (eventName.trim() !== "" && taskRules.trim() !== "") {
       createTask();
-      navigation.navigate("TasksScreen") // Navigeer naar TaskScreen.js na het opslaan
+      navigation.navigate("TasksScreen"); // Navigeer naar TaskScreen.js na het opslaan
     }
   };
-
 
   const createTask = async () => {
     const userId = await AsyncStorage.getItem("userId");
@@ -56,7 +54,7 @@ export default function AddTask() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        type: "Task",
+        type: "Event",
         activity: eventName,
         description: taskRules,
         datePlanned: formattedDate,
@@ -117,7 +115,7 @@ export default function AddTask() {
           value={eventName}
           onChangeText={setEventName}
         />
-        
+
         <CustomDatePicker />
 
         <TextInput
@@ -134,7 +132,10 @@ export default function AddTask() {
 
       <View style={styles.buttoncontainer}>
         <TouchableOpacity
-          style={[styles.button, { opacity: isEventNameFilled && isTaskRulesFilled ? 1 : 0.5 }]}
+          style={[
+            styles.button,
+            { opacity: isEventNameFilled && isTaskRulesFilled ? 1 : 0.5 },
+          ]}
           onPress={addTaskToList}
           disabled={!isEventNameFilled || !isTaskRulesFilled}
         >
@@ -144,8 +145,6 @@ export default function AddTask() {
     </View>
   );
 }
-
-
 
 const styles = StyleSheet.create({
   container: {
