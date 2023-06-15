@@ -37,6 +37,21 @@ const loadFonts = async () => {
   });
 };
 
+/*const europeanDate = "15-06-2023"; // Example date in European notation
+const dateObj = new Date(europeanDate);
+
+// Store the date in MongoDB
+db.collection.insertOne({ date: dateObj });
+
+// Retrieving a date and formatting it in the European date notation: dd-mm-yyyy
+const document = db.collection.findOne({});*/
+
+// Format the date in the European date notation
+//const formattedDate = document.date.toLocaleDateString("en-GB");
+
+//console.log(formattedDate); // Output: 15-06-2023
+
+
 export default function Homescreen({ navigation }) {
   const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const today = new Date();
@@ -76,8 +91,7 @@ export default function Homescreen({ navigation }) {
 
        getUser();
       // getHouse();
-      getAnnouncement(); // Fetch announcements initially
-
+      getAnnouncement(); 
   }, [isChanged]);
 
   const handleDeleteItem = (itemId) => {
@@ -161,38 +175,75 @@ export default function Homescreen({ navigation }) {
   }
 
 
-  const getAnnouncement = async () => {
-    const token = await AsyncStorage.getItem('token');
-    const houseId = await AsyncStorage.getItem('houseId');
-    console.log(token)
-    if(houseId){
-      fetch(`http://localhost:3000/api/v1/anouncement/${houseId}`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
+//   const getAnnouncement = async () => {
+//     const token = await AsyncStorage.getItem('token');
+//     const houseId = await AsyncStorage.getItem('houseId');
+//     console.log(token)
+//     if(houseId){
+//       fetch(`http://localhost:3000/api/v1/anouncement/${houseId}`, {
+//         method: 'GET',
+//         headers: {
+//             'Authorization': `Bearer ${token}`,
+//             'Content-Type': 'application/json',
+//         }
+//         })
+//         .then(response =>  response.json())
+//         .then(data => {   
+//           if (data.status === "success") {
+//             const fetchedAnnouncements = data.result.map((announcement) => announcement);
+//             console.log(fetchedAnnouncements)
+//             setAnnouncements(fetchedAnnouncements);
+//             } 
+//             else if(data === "failed"){
+//               console.log(data.result);
+//             }
+//         })
+//         .catch(error => {
+//           console.error(error);
+//         });
+//     } else {
+//       console.log(kaas);
+//     }
+
+// };
+
+const getAnnouncement = async () => {
+  const token = await AsyncStorage.getItem('token');
+  const houseId = await AsyncStorage.getItem('houseId');
+  console.log(token);
+
+  if (houseId) {
+    fetch(`http://localhost:3000/api/v1/anouncement/${houseId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          const fetchedAnnouncements = data.result.map(announcement => {
+            // Assuming 'item' is the object you want to update with the fetched dates
+            const item = { ...announcement }; // Create a copy of the announcement object
+            // Replace the hardcoded date in 'item' with the dates from the database
+            item.datePlanned = new Date(item.datePlanned);
+            return item;
+          });
+
+          console.log(fetchedAnnouncements);
+          setAnnouncements(fetchedAnnouncements);
+        } else if (data.status === 'failed') {
+          console.log(data.result);
         }
-        })
-        .then(response =>  response.json())
-        .then(data => {   
-          if (data.status === "success") {
-            const fetchedAnnouncements = data.result.map((announcement) => announcement);
-            console.log(fetchedAnnouncements)
-            setAnnouncements(fetchedAnnouncements);
-            } 
-            else if(data === "failed"){
-              console.log(data.result);
-            }
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    } else {
-      console.log(kaas);
-    }
-
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  } else {
+    console.log('kaas');
+  }
 };
-
   const startOfWeek = new Date(
     today.getFullYear(),
     today.getMonth(),
@@ -383,6 +434,7 @@ export default function Homescreen({ navigation }) {
                 <TouchableOpacity
                   key={item._id}
                   onPress={() => handleEventPress(item)}
+                  style={{ marginVertical: 5 }}
                 >
                   <View
                     style={{
@@ -403,15 +455,12 @@ export default function Homescreen({ navigation }) {
                         flexDirection: "column",
                       }}
                     >
-                      <Text
-                        style={{
-                          fontFamily: "novatica",
-                          fontWeight: "bold",
-                          fontSize: 20,
-                        }}
-                      >
-                        {item.datePlanned}
-                      </Text>
+                      <Text style={{ fontFamily: "novatica", fontWeight: "bold", fontSize: 20 }}>
+                      {new Date(item.datePlanned).getDate()}
+                    </Text>
+                    <Text>
+                      {new Date(item.datePlanned).toLocaleString("default", { month: "short" })}
+                    </Text>
                       <Text
                         style={{
                           fontFamily: "novatica",
@@ -423,7 +472,7 @@ export default function Homescreen({ navigation }) {
                       </Text>
                     </View>
                     <Text style={styles.h3black}>{item.eventName}</Text>
-                    <Image
+                    {/* <Image
                       source={item.image}
                       style={{
                         width: 40,
@@ -432,7 +481,7 @@ export default function Homescreen({ navigation }) {
                         alignSelf: "flex-end",
                         marginLeft: "auto",
                       }}
-                    />
+                    /> */}
                   </View>
                 </TouchableOpacity>
               );
