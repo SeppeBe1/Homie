@@ -3,6 +3,7 @@ import * as Font from "expo-font";
 import MoonFont from "../../assets/fonts/Moon.otf";
 import Novatica from "../../assets/fonts/Novatica-Bold.woff";
 import Manrope from "../../assets/fonts/Manrope-Bold.ttf";
+//import EventItem from "../../compontents/EventItem";
 
 import {
   View,
@@ -40,6 +41,7 @@ export default function Homescreen({ navigation }) {
   const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const today = new Date();
   const currentDate = new Date();
+  const [residentsData, setResidentsData] = useState([]);
   const [creatorId, setCreatorId]= useState([]);
   const [firstname, setFirstname] = useState([]);
   const [lastname, setLastname] = useState([]);
@@ -72,7 +74,7 @@ export default function Homescreen({ navigation }) {
   useEffect(() => {
      loadFonts();
 
-      // getUser();
+       getUser();
       // getHouse();
       getAnnouncement(); // Fetch announcements initially
 
@@ -97,6 +99,66 @@ export default function Homescreen({ navigation }) {
   };
 
   const formattedDate = currentDate.toLocaleString("nl-NL", options).replace("om", "-");;
+
+  const renderResidents = () => {
+    if (residentsData.length === 0) {
+      return <Text>Loading...</Text>; // Show loading indicator while data is being fetched
+    }
+
+    return residentsData.map((resident, index) => (
+      <View style={styles.residentFull} key={index}>
+        <View style={styles.residentProfile}>
+          <View style={styles.status}>
+            <Image source={profilePicture} style={styles.profilePicture} />
+            <View
+              style={[
+                styles.circle,
+                { backgroundColor: resident.profileStatusColor },
+              ]}
+            />
+          </View>
+          <Text>
+            {resident.firstname} {resident.lastname}
+          </Text>
+        </View>
+      </View>
+    ));
+  };
+
+  
+  const getUser = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    const houseId = await AsyncStorage.getItem("houseId");
+
+    fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+      }
+      })
+      .then(response => response.json())
+      .then(data => {        
+          if(data.status == "failed"){
+            console.log(data.status);
+          } else if(data.status == "succes"){
+            setFirstname(data.data.firstname);
+            setLastname(data.data.lastname);
+            AsyncStorage.setItem('houseId', data.data.houseId);
+            const fetchedResidents = data.result;
+            const updatedResidentsData = fetchedResidents.map((resident) => ({
+            firstname: resident.firstname,
+            lastname: resident.lastname,
+          }));
+          setResidentsData(updatedResidentsData);
+
+            // let profilePic = data.data.profilePic;
+          }
+      })
+      .catch(error => {
+          // Handle any errors
+          console.error(error);
+      });
+  }
 
 
   const getAnnouncement = async () => {
@@ -302,7 +364,6 @@ export default function Homescreen({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-
       <View
         style={{
           display: "flex",
@@ -311,63 +372,73 @@ export default function Homescreen({ navigation }) {
           marginTop: 8,
         }}
       >
-        {events.map((event) => (
-          <TouchableOpacity
-            key={event.title}
-            onPress={() => handleEventPress(event)}
-          >
-            <View
-              style={{
-                marginHorizontal: 24,
-                display: "flex",
-                flexDirection: "row",
-                backgroundColor: "white",
-                paddingHorizontal: 11,
-                paddingVertical: 8,
-                borderRadius: 10,
-                alignItems: "flex-end",
-                gap: 29,
-              }}
-            >
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <Text
-                  style={{
-                    fontFamily: "novatica",
-                    fontWeight: "bold",
-                    fontSize: 20,
-                  }}
+        {announcements.length === 0 ? (
+          <Text style={styles.nothingFound}>No announcements found</Text>
+        ) : (
+          <FlatList
+            keyExtractor={(item) => item._id}
+            data={announcements.filter((item) => item.type === "Event")} // Filter announcements by type "event"
+            renderItem={({ item }) => {
+              return (
+                <TouchableOpacity
+                  key={item._id}
+                  onPress={() => handleEventPress(item)}
                 >
-                  {event.day}
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: "novatica",
-                    fontWeight: "bold",
-                    fontSize: 10,
-                  }}
-                >
-                  {event.month}
-                </Text>
-              </View>
-              <Text style={styles.h3black}>{event.title}</Text>
-              <Image
-                source={event.image}
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 24,
-                  alignSelf: "flex-end",
-                  marginLeft: "auto",
-                }}
-              />
-            </View>
-          </TouchableOpacity>
-        ))}
+                  <View
+                    style={{
+                      marginHorizontal: 24,
+                      display: "flex",
+                      flexDirection: "row",
+                      backgroundColor: "white",
+                      paddingHorizontal: 11,
+                      paddingVertical: 8,
+                      borderRadius: 10,
+                      alignItems: "flex-end",
+                      gap: 29,
+                    }}
+                  >
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "novatica",
+                          fontWeight: "bold",
+                          fontSize: 20,
+                        }}
+                      >
+                        {item.datePlanned}
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: "novatica",
+                          fontWeight: "bold",
+                          fontSize: 10,
+                        }}
+                      >
+                        {item.month}
+                      </Text>
+                    </View>
+                    <Text style={styles.h3black}>{item.eventName}</Text>
+                    <Image
+                      source={item.image}
+                      style={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 24,
+                        alignSelf: "flex-end",
+                        marginLeft: "auto",
+                      }}
+                    />
+                  </View>
+                </TouchableOpacity>
+              );
+            }}
+          />
+        )}
       </View>
       <View style={{ marginTop: 20, paddingHorizontal: 24 }}>
         <View
@@ -530,41 +601,8 @@ export default function Homescreen({ navigation }) {
         >
           <Text style={styles.buttonText}>Add event</Text>
         </TouchableOpacity>
-      </View>
-      {announcements.length === 0 ? (
-          <Text style={styles.nothingFound}>No announcements found</Text>
-        ) : (
-          <FlatList
-            keyExtractor={(item) => item._id}
-            data={announcements}
-            renderItem={({ item }) => {
-              let announcementStyle;
-              let announcementTextStyle;
-
-              switch (item.type) {
-                case "Event":
-                  announcementStyle = styles.event;
-                  announcementTextStyle = styles.announcementTextEventPayment;
-                  return (
-                    <>
-                      <View style={announcementStyle}>
-                      <Text style={announcementTextStyle}>{item.eventName}</Text>
-                      <Text style={announcementTextStyle}>{item.description}</Text>
-                      <Text style={announcementTextStyle}>{item.creatorId}</Text>
-                      <Text style={announcementTextStyle}>{item.datePlanned}</Text>
-                      <Text style={announcementTextStyle}>{item.hour}</Text>
-                      <Text style={announcementTextStyle}>{item.invitationMessage}</Text>
-
-
-                      </View>
-                    </>
-                    
-                  );
-              }
-
-            }}
-          />
-        )}    </View>
+      </View> 
+        </View>
   );
 }
 
