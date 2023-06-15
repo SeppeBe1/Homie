@@ -12,6 +12,7 @@ import {
   ScrollView,
   Image,
   Modal,
+  FlatList
 } from "react-native";
 
 import checkbox from "../../assets/icons/Checkbox_empty.svg";
@@ -22,6 +23,9 @@ import boy from "../../assets/boy.jpg";
 import AddTask from "./AddTask";
 import AddEvent from "./AddEvent";
 import checkBlue from "../../assets/icons/check_blue.svg";
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 // Load the font
 const loadFonts = async () => {
@@ -35,6 +39,97 @@ const loadFonts = async () => {
 export default function Homescreen({ navigation }) {
   const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const today = new Date();
+  const currentDate = new Date();
+  const [creatorId, setCreatorId]= useState([]);
+  const [firstname, setFirstname] = useState([]);
+  const [lastname, setLastname] = useState([]);
+  const [isChanged, setIsChanged] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const [announcements, setAnnouncements] = useState([]);
+  const [eventName, setEventname] = useState("");
+  const [description, setDescription] = useState("");
+  const [datePlanned, setDatePlanned] = useState("");
+  const [dateCreated, setDateCreated] = useState("");
+  const [location, setLocation] = useState("");
+  const [hour, setHour] = useState("");
+  const [invitationMessage, setInvitationMessage] = useState("");
+
+  const loadFonts = async () => {
+    try {
+      await Font.loadAsync({
+        moon: require("../assets/fonts/Moon.otf"),
+        manrope: require("../assets/fonts/Manrope.ttf"),
+        novatica: require("../assets/fonts/Novatica.ttf"),
+        novaticaBold: require("../assets/fonts/Novatica-Bold.ttf"),
+      });
+      setFontsLoaded(true);
+    } catch (error) {
+      console.error("Error loading fonts:", error);
+    }
+  };
+
+
+  useEffect(() => {
+     loadFonts();
+
+      // getUser();
+      // getHouse();
+      getAnnouncement(); // Fetch announcements initially
+
+  }, [isChanged]);
+
+  const handleDeleteItem = (itemId) => {
+    setAnnouncements((prevAnnouncements) =>
+      prevAnnouncements.filter((item) => item._id !== itemId)
+    );
+  };
+  
+  const handleInputChange = (text) => {
+    setInputValue(text);
+  };
+
+  const options = {
+    day: "numeric",
+    month: "long",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: false,
+  };
+
+  const formattedDate = currentDate.toLocaleString("nl-NL", options).replace("om", "-");;
+
+
+  const getAnnouncement = async () => {
+    const token = await AsyncStorage.getItem('token');
+    const houseId = await AsyncStorage.getItem('houseId');
+    console.log(token)
+    if(houseId){
+      fetch(`http://localhost:3000/api/v1/anouncement/${houseId}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        }
+        })
+        .then(response =>  response.json())
+        .then(data => {   
+          if (data.status === "success") {
+            const fetchedAnnouncements = data.result.map((announcement) => announcement);
+            console.log(fetchedAnnouncements)
+            setAnnouncements(fetchedAnnouncements);
+            } 
+            else if(data === "failed"){
+              console.log(data.result);
+            }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    } else {
+      console.log(kaas);
+    }
+
+};
 
   const startOfWeek = new Date(
     today.getFullYear(),
@@ -436,7 +531,40 @@ export default function Homescreen({ navigation }) {
           <Text style={styles.buttonText}>Add event</Text>
         </TouchableOpacity>
       </View>
-    </View>
+      {announcements.length === 0 ? (
+          <Text style={styles.nothingFound}>No announcements found</Text>
+        ) : (
+          <FlatList
+            keyExtractor={(item) => item._id}
+            data={announcements}
+            renderItem={({ item }) => {
+              let announcementStyle;
+              let announcementTextStyle;
+
+              switch (item.type) {
+                case "Event":
+                  announcementStyle = styles.event;
+                  announcementTextStyle = styles.announcementTextEventPayment;
+                  return (
+                    <>
+                      <View style={announcementStyle}>
+                      <Text style={announcementTextStyle}>{item.eventName}</Text>
+                      <Text style={announcementTextStyle}>{item.description}</Text>
+                      <Text style={announcementTextStyle}>{item.creatorId}</Text>
+                      <Text style={announcementTextStyle}>{item.datePlanned}</Text>
+                      <Text style={announcementTextStyle}>{item.hour}</Text>
+                      <Text style={announcementTextStyle}>{item.invitationMessage}</Text>
+
+
+                      </View>
+                    </>
+                    
+                  );
+              }
+
+            }}
+          />
+        )}    </View>
   );
 }
 

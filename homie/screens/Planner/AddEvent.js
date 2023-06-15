@@ -17,13 +17,13 @@ import upload from "../../assets/icons/upload.svg";
 import dropdown from "../../assets/icons/dropdown.svg";
 import manrope from "../../assets/fonts/Manrope-Regular.ttf";
 import SaveAndCancel from "../../compontents/SaveAndCancel"; // Voeg deze importregel toe
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import * as ImagePicker from "expo-image-picker";
 
 export default function AddEvent() {
   const [startDate, setStartDate] = useState(new Date());
   const navigation = useNavigation();
-  const [eventName, setEventName] = useState("");
   const [eventDescription, setEventDescription] = useState("");
   const [eventLocation, setEventLocation] = useState("");
   const [eventHour, setEventHour] = useState("");
@@ -31,6 +31,98 @@ export default function AddEvent() {
   const [eventNote, setEventNote] = useState("");
   const [eventDate, setEventDate] = useState("");
   const [selectedFileName, setSelectedFileName] = useState("");
+  const currentDate = new Date();
+
+  const [firstname, setFirstname] = useState([]);
+  const [lastname, setLastname] = useState([]);
+  const [isChanged, setIsChanged] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const [announcements, setAnnouncements] = useState([]);
+  const [eventName, setEventname] = useState("");
+  const [description, setDescription] = useState("");
+  const [datePlanned, setDatePlanned] = useState("");
+  const [dateCreated, setDateCreated] = useState("");
+  const [location, setLocation] = useState("");
+  const [hour, setHour] = useState("");
+  const [invitationMessage, setInvitationMessage] = useState("");
+
+  const loadFonts = async () => {
+    try {
+      await Font.loadAsync({
+        moon: require("../assets/fonts/Moon.otf"),
+        manrope: require("../assets/fonts/Manrope.ttf"),
+        novatica: require("../assets/fonts/Novatica.ttf"),
+        novaticaBold: require("../assets/fonts/Novatica-Bold.ttf"),
+      });
+      setFontsLoaded(true);
+    } catch (error) {
+      console.error("Error loading fonts:", error);
+    }
+  };
+
+
+  useEffect(() => {
+     loadFonts();
+
+      // getUser();
+      // getHouse();
+      getAnnouncement(); // Fetch announcements initially
+
+  }, [isChanged]);
+
+  const handleDeleteItem = (itemId) => {
+    setAnnouncements((prevAnnouncements) =>
+      prevAnnouncements.filter((item) => item._id !== itemId)
+    );
+  };
+  
+  const handleInputChange = (text) => {
+    setInputValue(text);
+  };
+
+  const options = {
+    day: "numeric",
+    month: "long",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: false,
+  };
+
+  const formattedDate = currentDate.toLocaleString("nl-NL", options).replace("om", "-");;
+
+
+  const getAnnouncement = async () => {
+    const token = await AsyncStorage.getItem('token');
+    const houseId = await AsyncStorage.getItem('houseId');
+    console.log(token)
+    if(houseId){
+      fetch(`http://localhost:3000/api/v1/anouncement/${houseId}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        }
+        })
+        .then(response =>  response.json())
+        .then(data => {   
+          if (data.status === "success") {
+            const fetchedAnnouncements = data.result.map((announcement) => announcement);
+            console.log(fetchedAnnouncements)
+            setAnnouncements(fetchedAnnouncements);
+            } 
+            else if(data === "failed"){
+              console.log(data.result);
+            }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    } else {
+      console.log(kaas);
+    }
+
+};
+
 
   const handleSelectPicture = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
