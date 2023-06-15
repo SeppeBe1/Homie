@@ -52,7 +52,6 @@ export default function Homescreen({ navigation }) {
 
   useEffect(() => {
     loadFonts();
-
     getUser();
     getHouse();
     getAnnouncement(); // Fetch announcements initially

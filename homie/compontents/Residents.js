@@ -135,20 +135,24 @@ const Residents = ({ houseCode }) => {
 
     return residentsData.map((resident, index) => (
       <View style={styles.residentFull} key={index}>
-        <View style={styles.residentProfile}>
-          <View style={styles.status}>
-            <Image source={profilePicture} style={styles.profilePicture} />
-            <View
-              style={[
-                styles.circle,
-                { backgroundColor: resident.profileStatusColor },
-              ]}
-            />
+        <TouchableOpacity
+          onPress={() => navigation.navigate("housemateprofile")}
+        >
+          <View style={styles.residentProfile}>
+            <View style={styles.status}>
+              <Image source={profilePicture} style={styles.profilePicture} />
+              <View
+                style={[
+                  styles.circle,
+                  { backgroundColor: resident.profileStatusColor },
+                ]}
+              />
+            </View>
+            <Text>
+              {resident.firstname} {resident.lastname}
+            </Text>
           </View>
-          <Text>
-            {resident.firstname} {resident.lastname}
-          </Text>
-        </View>
+        </TouchableOpacity>
       </View>
     ));
   };
@@ -156,17 +160,20 @@ const Residents = ({ houseCode }) => {
   const navigation = useNavigation();
 
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.h3}>Our residents</Text>
-        <TouchableOpacity style={styles.residentsTitle} onPress={toggleModal}>
-          <Text style={styles.addResident}>Add resident</Text>
-          <Image source={addButton} style={{ width: 20, height: 20 }} />
+        <Text style={styles.h3}>Our homies</Text>
+        <TouchableOpacity
+          style={styles.addButtonContainer}
+          onPress={toggleModal}
+        >
+          <Text style={styles.addResidentText}>Add resident</Text>
+          <Image source={addButton} style={styles.addButtonIcon} />
         </TouchableOpacity>
       </View>
       {renderResidents()}
-      <TouchableOpacity style={styles.leave} onPress={leaveHouse}>
-        <Text style={styles.leaveText}>Leave House</Text>
+      <TouchableOpacity style={styles.leaveButton} onPress={leaveHouse}>
+        <Text style={styles.leaveButtonText}>Leave House</Text>
       </TouchableOpacity>
 
       <Modal visible={showModal} animationType="fade" transparent>
@@ -177,105 +184,37 @@ const Residents = ({ houseCode }) => {
           <TouchableOpacity style={styles.closeButton} onPress={toggleModal}>
             <Image source={crossIcon} style={styles.closeIcon} />
           </TouchableOpacity>
-          <View style={{ flex: 1, gap: 24 }}>
-            <Text
-              style={{
-                fontFamily: "moon",
-                fontWeight: "bold",
-                fontSize: 16,
-                color: "#160635",
-              }}
-            >
-              <Text>New resident</Text>
-            </Text>
-            <Text
-              style={{
-                fontFamily: "manrope",
-                fontSize: 16,
-                color: "#160635",
-              }}
-            >
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>New resident</Text>
+            <Text style={styles.modalText}>
               You want to add a new resident? Perfect! Just share this personal
               code, so your roomie can register and join the house.
             </Text>
-            <Text
-              style={{
-                fontFamily: "moon",
-                color: "#160635",
-                fontSize: 24,
-                fontWeight: "bold",
-                alignSelf: "center",
-              }}
-            >
-              {houseCode}
-            </Text>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                gap: 15,
-                justifyContent: "center",
-                alignItems: "center",
-                paddingHorizontal: 65,
-              }}
-            >
+            <Text style={styles.modalCode}>{houseCode}</Text>
+            <View style={styles.shareButtonsContainer}>
               <TouchableOpacity
-                style={{
-                  backgroundColor: "#B900F4",
-                  borderRadius: 30,
-                  width: 50,
-                  height: 50,
-                  alignSelf: "center",
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
+                style={[styles.shareButton, styles.shareButtonPurple]}
                 onPress={handleShare}
               >
-                <Image style={{ width: 18, height: 20 }} source={share} />
+                <Image style={styles.shareButtonIcon} source={share} />
               </TouchableOpacity>
               <TouchableOpacity
-                style={{
-                  backgroundColor: "#0E8EF1",
-                  borderRadius: 30,
-                  width: 50,
-                  height: 50,
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
+                style={[styles.shareButton, styles.shareButtonBlue]}
                 onPress={() =>
                   Linking.openURL("fb-messenger://share?link=<YOUR_SHARE_LINK>")
                 }
               >
-                <Image style={{ width: 18, height: 18 }} source={messenger} />
+                <Image style={styles.shareButtonIcon} source={messenger} />
               </TouchableOpacity>
               <TouchableOpacity
-                style={{
-                  backgroundColor: "#25D366",
-                  borderRadius: 30,
-                  width: 50,
-                  height: 50,
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
+                style={[styles.shareButton, styles.shareButtonGreen]}
                 onPress={() =>
                   Linking.openURL(
-                    `whatsapp://send?text=Join our house with this code: ${houseCode}`
+                    "whatsapp://send?text=Join our house with this code: 986 546"
                   )
                 }
               >
-                <Image
-                  source={whatsapp}
-                  style={{
-                    padding: 10,
-                    width: 18,
-                    height: 18,
-                    textAlign: "center",
-                    alignItems: "center",
-                  }}
-                />
+                <Image style={styles.shareButtonIcon} source={whatsapp} />
               </TouchableOpacity>
             </View>
           </View>
@@ -286,52 +225,45 @@ const Residents = ({ houseCode }) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingTop: 35,
+    paddingBottom: 20,
+  },
   h3: {
     fontFamily: "moon",
     fontSize: 14,
     color: "#160635",
-    paddingVertical: 40,
     fontWeight: "bold",
   },
-  leave: {
-    textAlign: "center",
-    fontFamily: "manrope",
-    color: "#FF7A7A",
-    paddingTop: 29,
-    textDecorationLine: "underline",
-  },
-  leaveText: {
-    textAlign: "center",
-    fontFamily: "manrope",
-    color: "#FF7A7A",
-    paddingTop: 29,
-    textDecorationLine: "underline",
-  },
-  header: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  residentsTitle: {
-    flex: 1,
+  addButtonContainer: {
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "flex-end",
+  },
+  addResidentText: {
+    fontFamily: "manrope",
+    fontSize: 13,
+    color: "#A5A5A5",
+    paddingRight: 5,
+  },
+  addButtonIcon: {
+    width: 20,
+    height: 20,
   },
   residentFull: {
     backgroundColor: "#FAFAFA",
     marginBottom: 8,
     height: 56,
     width: "100%",
-  },
-  addResident: {
-    fontFamily: "manrope",
-    fontSize: 13,
-    color: "#A5A5A5",
-    paddingRight: 5,
+    borderRadius: 10,
+    padding: 10,
   },
   residentProfile: {
-    flex: 1,
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
@@ -353,6 +285,22 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
   },
+  leaveButton: {
+    textAlign: "center",
+    fontFamily: "manrope",
+    color: "#FF7A7A",
+    paddingTop: 29,
+    textDecorationLine: "underline",
+  },
+  leaveButtonText: {
+    fontFamily: "manrope",
+    color: "#FF7A7A",
+    textDecorationLine: "underline",
+  },
+  name: {
+    fontFamily: "manrope",
+    fontSize: 16,
+  },
   overlay: {
     flex: 1,
     backgroundColor: "rgba(22, 6, 53, 0.5)",
@@ -360,13 +308,15 @@ const styles = StyleSheet.create({
   modalContainer: {
     height: 314,
     width: 342,
-    marginTop: 265,
-    marginLeft: 35,
-    marginRight: 24,
     backgroundColor: "#FFFFFF",
     borderRadius: 20,
     padding: 16,
     position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    top: "50%",
+    left: "50%",
+    transform: [{ translateX: -171 }, { translateY: -157 }],
   },
   closeButton: {
     position: "absolute",
@@ -376,6 +326,59 @@ const styles = StyleSheet.create({
   closeIcon: {
     width: 25,
     height: 25,
+  },
+  modalContent: {
+    flex: 1,
+    justifyContent: "space-between",
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
+  modalTitle: {
+    fontFamily: "moon",
+    fontWeight: "bold",
+    fontSize: 16,
+    color: "#160635",
+    alignSelf: "left",
+  },
+  modalText: {
+    fontFamily: "manrope",
+    fontSize: 16,
+    color: "#160635",
+  },
+  modalCode: {
+    fontFamily: "moon",
+    color: "#160635",
+    fontSize: 24,
+    fontWeight: "bold",
+    alignSelf: "center",
+  },
+  shareButtonsContainer: {
+    flexDirection: "row",
+    gap: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 65,
+    paddingBottom: 20,
+  },
+  shareButton: {
+    borderRadius: 30,
+    width: 50,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  shareButtonPurple: {
+    backgroundColor: "#B900F4",
+  },
+  shareButtonBlue: {
+    backgroundColor: "#0E8EF1",
+  },
+  shareButtonGreen: {
+    backgroundColor: "#25D366",
+  },
+  shareButtonIcon: {
+    width: 18,
+    height: 18,
   },
 });
 
