@@ -250,35 +250,20 @@ const getAnnouncement = async () => {
     today.getDate() - ((today.getDay() + 6) % 7)
   );
 
-  const events = [
-    {
-      day: "12",
-      month: "Dec",
-      title: "Houseparty in Casa",
-      image: girl,
-    },
-    {
-      day: "31",
-      month: "Jan",
-      title: "Movie night at the park",
-      image: boy,
-    },
-  ];
-
-  const tasks = [
-    {
-      day: "12",
-      month: "Dec",
-      id: 1,
-      name: "Taking out the dustbin",
-    },
-    {
-      id: 2,
-      day: "31",
-      month: "Jan",
-      name: "Cleaning the kitchen",
-    },
-  ];
+  // const tasks = [
+  //   {
+  //     day: "12",
+  //     month: "Dec",
+  //     id: 1,
+  //     name: "Taking out the dustbin",
+  //   },
+  //   {
+  //     id: 2,
+  //     day: "31",
+  //     month: "Jan",
+  //     name: "Cleaning the kitchen",
+  //   },
+  // ];
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [checkedTasks, setCheckedTasks] = useState([]);
@@ -290,6 +275,7 @@ const getAnnouncement = async () => {
   const togglePopUp = () => {
     setIsPopUpVisible(!isPopUpVisible);
   };
+  
 
   const handleEventPress = (event) => {
     navigation.navigate("EventDetails", { event });
@@ -373,7 +359,62 @@ const getAnnouncement = async () => {
       </View>
       <View style={styles.todo}>
         <Text style={styles.h3black}>Your today tasks and events</Text>
-        {tasks.map((task) => (
+        {announcements.length === 0 ? (
+        <Text style={styles.nothingFound}>No tasks or events found</Text>
+      ) : (
+        <FlatList
+          keyExtractor={(item) => item._id}
+          data={announcements.filter(
+            (item) =>
+            {
+              const today = new Date();
+              const itemDate = new Date(item.datePlanned);
+              return (
+                (item.type === 'Task' || item.type === 'Event') &&
+                itemDate.toDateString() === today.toDateString()
+              );
+            }
+              // (item.type === 'Task' || item.type === 'Event') &&
+              // new Date(item.date).toDateString() === new Date().toDateString()
+          )}
+          renderItem={({ item }) => {
+            return (
+              <TouchableOpacity
+                key={(item._id)}
+                onPress={() => togglePopup(item._id)}
+                style={{ marginVertical: 5 }}
+              >
+                <View key={item._id} style={styles.tasks}>
+            <TouchableOpacity onPress={() => handleTaskCheck(item._id)}>
+              <Image
+                source={checkedTasks.includes(item._id) ? checkBlue : checkbox}
+                style={{ width: 16, height: 16 }}
+              />
+            </TouchableOpacity>
+            <View>
+              <Text
+                style={{
+                  fontFamily: "manrope",
+                  fontSize: 14,
+                  textDecorationLine: checkedTasks.includes(item._id)
+                    ? "line-through"
+                    : "none",
+                }}
+              >
+                {item.activity}
+              </Text>
+            </View>
+          </View>
+              </TouchableOpacity>
+            );
+          }}
+        />
+      )}
+
+
+
+
+        {/* {tasks.map((task) => (
           <View key={task.id} style={styles.tasks}>
             <TouchableOpacity onPress={() => handleTaskCheck(task.id)}>
               <Image
@@ -395,7 +436,7 @@ const getAnnouncement = async () => {
               </Text>
             </View>
           </View>
-        ))}
+        ))} */}
       </View>
       <View style={{ marginTop: 20, paddingHorizontal: 24 }}>
         <View
@@ -424,7 +465,7 @@ const getAnnouncement = async () => {
         }}
       >
         {announcements.length === 0 ? (
-          <Text style={styles.nothingFound}>No announcements found</Text>
+          <Text style={styles.nothingFound}>No events found</Text>
         ) : (
           <FlatList
             keyExtractor={(item) => item._id}
@@ -515,52 +556,61 @@ const getAnnouncement = async () => {
           gap: 8,
           marginTop: 8,
         }}
-      >
-        {tasks.map((task) => (
-          <TouchableOpacity key={task.id} onPress={togglePopUp}>
-            <View
-              style={{
-                marginHorizontal: 24,
-                display: "flex",
-                flexDirection: "row",
-                backgroundColor: "white",
-                paddingHorizontal: 11,
-                paddingVertical: 8,
-                borderRadius: 10,
-                alignItems: "center",
-                gap: 29,
-                alignItems: "flex-end",
-              }}
-            >
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}
+      >{announcements.length === 0 ? (
+        <Text style={styles.nothingFound}>No tasks found</Text>
+      ) : (
+        <FlatList
+          keyExtractor={(item) => item._id}
+          data={announcements.filter((item) => item.type === "Task")} // Filter announcements by type "event"
+          renderItem={({ item }) => {
+            return (
+              <TouchableOpacity
+                key={(item._id)}
+                onPress={() => togglePopup(item._id)}
+                style={{ marginVertical: 5 }}
               >
-                <Text
+                <View
                   style={{
-                    fontFamily: "novatica",
-                    fontWeight: "bold",
-                    fontSize: 20,
+                    marginHorizontal: 24,
+                    display: "flex",
+                    flexDirection: "row",
+                    backgroundColor: "white",
+                    paddingHorizontal: 11,
+                    paddingVertical: 8,
+                    borderRadius: 10,
+                    alignItems: "flex-end",
+                    gap: 29,
                   }}
                 >
-                  {task.day}
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: "novatica",
-                    fontWeight: "bold",
-                    fontSize: 10,
-                  }}
-                >
-                  {task.month}
-                </Text>
-              </View>
-              <Text style={styles.h3black}>{task.name}</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <Text style={{ fontFamily: "novatica", fontWeight: "bold", fontSize: 20 }}>
+                    {new Date(item.datePlanned).getDate()}
+                  </Text>
+                  <Text>
+                    {new Date(item.datePlanned).toLocaleString("default", { month: "short" })}
+                  </Text>
+                    <Text
+                      style={{
+                        fontFamily: "novatica",
+                        fontWeight: "bold",
+                        fontSize: 10,
+                      }}
+                    >
+                      {item.month}
+                    </Text>
+                  </View>
+                  <Text style={styles.h3black}>{item.activity}</Text>
+                </View>
+              </TouchableOpacity>
+            );
+          }}
+        />
+      )}
       </View>
 
       <Modal visible={isPopUpVisible} animationType="fade" transparent>
