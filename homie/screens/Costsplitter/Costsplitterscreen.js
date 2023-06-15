@@ -6,6 +6,7 @@ import * as Font from "expo-font";
 import React, { useState, useEffect } from "react";
 import ViewStatistics from "./ViewStatistics";
 import ViewInvoices from "./ViewInvoices";
+import SplitCosts from "./SplitCosts";
 
 // Load the font
 const loadFonts = async () => {
@@ -60,7 +61,7 @@ export default function Costsplitterscreen({ navigation }) {
           }}
         />
         <TouchableOpacity
-          onPress={() => navigation.navigate("SplitCosts")}
+          onPress={() => navigation.navigate(SplitCosts)}
           style={[styles.button]}
         >
           <Text style={styles.buttonText}>Split costs</Text>

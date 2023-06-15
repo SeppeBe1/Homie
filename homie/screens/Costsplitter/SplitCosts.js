@@ -6,13 +6,10 @@ import {
   Image,
   ScrollView,
   TextInput,
-  ImageBackground,
-  Modal,
-  Button,
-  Touchable,
 } from "react-native";
 
 import React, { useState, useEffect } from "react";
+import AskRefund from "./AskRefund";
 import * as Font from "expo-font";
 import MoonFont from "../../assets/fonts/Moon.otf";
 import Novatica from "../../assets/fonts/Novatica-Bold.woff";
@@ -53,12 +50,15 @@ const loadFonts = async () => {
 const SplitCosts = () => {
 
   const [activeCategory, setActiveCategory] = useState(null);
+  const [selectedCategoryImage, setSelectedCategoryImage] = useState(null);
 
-  const handleCategoryPress = (category) => {
+  const handleCategoryPress = (category, imageSource) => {
     if (category === activeCategory) {
       setActiveCategory(null);
+      setSelectedCategoryImage(null);
     } else {
       setActiveCategory(category);
+      setSelectedCategoryImage(imageSource);
     }
   };
 
@@ -90,7 +90,7 @@ const SplitCosts = () => {
             <Text style={styles.debtText}> in debt</Text>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate(AskRefund)}>
               <Text style={styles.buttonText}>Pay off debts</Text>
             </TouchableOpacity>
           </View>
@@ -179,11 +179,60 @@ const SplitCosts = () => {
           <Image source={add} style={{width: 20, height: 20}}/>
         </TouchableOpacity>
       </View>
+
+      <View style={{ width: "100%", paddingHorizontal: 25, marginTop: 15 }}>
+        {selectedCategoryImage === null || selectedCategoryImage === furniture ? (
+          <TouchableOpacity style={styles.transactionContainer}>
+            <View style={styles.transaction}>
+              <Image source={furniture} style={{ width: 18, height: 21 }} />
+              <View style={styles.paidByWho}>
+                <Text style={styles.payTitle}>TV Box</Text>
+                <Text style={styles.payText}>Paid by Jade</Text>
+              </View>
+            </View>
+            <Text style={styles.amount}>€20</Text>
+          </TouchableOpacity>
+        ) : null}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  payText: {
+    fontFamily: "manrope",
+    fontWeight: "regular",
+    fontSize: 12,
+  },
+  payTitle: {
+    fontFamily: "moon",
+    fontWeight: "bold",
+    fontSize: 14,
+    color: "#160635",
+  },
+  amount: {
+    marginRight: 20,
+    fontFamily: "manrope",
+    fontWeight: "bold",
+    fontSize: 14,
+  },
+  paidByWho: {
+    marginLeft: 10,
+  },
+  transaction: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 20,
+  },
+  transactionContainer:{
+    width: "100%", 
+    backgroundColor: "white", 
+    height: "53px", 
+    borderRadius: 10,
+    flexDirection:"row", 
+    justifyContent:"space-between", 
+    alignItems:"center",
+  },
   activeCategory: {
     backgroundColor: '#F57ED4',
   },
