@@ -19,8 +19,13 @@ export default function AddTask() {
   const [eventName, setEventName] = useState("");
   const [taskDeadline, setTaskDeadline] = useState("");
   const [taskRules, setTaskRules] = useState("");
+  const [task, setTask] = useState("");
+  const [newTask, setNewTask] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [datePickerVisibility, setDatePickerVisibility] = useState(false);
+  const isEventNameFilled = eventName !== "";
+  const isTaskDeadlineFilled = taskDeadline !== "";
+  const isTaskRulesFilled = taskRules !== "";
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -29,16 +34,6 @@ export default function AddTask() {
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
-
-  // const handleConfirm = (date) => {
-  //   console.warn("A date has been picked: ", date);
-  //   setTaskDeadline(date.toLocaleDateString()); // convert date to a string in local date format
-  //   hideDatePicker();
-  // };
-
-  const isEventNameFilled = eventName !== "";
-  const isTaskDeadlineFilled = taskDeadline !== "";
-  const isTaskRulesFilled = taskRules !== "";
 
   const CustomDatePicker = () => {
     if (Platform.OS === "web") {
@@ -65,6 +60,10 @@ export default function AddTask() {
       );
     }
   };
+
+  useEffect(() => {
+    getTask();
+  }, []);
 
   return (
     <View>
