@@ -1,3 +1,4 @@
+import React, { Component } from "react";
 import {
   Text,
   TouchableOpacity,
@@ -7,9 +8,10 @@ import {
   Modal,
   TextInput,
 } from "react-native";
-import React, { Component } from "react";
+
 import checkbox from "../assets/icons/check.svg";
 import addRule from "../assets/icons/add.svg";
+import crossIcon from "../assets/icons/close.svg";
 
 export default class Houserules extends Component {
   state = {
@@ -69,41 +71,27 @@ export default class Houserules extends Component {
           <TouchableOpacity style={styles.overlay} activeOpacity={1}>
             <View style={styles.popup}>
               <Text style={styles.popupTitle}>New houserule</Text>
+              <TouchableOpacity
+                style={styles.closeButtonContainer}
+                onPress={this.togglePopupVisibility}
+              >
+                <Image source={crossIcon} style={styles.closeIcon} />
+              </TouchableOpacity>
               <TextInput
-                style={[
-                  styles.input,
-                  { borderWidth: 0, height: 150, paddingTop: 10 },
-                ]} // Aanpassing: verwijder de border en stel de hoogte in
-                multiline={true} // Aanpassing: maak de tekst invoerveld meerdere regels
-                numberOfLines={5} // Aanpassing: stel het aantal regels in dat zichtbaar is
+                style={styles.input}
+                multiline={true}
+                numberOfLines={5}
                 value={this.state.newRule}
                 onChangeText={this.handleRuleChange}
                 onSubmitEditing={this.addRuleToList}
                 placeholder="Type here..."
-                placeholderTextColor="#999999" // Aanpassing: kleur van de placeholder
+                placeholderTextColor="#999999"
               />
-
               <TouchableOpacity
-                style={[styles.addList, { alignSelf: "center" }]} // Aanpassing: centreren van de knop
+                style={styles.addList}
                 onPress={this.addRuleToList}
               >
-                <Text
-                  style={{
-                    fontFamily: "moon",
-                    fontWeight: "bold",
-                    fontSize: 18,
-                    textAlign: "center",
-                    color: "white",
-                  }}
-                >
-                  Add to list
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.closeButtonContainer} // Nieuwe stijl voor de close button
-                onPress={this.togglePopupVisibility}
-              >
-                <Text style={styles.closeButton}>X</Text>
+                <Text style={styles.addButtonTitle}>Add to list</Text>
               </TouchableOpacity>
             </View>
           </TouchableOpacity>
@@ -122,9 +110,8 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     fontWeight: "bold",
   },
-
   ruleContainer: {
-    height: "62px",
+    height: 62,
     width: "100%",
     backgroundColor: "white",
     flexDirection: "row",
@@ -143,12 +130,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#333333",
   },
-
   overlay: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
+  },
+  closeIcon: {
+    marginTop: 10,
+    width: 25,
+    height: 25,
   },
   popup: {
     backgroundColor: "white",
@@ -165,26 +156,32 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 10,
     fontSize: 16,
-    height: 190,
-    paddingLeft: 5, // Aanpassing: voeg wat padding aan de linkerkant toe
+    height: 150,
+    paddingLeft: 5,
+    marginTop: 10,
   },
   addList: {
     backgroundColor: "#B900F4",
     padding: 20,
     width: 200,
     borderRadius: 30,
+    alignSelf: "center",
+  },
+  addButtonTitle: {
+    fontFamily: "moon",
+    fontWeight: "bold",
+    fontSize: 18,
+    textAlign: "center",
+    color: "white",
   },
   closeButtonContainer: {
     position: "absolute",
     top: 10,
     right: 10,
   },
-  closeButton: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
   addButton: {
     alignSelf: "center",
     paddingTop: 10,
+    paddingBottom: 10,
   },
 });

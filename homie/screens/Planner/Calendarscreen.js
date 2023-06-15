@@ -21,6 +21,7 @@ import girl from "../../assets/girl.jpg";
 import boy from "../../assets/boy.jpg";
 import AddTask from "./AddTask";
 import AddEvent from "./AddEvent";
+import checkBlue from "../../assets/icons/check_blue.svg";
 
 // Load the font
 const loadFonts = async () => {
@@ -72,6 +73,7 @@ export default function Homescreen({ navigation }) {
   ];
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
+  const [checkedTasks, setCheckedTasks] = useState([]);
 
   useEffect(() => {
     loadFonts();
@@ -83,6 +85,13 @@ export default function Homescreen({ navigation }) {
 
   const handleEventPress = (event) => {
     navigation.navigate("EventDetails", { event });
+  };
+  const handleTaskCheck = (taskId) => {
+    if (checkedTasks.includes(taskId)) {
+      setCheckedTasks(checkedTasks.filter((id) => id !== taskId));
+    } else {
+      setCheckedTasks([...checkedTasks, taskId]);
+    }
   };
 
   return (
@@ -158,14 +167,20 @@ export default function Homescreen({ navigation }) {
         <Text style={styles.h3black}>Your today tasks and events</Text>
         {tasks.map((task) => (
           <View key={task.id} style={styles.tasks}>
-            <View>
-              <Image source={checkbox} style={{ width: 16, height: 16 }} />
-            </View>
+            <TouchableOpacity onPress={() => handleTaskCheck(task.id)}>
+              <Image
+                source={checkedTasks.includes(task.id) ? checkBlue : checkbox}
+                style={{ width: 16, height: 16 }}
+              />
+            </TouchableOpacity>
             <View>
               <Text
                 style={{
                   fontFamily: "manrope",
                   fontSize: 14,
+                  textDecorationLine: checkedTasks.includes(task.id)
+                    ? "line-through"
+                    : "none",
                 }}
               >
                 {task.name}
@@ -533,6 +548,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     fontFamily: "novatica",
+    fontWeight: "bold"
   },
   h3: {
     fontFamily: "moon",
