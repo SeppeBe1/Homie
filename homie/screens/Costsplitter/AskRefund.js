@@ -20,7 +20,8 @@ import {
   import pf1 from "../../assets/pf1.png";
   import pf2 from "../../assets/pf2.png";
   import arrowDown from "../../assets/icons/arrowDown.svg";
-import arrowUp from "../../assets/icons/arrowUp.svg";   
+    import arrowUp from "../../assets/icons/arrowUp.svg";   
+
 
 const loadFonts = async () => {
     await Font.loadAsync({
@@ -83,6 +84,7 @@ const AskRefund = () => {
                 </View>
                 <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20, position: "relative", zIndex:99 }}>
                     <Text style={{ fontSize: 14, fontFamily: "moon", fontWeight: "bold" }}>History</Text>
+                    
                     <TouchableOpacity onPress={toggleDropdown} style={{ flexDirection: "row", alignItems: "center" }}>
                         <Text style={{ fontSize: 14, fontFamily: "manrope", fontWeight: "regular", color: "#939393", marginRight: 7 }}>{selectedStatus}</Text>
                         {isDropdownVisible ? (

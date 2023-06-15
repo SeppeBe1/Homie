@@ -10,6 +10,7 @@ import {
 
 import React, { useState, useEffect } from "react";
 import AskRefund from "./AskRefund";
+import AddSpending from "./AddSpending";
 import * as Font from "expo-font";
 import MoonFont from "../../assets/fonts/Moon.otf";
 import Novatica from "../../assets/fonts/Novatica-Bold.woff";
@@ -174,7 +175,7 @@ const SplitCosts = () => {
 
       <View style={{flexDirection: "row", justifyContent: "space-between", alignItems:"center", paddingHorizontal: 25, marginTop: 20}}>
         <Text style={{fontSize: "0.875rem", fontFamily: "moon", fontWeight: "bold",}}>Transactions</Text>
-        <TouchableOpacity style={{flexDirection: "row"}}>
+        <TouchableOpacity style={{flexDirection: "row"}} onPress={() => navigation.navigate(AddSpending)}>
           <Text style={{fontSize: "0.875rem", fontFamily: "manrope", fontWeight: "regular", color: "#939393", marginRight:7}}>Add spending</Text>
           <Image source={add} style={{width: 20, height: 20}}/>
         </TouchableOpacity>

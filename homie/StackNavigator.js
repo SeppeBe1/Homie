@@ -26,6 +26,7 @@ import AddEvent from "./screens/Planner/AddEvent";
 import EventDetails from "./screens/Planner/EventDetails";
 import SplitCosts from "./screens/Costsplitter/SplitCosts";
 import AskRefund from "./screens/Costsplitter/AskRefund";
+import AddSpending from "./screens/Costsplitter/AddSpending";
 import ViewStatistics from "./screens/Costsplitter/ViewStatistics";
 import ViewInvoices from "./screens/Costsplitter/ViewInvoices";
 import ChangePassword from "./screens/ChangePassword";
@@ -80,6 +81,7 @@ const CostsplitterscreenStack = () => {
       <Stack.Screen name="costsplitter" component={Costsplitter} />
       <Stack.Screen name="SplitCosts" component={SplitCosts} />
       <Stack.Screen name="AskRefund" component={AskRefund} />
+      <Stack.Screen name="AddSpending" component={AddSpending} />
       <Stack.Screen name="ViewInvoices" component={ViewInvoices} />
       <Stack.Screen name="ViewStatistics" component={ViewStatistics} />
     </Stack.Navigator>
