@@ -246,10 +246,12 @@ export default function Homescreen({ navigation }) {
                 height: "100%",
               }}
             >
-              <Button
-                title={housenamee}
+              <TouchableOpacity
+                style={styles.button}
                 onPress={() => navigation.navigate("homeaccount")}
-              />
+              >
+                <Text style={styles.buttonText}>{housenamee}</Text>
+              </TouchableOpacity>
             </View>
           }
           rightComponent={
@@ -431,6 +433,19 @@ export default function Homescreen({ navigation }) {
                       </View>
                     </>
                   );
+                case "Task":
+                  announcementStyle = styles.event;
+                  announcementTextStyle = styles.announcementTextEventPayment;
+                  return (
+                    <>
+                      <View style={announcementStyle}>
+                        <Text style={announcementTextStyle}>
+                          <Text>19h00: </Text>
+                          {item.description}
+                        </Text>
+                      </View>
+                    </>
+                  );
               }
             }}
           />
@@ -480,6 +495,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+
+  button: {},
+
+  buttonText: {
+    color: "white",
+    fontFamily: "novatica",
+    fontWeight: "bold",
+    fontSize: "20px",
   },
   modalContent: {
     marginTop: 256,
