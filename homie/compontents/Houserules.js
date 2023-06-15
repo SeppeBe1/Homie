@@ -8,48 +8,70 @@ import {
   Modal,
   TextInput,
 } from "react-native";
+
 import checkbox from "../assets/icons/check.svg";
 import addRule from "../assets/icons/add.svg";
 import crossIcon from "../assets/icons/close.svg";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function Houserules(props) {
+export default function Houserules() {
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [newRule, setNewRule] = useState("");
   const [houseRules, setHouseRules] = useState([]);
-  const [description, setDescription] = useState("");
 
   useEffect(() => {
-    getHouserule();
+    getHouseRules();
   }, []);
 
-  const getHouserule = async () => {
+  const togglePopupVisibility = () => {
+    setPopupVisible((prevState) => !prevState);
+  };
+
+  const handleRuleChange = (text) => {
+    setNewRule(text);
+  };
+
+  const addRuleToList = () => {
+    if (newRule.trim() !== "") {
+      setPopupVisible(false);
+      setNewRule("");
+      const newHouseRule = { description: newRule, houseId: "your-house-id" };
+      setHouseRules((prevHouseRules) => [...prevHouseRules, newHouseRule]);
+    }
+  };
+
+  const getHouseRules = async () => {
     const token = await AsyncStorage.getItem("token");
     const houseId = await AsyncStorage.getItem("houseId");
 
-    fetch(`http://localhost:3000/api/v1/users/${houseId}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status === "success") {
-          setDescription(data.data.description);
-          setHouseRules(data.data.houseRules);
-          AsyncStorage.setItem("houseId", data.data.houseId);
-        }
+    if (houseId) {
+      fetch(`http://localhost:3000/api/v1/houserules/${houseId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       })
-      .catch((error) => {
-        console.error(error);
-      });
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "success") {
+            const fetchedHouseRules = data.result.map((houserule) => houserule);
+            setHouseRules(fetchedHouseRules);
+          } else if (data.status === "failed") {
+            console.log(data.result);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      console.log("houseId is not available");
+    }
   };
 
   const createHouserule = async () => {
-    const houseId = await AsyncStorage.getItem("houseId");
     const token = await AsyncStorage.getItem("token");
+    const houseId = await AsyncStorage.getItem("houseId");
 
     fetch(`http://localhost:3000/api/v1/houserules/`, {
       method: "POST",
@@ -58,8 +80,8 @@ export default function Houserules(props) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        type: "Announcement",
-        description: description,
+        type: "Houserule",
+        description: newRule,
         houseId: houseId,
       }),
     })
@@ -68,7 +90,8 @@ export default function Houserules(props) {
         console.log(data);
 
         if (data.status === "success") {
-          const updatedHouseRules = [...houseRules, description];
+          const newHouseRule = { description: newRule, houseId: houseId };
+          const updatedHouseRules = [...houseRules, newHouseRule];
 
           setNewRule("");
           setHouseRules(updatedHouseRules);
@@ -87,21 +110,13 @@ export default function Houserules(props) {
       });
   };
 
-  const togglePopupVisibility = () => {
-    setPopupVisible((prevState) => !prevState);
-  };
-
-  const handleRuleChange = (text) => {
-    setNewRule(text);
-  };
-
   return (
     <View>
       <Text style={styles.h3}>Our House Rules</Text>
       {houseRules.map((rule, index) => (
         <View key={index} style={styles.ruleContainer}>
           <Image source={checkbox} style={styles.checkbox} />
-          <Text style={styles.rule}>{rule}</Text>
+          <Text style={styles.rule}>{rule.description}</Text>
         </View>
       ))}
       <TouchableOpacity
@@ -111,7 +126,11 @@ export default function Houserules(props) {
         <Image source={addRule} style={{ width: 50, height: 50 }} />
       </TouchableOpacity>
 
-      <Modal visible={isPopupVisible} animationType="fade" transparent={true}>
+      <Modal
+        visible={isPopupVisible}
+        animationType="fade"
+        transparent={true}
+      >
         <TouchableOpacity style={styles.overlay} activeOpacity={1}>
           <View style={styles.popup}>
             <Text style={styles.popupTitle}>New houserule</Text>
@@ -130,7 +149,7 @@ export default function Houserules(props) {
               placeholder="Type here..."
               placeholderTextColor="#999999"
             />
-            <TouchableOpacity style={styles.addList} onPress={createHouserule}>
+            <TouchableOpacity style={styles.addList} onPress={addRuleToList}>
               <Text style={styles.addButtonTitle}>Add to list</Text>
             </TouchableOpacity>
           </View>
