@@ -35,7 +35,7 @@ export default function Houserules() {
     if (newRule.trim() !== "") {
       setPopupVisible(false);
       setNewRule("");
-      const newHouseRule = { description: newRule, houseId: "your-house-id" };
+      const newHouseRule = { description: newRule, houseId: houseId };
       setHouseRules((prevHouseRules) => [...prevHouseRules, newHouseRule]);
     }
   };

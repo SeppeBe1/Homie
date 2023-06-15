@@ -8,13 +8,6 @@ const SaveAndCancel = ({ navigation, title, destination, fileInfo }) => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.buttonText}>Cancel</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate(destination, { fileInfo: fileInfo })
-          }
-        >
-          <Text style={styles.buttonText}>Save</Text>
-        </TouchableOpacity>
       </View>
       <Text style={styles.headerTitle}>{title}</Text>
       <View style={styles.emptyIcon} />
