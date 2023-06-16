@@ -35,6 +35,7 @@ import AddInvoice from "./screens/Costsplitter/AddInvoice";
 import CategoryScreen from "./screens/Costsplitter/CategoryScreen";
 import Memorywall from "./screens/Memorywall";
 import ThankYouScreen from "./screens/ThankYouScreen";
+import CalendarScreen from "./screens/Planner/Calendarscreen";
 
 const Homename = "Home";
 
@@ -148,7 +149,7 @@ const CostsplitterscreenStack = () => {
 const CalendarScreenStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="calendar" component={Calendar} />
+      <Stack.Screen name="Calendar" component={Calendar} />
       <Stack.Screen name="FullCalenderScreen" component={FullCalenderScreen} />
       <Stack.Screen name="EventsScreen" component={EventsScreen} />
       <Stack.Screen name="TasksScreen" component={TasksScreen} />

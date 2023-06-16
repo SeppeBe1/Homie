@@ -18,6 +18,7 @@ export default function Houserules() {
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [newRule, setNewRule] = useState("");
   const [houseRules, setHouseRules] = useState([]);
+  const [houseId, setHouseId] = useState(null); // Declare houseId
 
   useEffect(() => {
     getHouseRules();
@@ -35,7 +36,7 @@ export default function Houserules() {
     if (newRule.trim() !== "") {
       setPopupVisible(false);
       setNewRule("");
-      const newHouseRule = { description: newRule, houseId: "your-house-id" };
+      const newHouseRule = { description: newRule, houseId: houseId };
       setHouseRules((prevHouseRules) => [...prevHouseRules, newHouseRule]);
     }
   };
@@ -43,6 +44,7 @@ export default function Houserules() {
   const getHouseRules = async () => {
     const token = await AsyncStorage.getItem("token");
     const houseId = await AsyncStorage.getItem("houseId");
+    setHouseId(houseId); // Set houseId
 
     if (houseId) {
       fetch(`http://localhost:3000/api/v1/houserules/${houseId}`, {
@@ -80,7 +82,6 @@ export default function Houserules() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        type: "Houserule",
         description: newRule,
         houseId: houseId,
       }),

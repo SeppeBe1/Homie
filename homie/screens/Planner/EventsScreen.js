@@ -185,7 +185,7 @@ export default function FullCalenderScreen() {
                         </Text>
                       </View>
                       <View style={{ marginLeft: 15 }}>
-                        <Text style={styles.titleText}>{item.eventName}</Text>
+                        <Text style={styles.titleText}>{item.activity}</Text>
                         <Text style={styles.descriptionText}>
                           {item.description}
                         </Text>
