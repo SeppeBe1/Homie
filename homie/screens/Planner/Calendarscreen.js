@@ -278,8 +278,17 @@ const getAnnouncement = async () => {
       </View>
       <View style={styles.todo}>
         <Text style={styles.h3black}>Your today tasks and events</Text>
-        {announcements.length === 0 ? (
-        <Text>You're free today!</Text>
+        {announcements.filter(
+    (item) => {
+      const today = new Date();
+      const itemDate = new Date(item.datePlanned);
+      return (
+        (item.type === 'Task' || item.type === 'Event') &&
+        itemDate.toDateString() === today.toDateString()
+      );
+    }
+  ).length === 0 ? (
+            <Text>You're free today!</Text>
       ) : (
         <FlatList
           keyExtractor={(item) => item._id}

@@ -153,8 +153,8 @@ export default function FullCalenderScreen() {
         </View>
       </View>
       <View style={styles.eventContainer}>
-      {announcements.length === 0 ? (
-          <Text style={styles.nothingFound}>No events found</Text>
+      {announcements.filter((item) => item.type === "Event").length === 0 ? (
+          <Text style={styles.nothingFound}>You have no events planned!</Text>
         ) : (
           <FlatList
             keyExtractor={(item) => item._id}
@@ -232,6 +232,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#ffffff",
     fontSize: 14,
+  },
+
+  nothingFound: {
+    marginTop: '220px'
   },
 
   eventContainer: {
