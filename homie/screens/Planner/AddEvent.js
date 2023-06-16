@@ -29,6 +29,7 @@ export default function AddEvent() {
   const [eventPicture, setEventPicture] = useState("");
   const [eventNote, setEventNote] = useState("");
   const [eventDate, setEventDate] = useState("");
+  const [eventName, setEventName] = useState("");
   const [selectedFileName, setSelectedFileName] = useState("");
   const iseventDescriptionFilled = eventDescription !== "";
   const [taskRules, setTaskRules] = useState("");
@@ -281,6 +282,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 20,
+    zIndex: -9999,
   },
   buttonText: {
     fontFamily: "moon",

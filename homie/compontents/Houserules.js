@@ -35,7 +35,7 @@ export default function Houserules() {
     if (newRule.trim() !== "") {
       setPopupVisible(false);
       setNewRule("");
-      const newHouseRule = { description: newRule, houseId: houseId };
+      const newHouseRule = { description: newRule, houseId: "your-house-id" };
       setHouseRules((prevHouseRules) => [...prevHouseRules, newHouseRule]);
     }
   };
@@ -126,11 +126,7 @@ export default function Houserules() {
         <Image source={addRule} style={{ width: 50, height: 50 }} />
       </TouchableOpacity>
 
-      <Modal
-        visible={isPopupVisible}
-        animationType="fade"
-        transparent={true}
-      >
+      <Modal visible={isPopupVisible} animationType="fade" transparent={true}>
         <TouchableOpacity style={styles.overlay} activeOpacity={1}>
           <View style={styles.popup}>
             <Text style={styles.popupTitle}>New houserule</Text>
