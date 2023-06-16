@@ -126,7 +126,7 @@ export default function HousemateProfile({ navigation }) {
               color: "black",
             }}
           >
-            {resident.phone}
+            {resident.phonenumber}
           </Text>
         </View>
       </View>

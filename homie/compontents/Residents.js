@@ -58,7 +58,7 @@ const Residents = ({ houseCode }) => {
             firstname: resident.firstname,
             lastname: resident.lastname,
             email: resident.email,
-            phone: resident.phone,
+            phonenumber: resident.phonenumber,
           }));
           setResidentsData(updatedResidentsData);
           console.log(updatedResidentsData);
