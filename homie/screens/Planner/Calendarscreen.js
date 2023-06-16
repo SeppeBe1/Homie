@@ -178,6 +178,51 @@ const getAnnouncement = async () => {
     console.log('kaas');
   }
 };
+
+const getSpecificAnnouncement = async () => {
+  const token = await AsyncStorage.getItem('token');
+  const houseId = await AsyncStorage.getItem('houseId');
+  console.log(token);
+
+  if (houseId) {
+    fetch(`http://localhost:3000/api/v1/anouncement/specific/${houseId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          const fetchedAnnouncements = data.result; 
+          const updatedAnnouncementsDetails = fetchedAnnouncements.map((itemId) => ({
+            id: itemId.id,
+            type: itemId.type,
+            activity: itemId.activity,
+            datePlanned: itemId.datePlanned,
+            description: itemId.description,
+            hour: itemId.hour,
+            houseId: itemId.houseId,
+            invitationMessage: itemId.invitationMessage
+          }));
+          setAnnouncements(updatedAnnouncementsDetails);
+
+          console.log(fetchedAnnouncements);
+         // setAnnouncements(fetchedAnnouncements);
+        } else if (data.status === 'failed') {
+          console.log(data.result);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  } else {
+    console.log('kaas');
+  }
+};
+
+
   const startOfWeek = new Date(
     today.getFullYear(),
     today.getMonth(),
@@ -196,9 +241,10 @@ const getAnnouncement = async () => {
   };
   
 
-  const handleEventPress = (event) => {
-    navigation.navigate("EventDetails", { event });
+  const handleEventPress = (itemId) => {
+    navigation.navigate("EventDetails", { itemId });
   };
+
   const handleTaskCheck = (taskId) => {
     if (checkedTasks.includes(taskId)) {
       setCheckedTasks(checkedTasks.filter((id) => id !== taskId));
@@ -373,8 +419,8 @@ const getAnnouncement = async () => {
             renderItem={({ item }) => {
               return (
                 <TouchableOpacity
-                  key={item._id}
-                  onPress={() => handleEventPress(item)}
+                  //key={item._id}
+                  onPress={() => handleEventPress((item._id))}
                   style={{ marginVertical: 5 }}
                 >
                   <View

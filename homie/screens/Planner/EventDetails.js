@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 import {
   View,
   StyleSheet,
@@ -13,9 +13,14 @@ import backgroundImage from "../../assets/event_picture.png";
 import location from "../../assets/icons/Location.svg";
 import users from "../../assets/boy2.jpg";
 import { withTheme } from "react-native-elements";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function EventDetails() {
-  const navigation = useNavigation();
+export default function EventDetails({ navigation }) {
+ 
+  const route = useRoute();
+  const { itemId } = route.params; 
+console.log(route.params);
+
 
   return (
     <View>
