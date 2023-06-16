@@ -26,23 +26,14 @@ export default function FullCalenderScreen() {
   const [dateCreated, setDateCreated] = useState("");
   const [location, setLocation] = useState("");
   const [hour, setHour] = useState("");
+  const [isParticipant, setIsParticipant]= useState(false);
   const [invitationMessage, setInvitationMessage] = useState("");
   const [buttonText, setButtonText] = useState("Join the party");
   const [buttonStyle, setButtonStyle] = useState(styles.joinButton);
   const [buttonTextStyle, setButtonTextStyle] = useState(styles.joinButtonText);
 
 
-  const handleButtonClick = () => {
-    if (buttonText === "Join the party") {
-      setButtonText("You're in 🎉");
-      setButtonStyle(styles.joinButtonClicked);
-      setButtonTextStyle(styles.joinButtonTextClicked);
-    } else {
-      setButtonText("Join the party");
-      setButtonStyle(styles.joinButton);
-      setButtonTextStyle(styles.joinButtonText);
-    }
-  };
+ 
 
   useEffect(() => {
    // loadFonts();
@@ -89,6 +80,19 @@ export default function FullCalenderScreen() {
   };
 
   const navigation = useNavigation();
+
+  const handleButtonClick = () => {
+    // if (buttonText === "Join the party") {
+    //   setButtonText("You're in 🎉");
+    //   setButtonStyle(styles.joinButtonClicked);
+    //   setButtonTextStyle(styles.joinButtonTextClicked);
+    // } else {
+    //   setButtonText("Join the party");
+    //   setButtonStyle(styles.joinButton);
+    //   setButtonTextStyle(styles.joinButtonText);
+    // }
+    setIsParticipant(!isParticipant);
+  };
   
   return (
     <View>
@@ -159,9 +163,17 @@ export default function FullCalenderScreen() {
                           <Text style={styles.descriptionText}>{item.description}</Text>
                           <Image source={image} style={styles.image} />
                         </View>
-                        <TouchableOpacity style={buttonStyle} onPress={handleButtonClick}>
+                        {/* <TouchableOpacity style={buttonStyle} onPress={handleButtonClick}>
                           <Text style={buttonTextStyle}>{buttonText}</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
+                        <TouchableOpacity
+                      style={isParticipant ? styles.joinButtonClicked : styles.joinButton}
+                      onPress={handleButtonClick}
+                    >
+                      <Text style={isParticipant ? styles.joinButtonTextClicked : styles.joinButtonText}>
+                        {isParticipant ? "You're in 🎉" : "Join the party"}
+                      </Text>
+                    </TouchableOpacity>
                       </View>
                     </View>
                 </TouchableOpacity>
