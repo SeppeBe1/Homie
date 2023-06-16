@@ -149,41 +149,57 @@ const AddSpending = () => {
                             )}
                     </TouchableOpacity>
                     {isDropdownVisible2 && (
-                    <View style={{ position: "absolute", top: 25, right: 0, width:150, backgroundColor: "#fff", borderRadius: 5, elevation: 3, zIndex: 99, shadowColor: "#000", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.3, shadowRadius: 4 }}>
-                        <View style={{flexDirection:"row", justifyContent: "center", alignItems: "center",}}>
-                            <TouchableOpacity onPress={() => handleStatusSelection2(<Image source={furniture} style={{ width: 21, height:24, marginRight: 10,  }} />)} style={styles.dropdownItem}>
-                            <Image source={furniture} style={{ width: 21, height: 24,  marginRight: 10 , borderWidth:2, borderRadius:99, borderColor:"#F57ED4" }} />
+                    <View style={{ position: "absolute", top: 25, right: 0, width:150, backgroundColor: "#fff", borderRadius: 5, elevation: 3, zIndex: 99, shadowColor: "#000", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.3, shadowRadius: 4 , padding: 15}}>
+                        <View style={{flexDirection:"row", justifyContent: "center", alignItems: "center"}}>
+                            <TouchableOpacity onPress={() => handleStatusSelection2(<View style={{width: 40, height: 40, flexDirection:"row", justifyContent: "center", alignItems: "center", borderWidth:2, borderRadius:999, borderColor:"#F57ED4", padding:0, marginRight: 10}}><Image source={furniture} style={{ width: 19, height: 22 }} /></View>)}>
+                                <View style={{width: 50, height: 50, flexDirection:"row", justifyContent: "center", alignItems: "center", borderWidth:2.5, borderRadius:999, borderColor:"#F57ED4", padding:5, marginRight: 10}}>
+                                    <Image source={furniture} style={{ width: 25, height: 28 }} />
+                                </View>
                             </TouchableOpacity>
                         
-                            <TouchableOpacity onPress={() => handleStatusSelection2(<Image source={groceries} style={{ width: 30, height: 30, borderRadius: 50, marginRight: 10 }} />)} style={styles.dropdownItem}>
-                            <Image source={groceries} style={{ width: 40, height: 40, borderRadius: 30, marginRight: 10 }} />
+                            <TouchableOpacity onPress={() => handleStatusSelection2(<View style={{width: 40, height: 40, flexDirection:"row", justifyContent: "center", alignItems: "center", borderWidth:2, borderRadius:999, borderColor:"#F57ED4", padding:0, marginRight: 10}}><Image source={groceries} style={{ width: 20, height: 21 }} /></View>)}>
+                                <View style={{width: 50, height: 50, flexDirection:"row", justifyContent: "center", alignItems: "center", borderWidth:2.5, borderRadius:999, borderColor:"#F57ED4", padding:5, marginRight: 10}}>
+                                    <Image source={groceries} style={{ width: 26, height: 27 }} />
+                                </View>
                             </TouchableOpacity>
                         </View>
-                        <View style={{flexDirection:"row", justifyContent: "center", alignItems: "center",}}>
-                            <TouchableOpacity onPress={() => handleStatusSelection2(<Image source={trips} style={{ width: 30, height: 30, borderRadius: 50, marginRight: 10 }} />)} style={styles.dropdownItem}>
-                            <Image source={trips} style={{ width: 40, height: 40, borderRadius: 30, marginRight: 10 }} />
+                        <View style={{flexDirection:"row", justifyContent: "center", alignItems: "center", marginTop:10}}>
+                            <TouchableOpacity onPress={() => handleStatusSelection2(<View style={{width: 40, height: 40, flexDirection:"row", justifyContent: "center", alignItems: "center", borderWidth:2, borderRadius:999, borderColor:"#F57ED4", padding:0, marginRight: 10}}><Image source={trips} style={{ width: 24, height: 17 }} /></View>)}>
+                                <View style={{width: 50, height: 50, flexDirection:"row", justifyContent: "center", alignItems: "center", borderWidth:2.5, borderRadius:999, borderColor:"#F57ED4", padding:5, marginRight: 10}}>
+                                    <Image source={trips} style={{ width: 27, height: 20 }} />
+                                </View>
                             </TouchableOpacity>
                         
-                            <TouchableOpacity onPress={() => handleStatusSelection2(<Image source={bliksem} style={{ width: 30, height: 30, borderRadius: 50, marginRight: 10 }} />)} style={styles.dropdownItem}>
-                            <Image source={bliksem} style={{ width: 40, height: 40, borderRadius: 30, marginRight: 10 }} />
+                            <TouchableOpacity onPress={() => handleStatusSelection2(<View style={{width: 40, height: 40, flexDirection:"row", justifyContent: "center", alignItems: "center", borderWidth:2, borderRadius:999, borderColor:"#F57ED4", padding:0, marginRight: 10}}><Image source={bliksem} style={{ width: 16, height: 24 }} /></View>)}>
+                                <View style={{width: 50, height: 50, flexDirection:"row", justifyContent: "center", alignItems: "center", borderWidth:2.5, borderRadius:999, borderColor:"#F57ED4", padding:5, marginRight: 10}}>
+                                    <Image source={bliksem} style={{ width: 20, height: 28 }} />
+                                </View>
                             </TouchableOpacity>
                         </View>
-                        <View style={{flexDirection:"row", justifyContent: "center", alignItems: "center",}}>
-                            <TouchableOpacity onPress={() => handleStatusSelection2(<Image source={gas} style={{ width: 30, height: 30, borderRadius: 50, marginRight: 10 }} />)} style={styles.dropdownItem}>
-                            <Image source={gas} style={{ width: 40, height: 40, borderRadius: 30, marginRight: 10 }} />
+                        <View style={{flexDirection:"row", justifyContent: "center", alignItems: "center", marginTop:10}}>
+                            <TouchableOpacity onPress={() => handleStatusSelection2(<View style={{width: 40, height: 40, flexDirection:"row", justifyContent: "center", alignItems: "center", borderWidth:2, borderRadius:999, borderColor:"#F57ED4", padding:0, marginRight: 10}}><Image source={gas} style={{ width: 17, height: 22 }} /></View>)}>
+                                <View style={{width: 50, height: 50, flexDirection:"row", justifyContent: "center", alignItems: "center", borderWidth:2.5, borderRadius:999, borderColor:"#F57ED4", padding:5, marginRight: 10}}>
+                                    <Image source={gas} style={{ width: 21, height: 26 }} />
+                                </View>
                             </TouchableOpacity>
                         
-                            <TouchableOpacity onPress={() => handleStatusSelection2(<Image source={water} style={{ width: 30, height: 30, borderRadius: 50, marginRight: 10 }} />)} style={styles.dropdownItem}>
-                            <Image source={water} style={{ width: 40, height: 40, borderRadius: 30, marginRight: 10 }} />
+                            <TouchableOpacity onPress={() => handleStatusSelection2(<View style={{width: 40, height: 40, flexDirection:"row", justifyContent: "center", alignItems: "center", borderWidth:2, borderRadius:999, borderColor:"#F57ED4", padding:0, marginRight: 10}}><Image source={water} style={{ width: 18, height: 22}} /></View>)}>
+                                <View style={{width: 50, height: 50, flexDirection:"row", justifyContent: "center", alignItems: "center", borderWidth:2.5, borderRadius:999, borderColor:"#F57ED4", padding:5, marginRight: 10}}>
+                                    <Image source={water} style={{ width: 22, height: 26 }} />
+                                </View>
                             </TouchableOpacity>
                         </View>
-                        <View style={{flexDirection:"row", justifyContent: "center", alignItems: "center",}}>
-                            <TouchableOpacity onPress={() => handleStatusSelection2(<Image source={mainte} style={{ width: 30, height: 30, borderRadius: 50, marginRight: 10 }} />)} style={styles.dropdownItem}>
-                            <Image source={mainte} style={{ width: 40, height: 40, borderRadius: 30, marginRight: 10 }} />
+                        <View style={{flexDirection:"row", justifyContent: "center", alignItems: "center", marginTop:10}}>
+                            <TouchableOpacity onPress={() => handleStatusSelection2(<View style={{width: 40, height: 40, flexDirection:"row", justifyContent: "center", alignItems: "center", borderWidth:2, borderRadius:999, borderColor:"#F57ED4", padding:0, marginRight: 10}}><Image source={mainte} style={{ width: 19, height: 19}} /></View>)}>
+                                <View style={{width: 50, height: 50, flexDirection:"row", justifyContent: "center", alignItems: "center", borderWidth:2.5, borderRadius:999, borderColor:"#F57ED4", padding:5, marginRight: 10}}>
+                                    <Image source={mainte} style={{ width: 24, height: 24 }} />
+                                </View>
                             </TouchableOpacity>
                         
-                            <TouchableOpacity onPress={() => handleStatusSelection2(<Image source={other} style={{ width: 30, height: 30, borderRadius: 50, marginRight: 10 }} />)} style={styles.dropdownItem}>
-                            <Image source={other} style={{ width: 40, height: 40, borderRadius: 30, marginRight: 10 }} />
+                            <TouchableOpacity onPress={() => handleStatusSelection2(<View style={{width: 40, height: 40, flexDirection:"row", justifyContent: "center", alignItems: "center", borderWidth:2, borderRadius:999, borderColor:"#F57ED4", padding:0, marginRight: 10}}><Image source={other} style={{ width: 19, height: 4}} /></View>)}>
+                                <View style={{width: 50, height: 50, flexDirection:"row", justifyContent: "center", alignItems: "center", borderWidth:2.5, borderRadius:999, borderColor:"#F57ED4", padding:5, marginRight: 10}}>
+                                    <Image source={other} style={{ width: 22, height: 4 }} />
+                                </View>
                             </TouchableOpacity>
                         </View>
                     </View>
