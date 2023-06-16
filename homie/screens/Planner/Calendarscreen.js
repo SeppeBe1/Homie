@@ -3,6 +3,7 @@ import * as Font from "expo-font";
 import MoonFont from "../../assets/fonts/Moon.otf";
 import Novatica from "../../assets/fonts/Novatica-Bold.woff";
 import Manrope from "../../assets/fonts/Manrope-Bold.ttf";
+//import EventItem from "../../compontents/EventItem";
 
 import {
   View,
@@ -12,6 +13,7 @@ import {
   ScrollView,
   Image,
   Modal,
+  FlatList
 } from "react-native";
 
 import checkbox from "../../assets/icons/Checkbox_empty.svg";
@@ -23,6 +25,9 @@ import AddTask from "./AddTask";
 import AddEvent from "./AddEvent";
 import checkBlue from "../../assets/icons/check_blue.svg";
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 // Load the font
 const loadFonts = async () => {
   await Font.loadAsync({
@@ -32,45 +37,152 @@ const loadFonts = async () => {
   });
 };
 
+/*const europeanDate = "15-06-2023"; // Example date in European notation
+const dateObj = new Date(europeanDate);
+
+// Store the date in MongoDB
+db.collection.insertOne({ date: dateObj });
+
+// Retrieving a date and formatting it in the European date notation: dd-mm-yyyy
+const document = db.collection.findOne({});*/
+
+// Format the date in the European date notation
+//const formattedDate = document.date.toLocaleDateString("en-GB");
+
+//console.log(formattedDate); // Output: 15-06-2023
+
+
 export default function Homescreen({ navigation }) {
   const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const today = new Date();
+  const currentDate = new Date();
+  const [residentsData, setResidentsData] = useState([]);
+  const [creatorId, setCreatorId]= useState([]);
+  const [firstname, setFirstname] = useState([]);
+  const [lastname, setLastname] = useState([]);
+  const [isChanged, setIsChanged] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const [announcements, setAnnouncements] = useState([]);
+  const [eventName, setEventname] = useState("");
+  const [datePlanned, setDatePlanned] = useState("");
+  const [dateCreated, setDateCreated] = useState("");
+  const [location, setLocation] = useState("");
+  const [hour, setHour] = useState("");
 
+  const loadFonts = async () => {
+    try {
+      await Font.loadAsync({
+        moon: require("../assets/fonts/Moon.otf"),
+        manrope: require("../assets/fonts/Manrope.ttf"),
+        novatica: require("../assets/fonts/Novatica.ttf"),
+        novaticaBold: require("../assets/fonts/Novatica-Bold.ttf"),
+      });
+      setFontsLoaded(true);
+    } catch (error) {
+      console.error("Error loading fonts:", error);
+    }
+  };
+
+
+  useEffect(() => {
+     loadFonts();
+
+       getUser();
+      // getHouse();
+      getAnnouncement(); 
+  }, [isChanged]);
+
+  const handleDeleteItem = (itemId) => {
+    setAnnouncements((prevAnnouncements) =>
+      prevAnnouncements.filter((item) => item._id !== itemId)
+    );
+  };
+  
+  const handleInputChange = (text) => {
+    setInputValue(text);
+  };
+
+  const options = {
+    day: "numeric",
+    month: "long",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: false,
+  };
+
+  const formattedDate = currentDate.toLocaleString("nl-NL", options).replace("om", "-");;
+  
+  const getUser = async () => {
+    const userId = await AsyncStorage.getItem('userId');
+    const houseId = await AsyncStorage.getItem("houseId");
+
+    fetch(`http://localhost:3000/api/v1/users/${userId}`, {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+      }
+      })
+      .then(response => response.json())
+      .then(data => {        
+          if(data.status == "failed"){
+            console.log(data.status);
+          } else if(data.status == "succes"){
+            setFirstname(data.data.firstname);
+            setLastname(data.data.lastname);
+            AsyncStorage.setItem('houseId', data.data.houseId);
+            const fetchedResidents = data.result;
+            const updatedResidentsData = fetchedResidents.map((resident) => ({
+            firstname: resident.firstname,
+            lastname: resident.lastname,
+          }));
+          setResidentsData(updatedResidentsData);
+          }
+      })
+      .catch(error => {
+          console.error(error);
+      });
+  }
+
+const getAnnouncement = async () => {
+  const token = await AsyncStorage.getItem('token');
+  const houseId = await AsyncStorage.getItem('houseId');
+  console.log(token);
+
+  if (houseId) {
+    fetch(`http://localhost:3000/api/v1/anouncement/${houseId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          const fetchedAnnouncements = data.result.map(announcement => {
+          const item = { ...announcement }; 
+            item.datePlanned = new Date(item.datePlanned);
+            return item;
+          });
+
+          console.log(fetchedAnnouncements);
+          setAnnouncements(fetchedAnnouncements);
+        } else if (data.status === 'failed') {
+          console.log(data.result);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  } else {
+    console.log('kaas');
+  }
+};
   const startOfWeek = new Date(
     today.getFullYear(),
     today.getMonth(),
     today.getDate() - ((today.getDay() + 6) % 7)
   );
-
-  const events = [
-    {
-      day: "12",
-      month: "Dec",
-      title: "Houseparty in Casa",
-      image: girl,
-    },
-    {
-      day: "31",
-      month: "Jan",
-      title: "Movie night at the park",
-      image: boy,
-    },
-  ];
-
-  const tasks = [
-    {
-      day: "12",
-      month: "Dec",
-      id: 1,
-      name: "Taking out the dustbin",
-    },
-    {
-      id: 2,
-      day: "31",
-      month: "Jan",
-      name: "Cleaning the kitchen",
-    },
-  ];
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [checkedTasks, setCheckedTasks] = useState([]);
@@ -82,6 +194,7 @@ export default function Homescreen({ navigation }) {
   const togglePopUp = () => {
     setIsPopUpVisible(!isPopUpVisible);
   };
+  
 
   const handleEventPress = (event) => {
     navigation.navigate("EventDetails", { event });
@@ -165,11 +278,43 @@ export default function Homescreen({ navigation }) {
       </View>
       <View style={styles.todo}>
         <Text style={styles.h3black}>Your today tasks and events</Text>
-        {tasks.map((task) => (
-          <View key={task.id} style={styles.tasks}>
-            <TouchableOpacity onPress={() => handleTaskCheck(task.id)}>
+        {announcements.filter(
+    (item) => {
+      const today = new Date();
+      const itemDate = new Date(item.datePlanned);
+      return (
+        (item.type === 'Task' || item.type === 'Event') &&
+        itemDate.toDateString() === today.toDateString()
+      );
+    }
+  ).length === 0 ? (
+            <Text>You're free today!</Text>
+      ) : (
+        <FlatList
+          keyExtractor={(item) => item._id}
+          data={announcements.filter(
+            (item) =>
+            {
+              const today = new Date();
+              const itemDate = new Date(item.datePlanned);
+              return (
+                (item.type === 'Task' || item.type === 'Event') &&
+                itemDate.toDateString() === today.toDateString()
+              );
+            }
+            
+          )}
+          renderItem={({ item }) => {
+            return (
+              <TouchableOpacity
+                key={(item._id)}
+                onPress={() => togglePopup(item._id)}
+                style={{ marginVertical: 5 }}
+              >
+                <View key={item._id} style={styles.tasks}>
+            <TouchableOpacity onPress={() => handleTaskCheck(item._id)}>
               <Image
-                source={checkedTasks.includes(task.id) ? checkBlue : checkbox}
+                source={checkedTasks.includes(item._id) ? checkBlue : checkbox}
                 style={{ width: 16, height: 16 }}
               />
             </TouchableOpacity>
@@ -178,16 +323,20 @@ export default function Homescreen({ navigation }) {
                 style={{
                   fontFamily: "manrope",
                   fontSize: 14,
-                  textDecorationLine: checkedTasks.includes(task.id)
+                  textDecorationLine: checkedTasks.includes(item._id)
                     ? "line-through"
                     : "none",
                 }}
               >
-                {task.name}
+                {item.activity}
               </Text>
             </View>
           </View>
-        ))}
+              </TouchableOpacity>
+            );
+          }}
+        />
+      )}
       </View>
       <View style={{ marginTop: 20, paddingHorizontal: 24 }}>
         <View
@@ -207,7 +356,6 @@ export default function Homescreen({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-
       <View
         style={{
           display: "flex",
@@ -216,63 +364,71 @@ export default function Homescreen({ navigation }) {
           marginTop: 8,
         }}
       >
-        {events.map((event) => (
-          <TouchableOpacity
-            key={event.title}
-            onPress={() => handleEventPress(event)}
-          >
-            <View
-              style={{
-                marginHorizontal: 24,
-                display: "flex",
-                flexDirection: "row",
-                backgroundColor: "white",
-                paddingHorizontal: 11,
-                paddingVertical: 8,
-                borderRadius: 10,
-                alignItems: "flex-end",
-                gap: 29,
-              }}
-            >
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <Text
-                  style={{
-                    fontFamily: "novatica",
-                    fontWeight: "bold",
-                    fontSize: 20,
-                  }}
+        {announcements.filter((item) => item.type === "Event").length === 0 ? (
+          <Text style={styles.nothingFound}>No events found!</Text>
+        ) : (
+          <FlatList
+            keyExtractor={(item) => item._id}
+            data={announcements.filter((item) => item.type === "Event")} 
+            renderItem={({ item }) => {
+              return (
+                <TouchableOpacity
+                  key={item._id}
+                  onPress={() => handleEventPress(item)}
+                  style={{ marginVertical: 5 }}
                 >
-                  {event.day}
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: "novatica",
-                    fontWeight: "bold",
-                    fontSize: 10,
-                  }}
-                >
-                  {event.month}
-                </Text>
-              </View>
-              <Text style={styles.h3black}>{event.title}</Text>
-              <Image
-                source={event.image}
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 24,
-                  alignSelf: "flex-end",
-                  marginLeft: "auto",
-                }}
-              />
-            </View>
-          </TouchableOpacity>
-        ))}
+                  <View
+                    style={{
+                      marginHorizontal: 24,
+                      display: "flex",
+                      flexDirection: "row",
+                      backgroundColor: "white",
+                      paddingHorizontal: 11,
+                      paddingVertical: 8,
+                      borderRadius: 10,
+                      alignItems: "flex-end",
+                      gap: 29,
+                    }}
+                  >
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <Text style={{ fontFamily: "novatica", fontWeight: "bold", fontSize: 20 }}>
+                      {new Date(item.datePlanned).getDate()}
+                    </Text>
+                    <Text>
+                      {new Date(item.datePlanned).toLocaleString("default", { month: "short" })}
+                    </Text>
+                      <Text
+                        style={{
+                          fontFamily: "novatica",
+                          fontWeight: "bold",
+                          fontSize: 10,
+                        }}
+                      >
+                        {item.month}
+                      </Text>
+                    </View>
+                    <Text style={styles.h3black}>{item.eventName}</Text>
+                    {/* <Image
+                      source={item.image}
+                      style={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 24,
+                        alignSelf: "flex-end",
+                        marginLeft: "auto",
+                      }}
+                    /> */}
+                  </View>
+                </TouchableOpacity>
+              );
+            }}
+          />
+        )}
       </View>
       <View style={{ marginTop: 20, paddingHorizontal: 24 }}>
         <View
@@ -300,52 +456,63 @@ export default function Homescreen({ navigation }) {
           gap: 8,
           marginTop: 8,
         }}
-      >
-        {tasks.map((task) => (
-          <TouchableOpacity key={task.id} onPress={togglePopUp}>
-            <View
-              style={{
-                marginHorizontal: 24,
-                display: "flex",
-                flexDirection: "row",
-                backgroundColor: "white",
-                paddingHorizontal: 11,
-                paddingVertical: 8,
-                borderRadius: 10,
-                alignItems: "center",
-                gap: 29,
-                alignItems: "flex-end",
-              }}
-            >
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                }}
+      >  
+      {announcements.filter((item) => item.type === "Task").length === 0 ? (
+
+        <Text style={styles.nothingFound}>No tasks found!</Text>
+      ) : (
+        <FlatList
+          keyExtractor={(item) => item._id}
+          data={announcements.filter((item) => item.type === "Task")} // Filter announcements by type "event"
+          renderItem={({ item }) => {
+            return (
+              <TouchableOpacity
+                key={(item._id)}
+                onPress={togglePopUp}
+                style={{ marginVertical: 5 }}
               >
-                <Text
+                <View
                   style={{
-                    fontFamily: "novatica",
-                    fontWeight: "bold",
-                    fontSize: 20,
+                    marginHorizontal: 24,
+                    display: "flex",
+                    flexDirection: "row",
+                    backgroundColor: "white",
+                    paddingHorizontal: 11,
+                    paddingVertical: 8,
+                    borderRadius: 10,
+                    alignItems: "flex-end",
+                    gap: 29,
                   }}
                 >
-                  {task.day}
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: "novatica",
-                    fontWeight: "bold",
-                    fontSize: 10,
-                  }}
-                >
-                  {task.month}
-                </Text>
-              </View>
-              <Text style={styles.h3black}>{task.name}</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <Text style={{ fontFamily: "novatica", fontWeight: "bold", fontSize: 20 }}>
+                    {new Date(item.datePlanned).getDate()}
+                  </Text>
+                  <Text>
+                    {new Date(item.datePlanned).toLocaleString("default", { month: "short" })}
+                  </Text>
+                    <Text
+                      style={{
+                        fontFamily: "novatica",
+                        fontWeight: "bold",
+                        fontSize: 10,
+                      }}
+                    >
+                      {item.month}
+                    </Text>
+                  </View>
+                  <Text style={styles.h3black}>{item.activity}</Text>
+                </View>
+              </TouchableOpacity>
+            );
+          }}
+        />
+      )}
       </View>
 
       <Modal visible={isPopUpVisible} animationType="fade" transparent>
@@ -435,8 +602,8 @@ export default function Homescreen({ navigation }) {
         >
           <Text style={styles.buttonText}>Add event</Text>
         </TouchableOpacity>
-      </View>
-    </View>
+      </View> 
+        </View>
   );
 }
 
@@ -520,6 +687,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#ffffff",
     fontSize: 14,
+  },
+
+  nothingFound: {
+    marginLeft: '29px'
   },
 
   linkText: {

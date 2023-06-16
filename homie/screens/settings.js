@@ -179,10 +179,21 @@ export default function Settingsscreen({ navigation }) {
           </View>
         </View>
       </View>
-      <TouchableOpacity onPress={() => console.log('Logout clicked')}>
-          <Text style={{ textDecorationLine: 'underline', textAlign:'center', paddingTop:'3rem', color:'#FF7A7A', fontFamily: 'manrope', fontSize: 16 }}>Logout</Text>
+      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+        <Text
+          style={{
+            textDecorationLine: "underline",
+            textAlign: "center",
+            paddingTop: "3rem",
+            color: "#FF7A7A",
+            fontFamily: "manrope",
+            fontSize: 16,
+          }}
+        >
+          Logout
+        </Text>
       </TouchableOpacity>
-      </View>
+    </View>
   );
 }
 

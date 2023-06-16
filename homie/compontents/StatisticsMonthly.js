@@ -93,7 +93,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
               ],
               datasets: [
                 {
-                  data: monthlyData,
+                  data: [20,40,80,88,55,95,80,140,95,95,78,26],
                 },
               ],
             }}
@@ -117,7 +117,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
             labels: ['2020', '2021', '2022', '2023'],
             datasets: [
               {
-                data: yearlyData,
+                data: [504,1222,888,1400],
               },
             ],
           }}
@@ -169,7 +169,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
               ],
               datasets: [
                 {
-                  data: monthlyData,
+                  data: [102,35,66,88,55,95,40,150,35,95,78,66],
                 },
               ],
             }}
@@ -190,7 +190,7 @@ const StatisticsComponent = ({ filter, periodFilter, monthlyData, yearlyData, ha
             labels: ['2020', '2021', '2022', '2023'],
             datasets: [
               {
-                data: yearlyData,
+                data: [635,465, 1000, 1500],
               },
             ],
           }}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -7,20 +7,22 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  Image,
   TextInput,
   Platform,
 } from "react-native";
-import arrowLeft from "../../assets/icons/arrowLeft.svg";
-import SaveAndCancel from "../../compontents/SaveAndCancel"; // Voeg deze importregel toe
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import SaveAndCancel from "../../compontents/SaveAndCancel";
 
 export default function AddTask() {
   const navigation = useNavigation();
-  const [eventName, setEventName] = useState("");
+  const [taskName, setTaskName] = useState("");
   const [taskDeadline, setTaskDeadline] = useState("");
   const [taskRules, setTaskRules] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [datePickerVisibility, setDatePickerVisibility] = useState(false);
+  const isTaskNameFilled = taskName !== "";
+  const isTaskRulesFilled = taskRules !== "";
+  const isTaskDeadlineFilled = taskDeadline !== "";
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -30,15 +32,45 @@ export default function AddTask() {
     setDatePickerVisibility(false);
   };
 
-  // const handleConfirm = (date) => {
-  //   console.warn("A date has been picked: ", date);
-  //   setTaskDeadline(date.toLocaleDateString()); // convert date to a string in local date format
-  //   hideDatePicker();
-  // };
+  const addTaskToList = () => {
+    if (taskName.trim() !== "" && taskRules.trim() !== "") {
+      createTask();
+      navigation.navigate("TasksScreen"); // Navigeer naar TaskScreen.js na het opslaan
+    }
+  };
 
-  const isEventNameFilled = eventName !== "";
-  const isTaskDeadlineFilled = taskDeadline !== "";
-  const isTaskRulesFilled = taskRules !== "";
+  const createTask = async () => {
+    const userId = await AsyncStorage.getItem("userId");
+    const houseId = await AsyncStorage.getItem("houseId");
+    const token = await AsyncStorage.getItem("token");
+
+    // Formateer de geselecteerde datum naar het gewenste formaat
+    const formattedDate = startDate.toISOString();
+
+    fetch("http://localhost:3000/api/v1/anouncement", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        type: "Task",
+        activity: taskName,
+        description: taskRules,
+        datePlanned: formattedDate,
+        creatorId: userId,
+        houseId: houseId,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        // Voer eventuele vervolgstappen uit na het opslaan van de gegevens
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   const CustomDatePicker = () => {
     if (Platform.OS === "web") {
@@ -77,18 +109,14 @@ export default function AddTask() {
         <TextInput
           style={[
             styles.inputSmall,
-            { color: isEventNameFilled ? "black" : "#A5A5A5" },
+            { color: isTaskNameFilled ? "black" : "#A5A5A5" },
           ]}
-          placeholder="Name of event"
-          value={eventName}
-          onChangeText={setEventName}
+          placeholder="Name of task"
+          value={taskName}
+          onChangeText={setTaskName}
         />
 
         <CustomDatePicker />
-
-        <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-          {/* ...other code */}
-        </View>
 
         <TextInput
           style={[
@@ -102,22 +130,23 @@ export default function AddTask() {
         />
       </View>
 
-      <View style={[styles.who, { zIndex: -1 }]}>{/* ...other code */}</View>
+      <View style={styles.buttoncontainer}>
+        <TouchableOpacity
+          style={[
+            styles.button,
+            { opacity: isTaskNameFilled && isTaskRulesFilled ? 1 : 0.5 },
+          ]}
+          onPress={addTaskToList}
+          disabled={!isTaskNameFilled || !isTaskRulesFilled}
+        >
+          <Text style={styles.buttonText}>Save</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: "#160635",
-    height: 115,
-    marginBottom: 20,
-  },
   container: {
     paddingHorizontal: 20,
   },
@@ -144,20 +173,11 @@ const styles = StyleSheet.create({
     fontFamily: "manrope",
     fontSize: 16,
   },
-  who: {
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-  },
-  user: {
-    width: 40,
-    height: 40,
-    marginRight: 10,
-    marginTop: 15,
-    borderRadius: 25,
-  },
-  users: {
+  buttoncontainer: {
     flex: 1,
-    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 40,
   },
   button: {
     backgroundColor: "#B900F4",
@@ -173,12 +193,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#ffffff",
     fontSize: 14,
-  },
-  buttoncontainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 40,
   },
   datePickerContainer: {
     fontFamily: "moon",
