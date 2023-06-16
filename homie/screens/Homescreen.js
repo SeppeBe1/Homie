@@ -31,7 +31,7 @@ export default function Homescreen({ navigation }) {
   const [housenamee, setHousename] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [announcements, setAnnouncements] = useState([]);
   const [dataCreated, setDataCreated] = useState(null);
   const [datePlanned, setDatePlanned]= useState()
@@ -60,16 +60,11 @@ export default function Homescreen({ navigation }) {
     getAnnouncement();
   }, [isChanged]);
 
-
-
-
   const handleDeleteItem = (itemId) => {
     setAnnouncements((prevAnnouncements) =>
       prevAnnouncements.filter((item) => item._id !== itemId)
     );
   };
-  
-
 
   const handleOpenModal = () => {
     setModalVisible(true);
@@ -91,14 +86,15 @@ export default function Homescreen({ navigation }) {
     hour12: false,
   };
 
-  const formattedDate = currentDate.toLocaleString("nl-NL", options).replace("om", "-");;
-
+  const formattedDate = currentDate
+    .toLocaleString("nl-NL", options)
+    .replace("om", "-");
 
   const getUser = async () => {
-    const userId = await AsyncStorage.getItem('userId');
+    const userId = await AsyncStorage.getItem("userId");
 
     fetch(`http://localhost:3000/api/v1/users/${userId}`, {
-      method: 'GET',
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
@@ -116,11 +112,11 @@ export default function Homescreen({ navigation }) {
       .catch((error) => {
         console.error(error);
       });
-  }
+  };
 
   const getHouse = async () => {
-    const token = await AsyncStorage.getItem('token');
-    const houseId = await AsyncStorage.getItem('houseId');
+    const token = await AsyncStorage.getItem("token");
+    const houseId = await AsyncStorage.getItem("houseId");
 
     const response = await fetch(
       `http://localhost:3000/api/v1/house/${houseId}`,
@@ -151,8 +147,8 @@ export default function Homescreen({ navigation }) {
     fetch("http://localhost:3000/api/v1/anouncement", {
       method: "POST",
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         type: "Announcement",
@@ -210,25 +206,25 @@ export default function Homescreen({ navigation }) {
           } else if (data === "failed") {
             console.log(data.result);
           }
-          })
-          .then(response =>  response.json())
-          .then(data => {   
-            if (data.status === "success") {
-              const fetchedAnnouncements = data.result.map((announcement) => announcement);
-              console.log(fetchedAnnouncements)
-              setAnnouncements(fetchedAnnouncements);
-              } 
-              else if(data === "failed"){
-                console.log(data.result);
-              }
-          })
-          .catch(error => {
-            console.error(error);
-          });
-      } else {
-        console.log(kaas);
-      }
-
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "success") {
+            const fetchedAnnouncements = data.result.map(
+              (announcement) => announcement
+            );
+            console.log(fetchedAnnouncements);
+            setAnnouncements(fetchedAnnouncements);
+          } else if (data === "failed") {
+            console.log(data.result);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      console.log(kaas);
+    }
   };
 
   try {
@@ -446,6 +442,7 @@ export default function Homescreen({ navigation }) {
                   }
 
                   return (
+<<<<<<< HEAD
                     <View key={item._id} style={announcementStyle}>
                       {item.type === 'Announcement' ? (
                       <>
@@ -462,6 +459,22 @@ export default function Homescreen({ navigation }) {
                       </>
                     )}
                     </View>
+=======
+                    <TouchableOpacity
+                      key={item._id}
+                      style={announcementStyle}
+                      onPress={() => navigation.navigate("Calendar")}
+                    >
+                      <View>
+                        <Text style={announcementTextStyle}>
+                          {item.description}
+                        </Text>
+                        <Text style={styles.announcementTime}>
+                          {formattedDate}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+>>>>>>> origin/laststuff
                   );
                 })}
               </View>
@@ -511,15 +524,14 @@ const styles = StyleSheet.create({
     maxWidth: "80%",
     height: "100%",
   },
-  addAnnoucement:{
+  addAnnoucement: {
     display: "flex",
-    flexDirection: "row"
-    
+    flexDirection: "row",
   },
   modalContainer: {
     flex: 1,
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   button: {
     flex: 1,
@@ -539,29 +551,29 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     marginTop: 256,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 20,
     borderRadius: 10,
-    borderStyle: 'none',
-    width: '80%',
+    borderStyle: "none",
+    width: "80%",
   },
   close: {
-    alignSelf : 'flex-end',
-    width:28,
-    height:28,
-},
+    alignSelf: "flex-end",
+    width: 28,
+    height: 28,
+  },
   modalText: {
     fontSize: 16,
     marginTop: -15,
     marginBottom: 10,
     fontFamily: Moon,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   dateTime: {
     fontSize: 14,
     marginBottom: 10,
     fontFamily: Manrope,
-    color:'#D9B2EE'
+    color: "#D9B2EE",
   },
   input: {
     borderRadius: 5,
@@ -571,15 +583,15 @@ const styles = StyleSheet.create({
   },
   createAnnouncementBtn: {
     fontFamily: Moon,
-    backgroundColor: '#B900F4',
+    backgroundColor: "#B900F4",
     borderRadius: 30,
     paddingLeft: 27,
     paddingRight: 27,
     paddingTop: 13,
     paddingBottom: 13,
     marginTop: 30,
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    marginLeft: "auto",
+    marginRight: "auto",
     fontSize: 18,
   },
   createAnnouncement: {

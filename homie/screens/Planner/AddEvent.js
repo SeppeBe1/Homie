@@ -29,6 +29,7 @@ export default function AddEvent() {
   const [eventPicture, setEventPicture] = useState("");
   const [eventNote, setEventNote] = useState("");
   const [eventDate, setEventDate] = useState("");
+  const [eventName, setEventName] = useState("");
   const [selectedFileName, setSelectedFileName] = useState("");
   const iseventDescriptionFilled = eventDescription !== "";
   const [taskRules, setTaskRules] = useState("");
@@ -93,10 +94,9 @@ export default function AddEvent() {
     }
   };
 
-  const addEventToList = () => {
+  const addEventToList = async () => {
     if (eventName.trim() !== "" && eventDescription.trim() !== "") {
-      createEvent();
-      navigation.navigate("EventsScreen"); // Navigeer naar TaskScreen.js na het opslaan
+      await createEvent();
     }
   };
 
@@ -129,7 +129,7 @@ export default function AddEvent() {
       .then((response) => response.json())
       .then((data) => {
         console.log("gelukttttttttttttttttt");
-        // Voer eventuele vervolgstappen uit na het opslaan van de gegevens
+        navigation.navigate("EventsScreen"); // Navigeer naar EventScreen.js nadat het event succesvol is opgeslagen
       })
       .catch((error) => {
         console.error(error);
@@ -281,6 +281,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 20,
+    zIndex: -9999,
   },
   buttonText: {
     fontFamily: "moon",

@@ -119,6 +119,8 @@ export default function Myprofilescreen({ navigation }) {
         name: "profilepic.png",
         type: "image/png" // You can customize the filename if needed
       });
+
+      
       fetch(`http://localhost:3000/api/v1/users/${userId}`, {
       method: "PUT",
       headers: {

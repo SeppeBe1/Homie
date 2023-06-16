@@ -54,8 +54,11 @@ const Residents = ({ houseCode }) => {
         } else if (data.status === "success") {
           const fetchedResidents = data.result;
           const updatedResidentsData = fetchedResidents.map((resident) => ({
+            id: resident.id,
             firstname: resident.firstname,
             lastname: resident.lastname,
+            email: resident.email,
+            phone: resident.phone,
           }));
           setResidentsData(updatedResidentsData);
           console.log(updatedResidentsData);
@@ -128,6 +131,10 @@ const Residents = ({ houseCode }) => {
     setShowModal((prevState) => !prevState);
   };
 
+  const navigateToHousemateProfile = (resident) => {
+    navigation.navigate("housemateprofile", { resident });
+  };
+
   const renderResidents = () => {
     if (residentsData.length === 0) {
       return <Text>Loading...</Text>; // Show loading indicator while data is being fetched
@@ -135,9 +142,7 @@ const Residents = ({ houseCode }) => {
 
     return residentsData.map((resident, index) => (
       <View style={styles.residentFull} key={index}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("housemateprofile")}
-        >
+        <TouchableOpacity onPress={() => navigateToHousemateProfile(resident)}>
           <View style={styles.residentProfile}>
             <View style={styles.status}>
               <Image source={profilePicture} style={styles.profilePicture} />

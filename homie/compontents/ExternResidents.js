@@ -40,7 +40,7 @@ export default class Residents extends Component {
               <Image source={resident.image} style={styles.profilePicture} />
             </View>
             <Text style={{ fontSize: "16px", fontFamily: "manrope" }}>
-              {resident.name}
+              {item.firstname}
             </Text>
           </View>
         </TouchableOpacity>

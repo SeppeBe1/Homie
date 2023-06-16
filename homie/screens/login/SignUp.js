@@ -214,14 +214,16 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
 
     marginBottom: 17,
-    marginHorizontal: 24,
     padding: 17,
 
     borderWidth: 1,
     borderColor: "white",
     borderRadius: 10,
 
-    width: "300",
+    width: "342px",
+
+    marginLeft: 26,
+    marginRight: 26,
   },
 
   login: {

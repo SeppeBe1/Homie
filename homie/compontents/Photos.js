@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   TouchableOpacity,
@@ -11,30 +11,58 @@ import {
 } from "react-native";
 import share from "../assets/icons/share.svg";
 import close from "../assets/icons/close_white.svg";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const galleryImages = [
-  require("../assets/girl.jpg"),
-  require("../assets/girl.jpg"),
-  require("../assets/girl.jpg"),
-  require("../assets/girl.jpg"),
-  require("../assets/girl.jpg"),
-  require("../assets/girl.jpg"),
-];
+const Residents = ({ navigation }) => {
+  const [showModal, setShowModal] = useState(false);
+  const [photoData, setPhotoData] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
 
-export default class Residents extends Component {
-  state = {
-    selectedImage: null,
+  useEffect(() => {
+    getPhotos();
+  }, []);
+
+  const getPhotos = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await fetch("http://localhost:3000/api/v1/photo/", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+
+      if (data.status === "success") {
+        const photos = data.result.map((photo) => ({
+          image: photo.image,
+          description: photo.description,
+          houseName: photo.houseName,
+          city: photo.city,
+          dateTaken: photo.dateTaken,
+          houseId: photo.houseId,
+        }));
+
+        const recentPhotos = photos.slice(0, 6); // Selecteer de meest recente 6 foto's
+        setPhotoData(recentPhotos);
+      } else {
+        console.log(data.status);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  selectImage = (image) => {
-    this.setState({ selectedImage: image });
+  const selectImage = (image) => {
+    setSelectedImage(image);
   };
 
-  closeImage = () => {
-    this.setState({ selectedImage: null });
+  const closeImage = () => {
+    setSelectedImage(null);
   };
 
-  shareImage = async (image) => {
+  const shareImage = async (image) => {
     try {
       const shareOptions = {
         title: "Share Image",
@@ -46,34 +74,38 @@ export default class Residents extends Component {
     }
   };
 
-  renderImageRow = ({ item }) => {
+  const renderImageRow = ({ item }) => {
     const { startIndex, images } = item;
+
     return (
       <View key={startIndex} style={styles.imageRow}>
-        {images.map((image, index) => (
+        {images.map((photo, index) => (
           <TouchableOpacity
             key={startIndex + index}
-            onPress={() => this.selectImage(image)}
+            onPress={() => selectImage(photo.image)}
             style={styles.galleryImageWrapper}
           >
-            <Image source={image} style={styles.galleryImage} />
-            {this.state.selectedImage === image && (
+            <Image source={{ uri: photo.image }} style={styles.galleryImage} />
+            {selectedImage === photo.image && (
               <Modal transparent={true} visible={true}>
                 <TouchableOpacity
                   style={{ flex: 1 }}
                   activeOpacity={1}
-                  onPress={this.closeImage}
+                  onPress={closeImage}
                 >
                   <View style={styles.overlay}>
-                    <Image source={image} style={styles.enlargedImage} />
+                    <Image
+                      source={{ uri: photo.image }}
+                      style={styles.enlargedImage}
+                    />
                     <View style={styles.buttonImage}>
                       <TouchableOpacity
-                        onPress={() => this.shareImage(image)}
+                        onPress={() => shareImage(photo.image)}
                         style={styles.shareButton}
                       >
                         <Image source={share} style={styles.photoButton} />
                       </TouchableOpacity>
-                      <TouchableOpacity onPress={this.closeImage}>
+                      <TouchableOpacity onPress={closeImage}>
                         <Image source={close} style={styles.photoButton} />
                       </TouchableOpacity>
                     </View>
@@ -87,39 +119,34 @@ export default class Residents extends Component {
     );
   };
 
-  render() {
-    const { navigation } = this.props; // Added navigation prop
-    const imagesPerRow = 3;
-    const rows = Math.ceil(galleryImages.length / imagesPerRow);
-    const imageRows = Array.from(Array(rows).keys()).map((index) => ({
-      startIndex: index * imagesPerRow,
-      images: galleryImages.slice(
-        index * imagesPerRow,
-        (index + 1) * imagesPerRow
-      ),
-    }));
-    return (
-      <View>
-        <View style={styles.header}>
-          <Text style={styles.h3}>Our recent moments</Text>
-        </View>
-        <FlatList
-          data={imageRows}
-          renderItem={this.renderImageRow}
-          keyExtractor={(item, index) => index.toString()}
-        />
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate("Memorywall")}
-          >
-            <Text style={styles.buttonText}>View memory wall</Text>
-          </TouchableOpacity>
-        </View>
+  const imagesPerRow = 3;
+  const rows = Math.ceil(photoData.length / imagesPerRow);
+  const imageRows = Array.from(Array(rows).keys()).map((index) => ({
+    startIndex: index * imagesPerRow,
+    images: photoData.slice(index * imagesPerRow, (index + 1) * imagesPerRow),
+  }));
+
+  return (
+    <View>
+      <View style={styles.header}>
+        <Text style={styles.h3}>Our recent moments</Text>
       </View>
-    );
-  }
-}
+      <FlatList
+        data={imageRows}
+        renderItem={renderImageRow}
+        keyExtractor={(item, index) => index.toString()}
+      />
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("Memorywall")}
+        >
+          <Text style={styles.buttonText}>View memory wall</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   header: {
@@ -195,3 +222,5 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 });
+
+export default Residents;

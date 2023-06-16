@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     borderColor: "white",
     borderRadius: 10,
 
-    width: "300",
+    width: "342px",
 
     marginLeft: 26,
     marginRight: 26,

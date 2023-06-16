@@ -1,21 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Text, View, StyleSheet, TouchableOpacity, Image, FlatList } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  FlatList,
+} from "react-native";
 import arrowLeft from "../../assets/icons/arrowLeft.svg";
 import fun from "../../assets/undraw_having_fun_re_vj4h 1.svg";
 import Event from "../../compontents/Event";
 import AddEvent from "./AddEvent";
 import EventDetails from "./EventDetails.js";
-import image from "../../assets/boy.jpg"
+import image from "../../assets/boy.jpg";
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function FullCalenderScreen() {
   const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const today = new Date();
   const currentDate = new Date();
   const [residentsData, setResidentsData] = useState([]);
-  const [creatorId, setCreatorId]= useState([]);
+  const [creatorId, setCreatorId] = useState([]);
   const [firstname, setFirstname] = useState([]);
   const [lastname, setLastname] = useState([]);
   const [isChanged, setIsChanged] = useState(false);
@@ -26,56 +33,53 @@ export default function FullCalenderScreen() {
   const [dateCreated, setDateCreated] = useState("");
   const [location, setLocation] = useState("");
   const [hour, setHour] = useState("");
-  const [isParticipant, setIsParticipant]= useState(false);
+  const [isParticipant, setIsParticipant] = useState(false);
   const [invitationMessage, setInvitationMessage] = useState("");
   const [buttonText, setButtonText] = useState("Join the party");
   const [buttonStyle, setButtonStyle] = useState(styles.joinButton);
   const [buttonTextStyle, setButtonTextStyle] = useState(styles.joinButtonText);
 
-
- 
-
   useEffect(() => {
-   // loadFonts();
+    // loadFonts();
 
     //  getUser();
-     // getHouse();
-     getAnnouncement(); 
- }, [isChanged]);
+    // getHouse();
+    getAnnouncement();
+  }, [isChanged]);
 
   const getAnnouncement = async () => {
-    const token = await AsyncStorage.getItem('token');
-    const houseId = await AsyncStorage.getItem('houseId');
+    const token = await AsyncStorage.getItem("token");
+    const houseId = await AsyncStorage.getItem("houseId");
     console.log(token);
-  
+
     if (houseId) {
       fetch(`http://localhost:3000/api/v1/anouncement/${houseId}`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        }
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       })
-        .then(response => response.json())
-        .then(data => {
-          if (data.status === 'success') {
-            const fetchedAnnouncements = data.result.map(announcement => {
-            const item = { ...announcement }; 
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "success") {
+            const fetchedAnnouncements = data.result.map((announcement) => {
+              const item = { ...announcement };
               item.datePlanned = new Date(item.datePlanned);
               return item;
             });
-  
+
             console.log(fetchedAnnouncements);
             setAnnouncements(fetchedAnnouncements);
-          } else if (data.status === 'failed') {
+          } else if (data.status === "failed") {
             console.log(data.result);
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(error);
         });
     } else {
-      console.log('kaas');
+      console.log("kaas");
     }
   };
 
@@ -95,19 +99,19 @@ export default function FullCalenderScreen() {
   // };
 
   const handleButtonClick = (announcementId) => {
-  setAnnouncements(prevAnnouncements => {
-    return prevAnnouncements.map(announcement => {
-      if (announcement._id === announcementId) {
-        return {
-          ...announcement,
-          isParticipant: !announcement.isParticipant
-        };
-      }
-      return announcement;
+    setAnnouncements((prevAnnouncements) => {
+      return prevAnnouncements.map((announcement) => {
+        if (announcement._id === announcementId) {
+          return {
+            ...announcement,
+            isParticipant: !announcement.isParticipant,
+          };
+        }
+        return announcement;
+      });
     });
-  });
-};
-  
+  };
+
   return (
     <View>
       <View style={styles.header}>
@@ -153,12 +157,12 @@ export default function FullCalenderScreen() {
         </View>
       </View>
       <View style={styles.eventContainer}>
-      {announcements.filter((item) => item.type === "Event").length === 0 ? (
+        {announcements.filter((item) => item.type === "Event").length === 0 ? (
           <Text style={styles.nothingFound}>You have no events planned!</Text>
         ) : (
           <FlatList
             keyExtractor={(item) => item._id}
-            data={announcements.filter((item) => item.type === "Event")} 
+            data={announcements.filter((item) => item.type === "Event")}
             renderItem={({ item }) => {
               return (
                 <TouchableOpacity
@@ -166,23 +170,33 @@ export default function FullCalenderScreen() {
                   onPress={() => handleEventPress(item)}
                   style={{ marginVertical: 5 }}
                 >
-                <View style={styles.eventContainer}>
-                      <View style={styles.event}>
-                        <View style={styles.dateContainer}>
-                          <Text style={styles.dayText}> {new Date(item.datePlanned).getDate()}</Text>
-                          <Text style={styles.monthText}>{new Date(item.datePlanned).toLocaleString("default", { month: "short" })}</Text>
-                        </View>
-                        <View style={{ marginLeft: 15 }}>
-                          <Text style={styles.titleText}>{item.eventName}</Text>
-                          <Text style={styles.descriptionText}>{item.description}</Text>
-                          <Image source={image} style={styles.image} />
-                        </View>
-                        {/* <TouchableOpacity style={buttonStyle} onPress={handleButtonClick}>
+                  <View style={styles.eventContainer}>
+                    <View style={styles.event}>
+                      <View style={styles.dateContainer}>
+                        <Text style={styles.dayText}>
+                          {" "}
+                          {new Date(item.datePlanned).getDate()}
+                        </Text>
+                        <Text style={styles.monthText}>
+                          {new Date(item.datePlanned).toLocaleString(
+                            "default",
+                            { month: "short" }
+                          )}
+                        </Text>
+                      </View>
+                      <View style={{ marginLeft: 15 }}>
+                        <Text style={styles.titleText}>{item.activity}</Text>
+                        <Text style={styles.descriptionText}>
+                          {item.description}
+                        </Text>
+                        <Image source={image} style={styles.image} />
+                      </View>
+                      {/* <TouchableOpacity style={buttonStyle} onPress={handleButtonClick}>
                           <Text style={buttonTextStyle}>{buttonText}</Text>
                         </TouchableOpacity> */}
-                       </View>
-                       <View style={styles.buttonParticipation}>
-                       {/* <TouchableOpacity
+                    </View>
+                    <View style={styles.buttonParticipation}>
+                      {/* <TouchableOpacity
                           style={isParticipant ? styles.joinButtonClicked : styles.joinButton}
                           onPress={handleButtonClick}
                         >
@@ -190,16 +204,28 @@ export default function FullCalenderScreen() {
                             {isParticipant ? "You're in 🎉" : "Join the party"}
                           </Text>
                         </TouchableOpacity> */}
-                         <TouchableOpacity
-                      style={item.isParticipant ? styles.joinButtonClicked : styles.joinButton}
-                      onPress={() => handleButtonClick(item._id)}
-                    >
-                      <Text style={item.isParticipant ? styles.joinButtonTextClicked : styles.joinButtonText}>
-                        {item.isParticipant ? "You're in 🎉" : "Join the party"}
-                      </Text>
-                    </TouchableOpacity>
-                        </View>
+                      <TouchableOpacity
+                        style={
+                          item.isParticipant
+                            ? styles.joinButtonClicked
+                            : styles.joinButton
+                        }
+                        onPress={() => handleButtonClick(item._id)}
+                      >
+                        <Text
+                          style={
+                            item.isParticipant
+                              ? styles.joinButtonTextClicked
+                              : styles.joinButtonText
+                          }
+                        >
+                          {item.isParticipant
+                            ? "You're in 🎉"
+                            : "Join the party"}
+                        </Text>
+                      </TouchableOpacity>
                     </View>
+                  </View>
                 </TouchableOpacity>
               );
             }}
@@ -235,7 +261,7 @@ const styles = StyleSheet.create({
   },
 
   nothingFound: {
-    marginTop: '220px'
+    marginTop: "220px",
   },
 
   eventContainer: {
@@ -251,7 +277,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: 350,
     height: 110,
-    marginTop: 15,
+    marginTop: 5,
     backgroundColor: "white",
     borderRadius: 10,
     justifyContent: "flex-start",
@@ -291,7 +317,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#00B9F4",
     padding: 12,
     borderRadius: 55,
-    width: 120,
+    marginBottom: 100,
   },
   joinButtonText: {
     color: "white",
@@ -317,6 +343,6 @@ const styles = StyleSheet.create({
   buttonParticipation: {
     position: "absolute",
     top: 77,
-    right: 12
-  }
+    right: 12,
+  },
 });
