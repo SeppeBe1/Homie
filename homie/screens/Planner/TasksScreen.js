@@ -132,8 +132,8 @@ export default function FullCalenderScreen() {
           
           <View>
           <Text style={styles.headingText}>Your tasks</Text>
-           {announcements.length === 0 ? (
-        <Text style={styles.nothingFound}>No tasks found</Text>
+          {announcements.filter((item) => item.type === "Task").length === 0 ? (
+        <Text style={styles.nothingFound}>No tasks found!</Text>
       ) : (
         <FlatList
           keyExtractor={(item) => item._id}
@@ -173,8 +173,8 @@ export default function FullCalenderScreen() {
 
           <View>
           <Text style={styles.headingText}>All tasks</Text>
-           {announcements.length === 0 ? (
-        <Text style={styles.nothingFound}>No tasks found</Text>
+          {announcements.filter((item) => item.type === "Task").length === 0 ? (
+        <Text style={styles.nothingFound}>No tasks found!</Text>
       ) : (
         <FlatList
           keyExtractor={(item) => item._id}
@@ -308,5 +308,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
     padding: 24,
   },
+  nothingFound: {
+    marginLeft: '24px'
+  }
 });
 

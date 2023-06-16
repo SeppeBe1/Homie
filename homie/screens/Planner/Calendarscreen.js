@@ -279,7 +279,7 @@ const getAnnouncement = async () => {
       <View style={styles.todo}>
         <Text style={styles.h3black}>Your today tasks and events</Text>
         {announcements.length === 0 ? (
-        <Text style={styles.nothingFound}>No tasks or events found</Text>
+        <Text>You're free today!</Text>
       ) : (
         <FlatList
           keyExtractor={(item) => item._id}
@@ -355,8 +355,8 @@ const getAnnouncement = async () => {
           marginTop: 8,
         }}
       >
-        {announcements.length === 0 ? (
-          <Text style={styles.nothingFound}>No events found</Text>
+        {announcements.filter((item) => item.type === "Event").length === 0 ? (
+          <Text style={styles.nothingFound}>No events found!</Text>
         ) : (
           <FlatList
             keyExtractor={(item) => item._id}
@@ -447,8 +447,10 @@ const getAnnouncement = async () => {
           gap: 8,
           marginTop: 8,
         }}
-      >{announcements.length === 0 ? (
-        <Text style={styles.nothingFound}>No tasks found</Text>
+      >  
+      {announcements.filter((item) => item.type === "Task").length === 0 ? (
+
+        <Text style={styles.nothingFound}>No tasks found!</Text>
       ) : (
         <FlatList
           keyExtractor={(item) => item._id}
@@ -457,7 +459,7 @@ const getAnnouncement = async () => {
             return (
               <TouchableOpacity
                 key={(item._id)}
-                onPress={() => togglePopup(item._id)}
+                onPress={togglePopUp}
                 style={{ marginVertical: 5 }}
               >
                 <View
@@ -676,6 +678,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#ffffff",
     fontSize: 14,
+  },
+
+  nothingFound: {
+    marginLeft: '29px'
   },
 
   linkText: {
