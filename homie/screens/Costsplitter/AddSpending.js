@@ -20,6 +20,15 @@ import arrowUp from "../../assets/icons/arrowUp.svg";
 import pf1 from "../../assets/pf1.png";
 import pf2 from "../../assets/pf2.png";
 
+import furniture from "../../assets/categories/furniture.svg";
+import groceries from "../../assets/categories/groceries.svg";
+import trips from "../../assets/categories/trips.svg";
+import bliksem from "../../assets/categories/bliksem.svg";
+import gas from "../../assets/categories/gas.svg";
+import water from "../../assets/categories/water.svg";
+import mainte from "../../assets/categories/mainte.svg";
+import other from "../../assets/categories/other.svg";
+
 const loadFonts = async () => {
     await Font.loadAsync({
         moon: MoonFont,
@@ -33,14 +42,26 @@ const AddSpending = () => {
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState("Paid by");
 
+    const [isDropdownVisible2, setIsDropdownVisible2] = useState(false);
+    const [selectedStatus2, setSelectedStatus2] = useState("Shared by");
+
     const toggleDropdown = () => {
     setIsDropdownVisible(!isDropdownVisible);
+    };
+
+    const toggleDropdown2 = () => {
+        setIsDropdownVisible2(!isDropdownVisible2);
     };
 
     const handleStatusSelection = (status) => {
         setSelectedStatus(status);
         setIsDropdownVisible(false);
-      };
+    };
+
+    const handleStatusSelection2 = (status) => {
+        setSelectedStatus2(status);
+        setIsDropdownVisible2(false);
+    };
       
 
     const datePickerRef = useRef(null);
@@ -95,7 +116,7 @@ const AddSpending = () => {
                         borderWidth={0}
                     />
                 </View>
-                <View style={{position:"relative", zIndex:99}}>
+                <View style={{position:"relative", zIndex:100}}>
                     <TouchableOpacity onPress={toggleDropdown} style={styles.input3}>
                         <Text style={{color: "#A5A5A5", fontFamily: "manrope", fontWeight: "regular", fontSize: 16}}>{selectedStatus}</Text>
                             {isDropdownVisible ? (
@@ -117,6 +138,57 @@ const AddSpending = () => {
                       </View>
                     )}
 
+                </View>
+                <View style={{position:"relative", zIndex:99}}>
+                    <TouchableOpacity onPress={toggleDropdown2} style={styles.input3}>
+                        <Text style={{color: "#A5A5A5", fontFamily: "manrope", fontWeight: "regular", fontSize: 16}}>{selectedStatus2}</Text>
+                            {isDropdownVisible2 ? (
+                            <Image source={arrowUp} style={{ width: 10, height: 6 }} />
+                            ) : (
+                            <Image source={arrowDown} style={{ width: 10, height: 6 }} />
+                            )}
+                    </TouchableOpacity>
+                    {isDropdownVisible2 && (
+                    <View style={{ position: "absolute", top: 25, right: 0, width:150, backgroundColor: "#fff", borderRadius: 5, elevation: 3, zIndex: 99, shadowColor: "#000", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.3, shadowRadius: 4 }}>
+                        <View style={{flexDirection:"row", justifyContent: "center", alignItems: "center",}}>
+                            <TouchableOpacity onPress={() => handleStatusSelection2(<Image source={furniture} style={{ width: 21, height:24, marginRight: 10,  }} />)} style={styles.dropdownItem}>
+                            <Image source={furniture} style={{ width: 21, height: 24,  marginRight: 10 , borderWidth:2, borderRadius:99, borderColor:"#F57ED4" }} />
+                            </TouchableOpacity>
+                        
+                            <TouchableOpacity onPress={() => handleStatusSelection2(<Image source={groceries} style={{ width: 30, height: 30, borderRadius: 50, marginRight: 10 }} />)} style={styles.dropdownItem}>
+                            <Image source={groceries} style={{ width: 40, height: 40, borderRadius: 30, marginRight: 10 }} />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{flexDirection:"row", justifyContent: "center", alignItems: "center",}}>
+                            <TouchableOpacity onPress={() => handleStatusSelection2(<Image source={trips} style={{ width: 30, height: 30, borderRadius: 50, marginRight: 10 }} />)} style={styles.dropdownItem}>
+                            <Image source={trips} style={{ width: 40, height: 40, borderRadius: 30, marginRight: 10 }} />
+                            </TouchableOpacity>
+                        
+                            <TouchableOpacity onPress={() => handleStatusSelection2(<Image source={bliksem} style={{ width: 30, height: 30, borderRadius: 50, marginRight: 10 }} />)} style={styles.dropdownItem}>
+                            <Image source={bliksem} style={{ width: 40, height: 40, borderRadius: 30, marginRight: 10 }} />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{flexDirection:"row", justifyContent: "center", alignItems: "center",}}>
+                            <TouchableOpacity onPress={() => handleStatusSelection2(<Image source={gas} style={{ width: 30, height: 30, borderRadius: 50, marginRight: 10 }} />)} style={styles.dropdownItem}>
+                            <Image source={gas} style={{ width: 40, height: 40, borderRadius: 30, marginRight: 10 }} />
+                            </TouchableOpacity>
+                        
+                            <TouchableOpacity onPress={() => handleStatusSelection2(<Image source={water} style={{ width: 30, height: 30, borderRadius: 50, marginRight: 10 }} />)} style={styles.dropdownItem}>
+                            <Image source={water} style={{ width: 40, height: 40, borderRadius: 30, marginRight: 10 }} />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{flexDirection:"row", justifyContent: "center", alignItems: "center",}}>
+                            <TouchableOpacity onPress={() => handleStatusSelection2(<Image source={mainte} style={{ width: 30, height: 30, borderRadius: 50, marginRight: 10 }} />)} style={styles.dropdownItem}>
+                            <Image source={mainte} style={{ width: 40, height: 40, borderRadius: 30, marginRight: 10 }} />
+                            </TouchableOpacity>
+                        
+                            <TouchableOpacity onPress={() => handleStatusSelection2(<Image source={other} style={{ width: 30, height: 30, borderRadius: 50, marginRight: 10 }} />)} style={styles.dropdownItem}>
+                            <Image source={other} style={{ width: 40, height: 40, borderRadius: 30, marginRight: 10 }} />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    
+                    )}
                 </View>
             </View>
             <View style={{ flexDirection: "row", alignItems: "center", marginTop: "40px", position: "relative", paddingHorizontal:25 }}>
