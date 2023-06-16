@@ -89,6 +89,8 @@ export default function Houserules() {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
+        console.log("gelukttttttttttttttttt");
+
 
         if (data.status === "success") {
           const newHouseRule = { description: newRule, houseId: houseId };

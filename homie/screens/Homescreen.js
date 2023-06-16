@@ -442,7 +442,6 @@ export default function Homescreen({ navigation }) {
                   }
 
                   return (
-<<<<<<< HEAD
                     <View key={item._id} style={announcementStyle}>
                       {item.type === 'Announcement' ? (
                       <>
@@ -459,22 +458,6 @@ export default function Homescreen({ navigation }) {
                       </>
                     )}
                     </View>
-=======
-                    <TouchableOpacity
-                      key={item._id}
-                      style={announcementStyle}
-                      onPress={() => navigation.navigate("Calendar")}
-                    >
-                      <View>
-                        <Text style={announcementTextStyle}>
-                          {item.description}
-                        </Text>
-                        <Text style={styles.announcementTime}>
-                          {formattedDate}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
->>>>>>> origin/laststuff
                   );
                 })}
               </View>
