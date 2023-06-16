@@ -81,18 +81,32 @@ export default function FullCalenderScreen() {
 
   const navigation = useNavigation();
 
-  const handleButtonClick = () => {
-    // if (buttonText === "Join the party") {
-    //   setButtonText("You're in 🎉");
-    //   setButtonStyle(styles.joinButtonClicked);
-    //   setButtonTextStyle(styles.joinButtonTextClicked);
-    // } else {
-    //   setButtonText("Join the party");
-    //   setButtonStyle(styles.joinButton);
-    //   setButtonTextStyle(styles.joinButtonText);
-    // }
-    setIsParticipant(!isParticipant);
-  };
+  // const handleButtonClick = () => {
+  //   // if (buttonText === "Join the party") {
+  //   //   setButtonText("You're in 🎉");
+  //   //   setButtonStyle(styles.joinButtonClicked);
+  //   //   setButtonTextStyle(styles.joinButtonTextClicked);
+  //   // } else {
+  //   //   setButtonText("Join the party");
+  //   //   setButtonStyle(styles.joinButton);
+  //   //   setButtonTextStyle(styles.joinButtonText);
+  //   // }
+  // //  setIsParticipant(!isParticipant);
+  // };
+
+  const handleButtonClick = (announcementId) => {
+  setAnnouncements(prevAnnouncements => {
+    return prevAnnouncements.map(announcement => {
+      if (announcement._id === announcementId) {
+        return {
+          ...announcement,
+          isParticipant: !announcement.isParticipant
+        };
+      }
+      return announcement;
+    });
+  });
+};
   
   return (
     <View>
@@ -166,15 +180,25 @@ export default function FullCalenderScreen() {
                         {/* <TouchableOpacity style={buttonStyle} onPress={handleButtonClick}>
                           <Text style={buttonTextStyle}>{buttonText}</Text>
                         </TouchableOpacity> */}
-                        <TouchableOpacity
-                      style={isParticipant ? styles.joinButtonClicked : styles.joinButton}
-                      onPress={handleButtonClick}
+                       </View>
+                       <View style={styles.buttonParticipation}>
+                       {/* <TouchableOpacity
+                          style={isParticipant ? styles.joinButtonClicked : styles.joinButton}
+                          onPress={handleButtonClick}
+                        >
+                          <Text style={isParticipant ? styles.joinButtonTextClicked : styles.joinButtonText}>
+                            {isParticipant ? "You're in 🎉" : "Join the party"}
+                          </Text>
+                        </TouchableOpacity> */}
+                         <TouchableOpacity
+                      style={item.isParticipant ? styles.joinButtonClicked : styles.joinButton}
+                      onPress={() => handleButtonClick(item._id)}
                     >
-                      <Text style={isParticipant ? styles.joinButtonTextClicked : styles.joinButtonText}>
-                        {isParticipant ? "You're in 🎉" : "Join the party"}
+                      <Text style={item.isParticipant ? styles.joinButtonTextClicked : styles.joinButtonText}>
+                        {item.isParticipant ? "You're in 🎉" : "Join the party"}
                       </Text>
                     </TouchableOpacity>
-                      </View>
+                        </View>
                     </View>
                 </TouchableOpacity>
               );
@@ -226,7 +250,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     backgroundColor: "white",
     borderRadius: 10,
-    justifyContent: "space-around",
+    justifyContent: "flex-start",
   },
   dateContainer: {
     fontFamily: "novatica",
@@ -286,4 +310,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "bold",
   },
+  buttonParticipation: {
+    position: "absolute",
+    top: 77,
+    right: 12
+  }
 });
