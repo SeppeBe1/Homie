@@ -34,6 +34,7 @@ export default function Homescreen({ navigation }) {
   const [inputValue, setInputValue] = useState('');
   const [announcements, setAnnouncements] = useState([]);
   const [dataCreated, setDataCreated] = useState(null);
+  const [datePlanned, setDatePlanned]= useState()
   const [scrollViewHeight, setScrollViewHeight] = useState(0);
 
   const currentDate = new Date();
@@ -431,12 +432,12 @@ export default function Homescreen({ navigation }) {
                     case "Event":
                       announcementStyle = styles.event;
                       announcementTextStyle =
-                        styles.announcementTextEventPayment;
+                        styles.announcementText;
                       break;
                     case "Task":
                       announcementStyle = styles.event;
                       announcementTextStyle =
-                        styles.announcementTextEventPayment;
+                        styles.announcementText;
                       break;
                     default:
                       announcementStyle = styles.announcement;
@@ -446,12 +447,20 @@ export default function Homescreen({ navigation }) {
 
                   return (
                     <View key={item._id} style={announcementStyle}>
-                      <Text style={announcementTextStyle}>
-                        {item.description}
+                      {item.type === 'Announcement' ? (
+                      <>
+                        <Text style={announcementTextStyle}>{item.description}</Text>
+                        <Text style={styles.announcementTime}>{item.dateCreated}</Text>
+                      </>
+                    ) : (
+                      <>
+                      <Text style={announcementTextStyle}>{item.description}</Text>
+                      <Text style={styles.announcementTime}>                    
+                      Due to: {new Date(item.datePlanned).getDate()}/
+                      {new Date(item.datePlanned).getMonth()+ 1}
                       </Text>
-                      <Text style={styles.announcementTime}>
-                        {formattedDate}
-                      </Text>
+                      </>
+                    )}
                     </View>
                   );
                 })}
@@ -637,4 +646,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "white",
   },
+  plannedTime: {
+    
+  }
 });
