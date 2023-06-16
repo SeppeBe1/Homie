@@ -5,6 +5,7 @@ import phoneIcon from "../assets/icons/phone.svg";
 import profilePicture from "../assets/boy2.jpg";
 import * as Font from "expo-font";
 import React, { useState, useEffect } from "react";
+import { useRoute } from "@react-navigation/native";
 
 // Load the font
 const loadFonts = async () => {
@@ -18,6 +19,9 @@ const loadFonts = async () => {
 
 export default function HousemateProfile({ navigation }) {
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const route = useRoute();
+  const { resident } = route.params;
+  console.log(route.params);
 
   useEffect(() => {
     loadFonts().then(() => {
@@ -28,37 +32,6 @@ export default function HousemateProfile({ navigation }) {
   if (!fontsLoaded) {
     return null; // or a loading screen
   }
-
-  const getUsersHouse = async () => {
-    const token = await AsyncStorage.getItem("token");
-    const houseId = await AsyncStorage.getItem("houseId");
-    fetch(`http://localhost:3000/api/v1/users/house/${houseId}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data.status);
-        if (data.status === "failed") {
-          console.log(data.status);
-        } else if (data.status === "success") {
-          const fetchedResidents = data.result;
-          const updatedResidentsData = fetchedResidents.map((resident) => ({
-            firstname: resident.firstname,
-            lastname: resident.lastname,
-          }));
-          setResidentsData(updatedResidentsData);
-          console.log(updatedResidentsData);
-        }
-      })
-      .catch((error) => {
-        // Handle any errors
-        console.error(error);
-      });
-  };
 
   return (
     <View>
@@ -92,7 +65,7 @@ export default function HousemateProfile({ navigation }) {
                 textAlign: "center",
               }}
             >
-              Boy
+              {resident.firstname} {resident.lastname}
             </Text>
           </View>
         </View>
@@ -125,7 +98,7 @@ export default function HousemateProfile({ navigation }) {
           <Text
             style={{ fontFamily: "manrope", margin: "10px", fontSize: "16px" }}
           >
-            boysangur@hotmail.com
+            {resident.email}
           </Text>
         </View>
         <View style={styles.profileItem}>
@@ -146,9 +119,14 @@ export default function HousemateProfile({ navigation }) {
             </View>
           </View>
           <Text
-            style={{ fontFamily: "manrope", margin: "10px", fontSize: "16px" }}
+            style={{
+              fontFamily: "manrope",
+              margin: "10px",
+              fontSize: "16px",
+              color: "black",
+            }}
           >
-            +32 412 34 76 06
+            {resident.phone}
           </Text>
         </View>
       </View>
