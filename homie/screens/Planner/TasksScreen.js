@@ -45,7 +45,9 @@ export default function FullCalenderScreen() {
                 width: "85%",
               }}
             >
-              <TouchableOpacity onPress={() => navigation.goBack()}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Calendarscreen")}
+              >
                 <Image source={arrowLeft} style={{ width: 8, height: 15 }} />
               </TouchableOpacity>
               <Text

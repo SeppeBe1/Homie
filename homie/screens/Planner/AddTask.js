@@ -20,7 +20,7 @@ export default function AddTask() {
   const [taskRules, setTaskRules] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [datePickerVisibility, setDatePickerVisibility] = useState(false);
-  const isEventNameFilled = taskName !== "";
+  const isTaskNameFilled = taskName !== "";
   const isTaskRulesFilled = taskRules !== "";
   const isTaskDeadlineFilled = taskDeadline !== "";
 
@@ -109,11 +109,11 @@ export default function AddTask() {
         <TextInput
           style={[
             styles.inputSmall,
-            { color: isEventNameFilled ? "black" : "#A5A5A5" },
+            { color: isTaskNameFilled ? "black" : "#A5A5A5" },
           ]}
-          placeholder="Name of event"
-          value={eventName}
-          onChangeText={setEventName}
+          placeholder="Name of task"
+          value={taskName}
+          onChangeText={setTaskName}
         />
 
         <CustomDatePicker />
@@ -134,10 +134,10 @@ export default function AddTask() {
         <TouchableOpacity
           style={[
             styles.button,
-            { opacity: isEventNameFilled && isTaskRulesFilled ? 1 : 0.5 },
+            { opacity: isTaskNameFilled && isTaskRulesFilled ? 1 : 0.5 },
           ]}
           onPress={addTaskToList}
-          disabled={!isEventNameFilled || !isTaskRulesFilled}
+          disabled={!isTaskNameFilled || !isTaskRulesFilled}
         >
           <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
