@@ -64,12 +64,10 @@ export default function Homescreen({ navigation }) {
   const [inputValue, setInputValue] = useState('');
   const [announcements, setAnnouncements] = useState([]);
   const [eventName, setEventname] = useState("");
-  const [description, setDescription] = useState("");
   const [datePlanned, setDatePlanned] = useState("");
   const [dateCreated, setDateCreated] = useState("");
   const [location, setLocation] = useState("");
   const [hour, setHour] = useState("");
-  const [invitationMessage, setInvitationMessage] = useState("");
 
   const loadFonts = async () => {
     try {
@@ -113,32 +111,6 @@ export default function Homescreen({ navigation }) {
   };
 
   const formattedDate = currentDate.toLocaleString("nl-NL", options).replace("om", "-");;
-
-  const renderResidents = () => {
-    if (residentsData.length === 0) {
-      return <Text>Loading...</Text>; // Show loading indicator while data is being fetched
-    }
-
-    return residentsData.map((resident, index) => (
-      <View style={styles.residentFull} key={index}>
-        <View style={styles.residentProfile}>
-          <View style={styles.status}>
-            <Image source={profilePicture} style={styles.profilePicture} />
-            <View
-              style={[
-                styles.circle,
-                { backgroundColor: resident.profileStatusColor },
-              ]}
-            />
-          </View>
-          <Text>
-            {resident.firstname} {resident.lastname}
-          </Text>
-        </View>
-      </View>
-    ));
-  };
-
   
   const getUser = async () => {
     const userId = await AsyncStorage.getItem('userId');
@@ -164,48 +136,12 @@ export default function Homescreen({ navigation }) {
             lastname: resident.lastname,
           }));
           setResidentsData(updatedResidentsData);
-
-            // let profilePic = data.data.profilePic;
           }
       })
       .catch(error => {
-          // Handle any errors
           console.error(error);
       });
   }
-
-
-//   const getAnnouncement = async () => {
-//     const token = await AsyncStorage.getItem('token');
-//     const houseId = await AsyncStorage.getItem('houseId');
-//     console.log(token)
-//     if(houseId){
-//       fetch(`http://localhost:3000/api/v1/anouncement/${houseId}`, {
-//         method: 'GET',
-//         headers: {
-//             'Authorization': `Bearer ${token}`,
-//             'Content-Type': 'application/json',
-//         }
-//         })
-//         .then(response =>  response.json())
-//         .then(data => {   
-//           if (data.status === "success") {
-//             const fetchedAnnouncements = data.result.map((announcement) => announcement);
-//             console.log(fetchedAnnouncements)
-//             setAnnouncements(fetchedAnnouncements);
-//             } 
-//             else if(data === "failed"){
-//               console.log(data.result);
-//             }
-//         })
-//         .catch(error => {
-//           console.error(error);
-//         });
-//     } else {
-//       console.log(kaas);
-//     }
-
-// };
 
 const getAnnouncement = async () => {
   const token = await AsyncStorage.getItem('token');
@@ -224,9 +160,7 @@ const getAnnouncement = async () => {
       .then(data => {
         if (data.status === 'success') {
           const fetchedAnnouncements = data.result.map(announcement => {
-            // Assuming 'item' is the object you want to update with the fetched dates
-            const item = { ...announcement }; // Create a copy of the announcement object
-            // Replace the hardcoded date in 'item' with the dates from the database
+          const item = { ...announcement }; 
             item.datePlanned = new Date(item.datePlanned);
             return item;
           });
@@ -249,21 +183,6 @@ const getAnnouncement = async () => {
     today.getMonth(),
     today.getDate() - ((today.getDay() + 6) % 7)
   );
-
-  // const tasks = [
-  //   {
-  //     day: "12",
-  //     month: "Dec",
-  //     id: 1,
-  //     name: "Taking out the dustbin",
-  //   },
-  //   {
-  //     id: 2,
-  //     day: "31",
-  //     month: "Jan",
-  //     name: "Cleaning the kitchen",
-  //   },
-  // ];
 
   const [isPopUpVisible, setIsPopUpVisible] = useState(false);
   const [checkedTasks, setCheckedTasks] = useState([]);
@@ -374,8 +293,7 @@ const getAnnouncement = async () => {
                 itemDate.toDateString() === today.toDateString()
               );
             }
-              // (item.type === 'Task' || item.type === 'Event') &&
-              // new Date(item.date).toDateString() === new Date().toDateString()
+            
           )}
           renderItem={({ item }) => {
             return (
@@ -410,33 +328,6 @@ const getAnnouncement = async () => {
           }}
         />
       )}
-
-
-
-
-        {/* {tasks.map((task) => (
-          <View key={task.id} style={styles.tasks}>
-            <TouchableOpacity onPress={() => handleTaskCheck(task.id)}>
-              <Image
-                source={checkedTasks.includes(task.id) ? checkBlue : checkbox}
-                style={{ width: 16, height: 16 }}
-              />
-            </TouchableOpacity>
-            <View>
-              <Text
-                style={{
-                  fontFamily: "manrope",
-                  fontSize: 14,
-                  textDecorationLine: checkedTasks.includes(task.id)
-                    ? "line-through"
-                    : "none",
-                }}
-              >
-                {task.name}
-              </Text>
-            </View>
-          </View>
-        ))} */}
       </View>
       <View style={{ marginTop: 20, paddingHorizontal: 24 }}>
         <View
@@ -469,7 +360,7 @@ const getAnnouncement = async () => {
         ) : (
           <FlatList
             keyExtractor={(item) => item._id}
-            data={announcements.filter((item) => item.type === "Event")} // Filter announcements by type "event"
+            data={announcements.filter((item) => item.type === "Event")} 
             renderItem={({ item }) => {
               return (
                 <TouchableOpacity
