@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
   Platform,
@@ -23,7 +23,6 @@ import * as ImagePicker from "expo-image-picker";
 export default function AddEvent() {
   const [startDate, setStartDate] = useState(new Date());
   const navigation = useNavigation();
-  const [eventName, setEventName] = useState("");
   const [eventDescription, setEventDescription] = useState("");
   const [eventLocation, setEventLocation] = useState("");
   const [eventHour, setEventHour] = useState("");
