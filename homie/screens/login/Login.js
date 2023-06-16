@@ -19,7 +19,6 @@ import Novatica from "../../assets/fonts/Novatica-Bold.woff";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Login({ navigation }) {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [color, setColor] = useState("white");
@@ -142,11 +141,11 @@ const styles = StyleSheet.create({
     height: 215,
     width: "100%",
   },
-
   logo: {
-    width: 280,
-    height: "40%",
-    marginTop: 50,
+    width: 215,
+    height: 66.25,
+    marginTop: "auto",
+    marginBottom: "auto",
     marginLeft: "auto",
     marginRight: "auto",
   },
@@ -161,7 +160,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 25,
     fontFamily: Moon,
-    marginTop: 60,
+    marginTop: 40,
     marginBottom: 40,
   },
 
