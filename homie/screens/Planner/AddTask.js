@@ -15,12 +15,12 @@ import SaveAndCancel from "../../compontents/SaveAndCancel";
 
 export default function AddTask() {
   const navigation = useNavigation();
-  const [eventName, setEventName] = useState("");
+  const [taskName, setTaskName] = useState("");
   const [taskDeadline, setTaskDeadline] = useState("");
   const [taskRules, setTaskRules] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [datePickerVisibility, setDatePickerVisibility] = useState(false);
-  const isEventNameFilled = eventName !== "";
+  const isEventNameFilled = taskName !== "";
   const isTaskRulesFilled = taskRules !== "";
   const isTaskDeadlineFilled = taskDeadline !== "";
 
@@ -33,7 +33,7 @@ export default function AddTask() {
   };
 
   const addTaskToList = () => {
-    if (eventName.trim() !== "" && taskRules.trim() !== "") {
+    if (taskName.trim() !== "" && taskRules.trim() !== "") {
       createTask();
       navigation.navigate("TasksScreen"); // Navigeer naar TaskScreen.js na het opslaan
     }
@@ -54,8 +54,8 @@ export default function AddTask() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        type: "Event",
-        activity: eventName,
+        type: "Task",
+        activity: taskName,
         description: taskRules,
         datePlanned: formattedDate,
         creatorId: userId,

@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import arrowLeft from "../../assets/icons/arrowLeft.svg";
 import upload from "../../assets/icons/upload.svg";
 import dropdown from "../../assets/icons/dropdown.svg";
@@ -31,6 +31,8 @@ export default function AddEvent() {
   const [eventNote, setEventNote] = useState("");
   const [eventDate, setEventDate] = useState("");
   const [selectedFileName, setSelectedFileName] = useState("");
+  const iseventDescriptionFilled = eventDescription !== "";
+  const [taskRules, setTaskRules] = useState("");
 
   const handleSelectPicture = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -92,6 +94,49 @@ export default function AddEvent() {
     }
   };
 
+  const addEventToList = () => {
+    if (eventName.trim() !== "" && eventDescription.trim() !== "") {
+      createEvent();
+      navigation.navigate("EventsScreen"); // Navigeer naar TaskScreen.js na het opslaan
+    }
+  };
+
+  const createEvent = async () => {
+    const userId = await AsyncStorage.getItem("userId");
+    const houseId = await AsyncStorage.getItem("houseId");
+    const token = await AsyncStorage.getItem("token");
+
+    // Formateer de geselecteerde datum naar het gewenste formaat
+    const formattedDate = startDate.toISOString();
+
+    fetch("http://localhost:3000/api/v1/anouncement", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        type: "Event",
+        activity: eventName,
+        description: eventDescription,
+        location: eventLocation,
+        datePlanned: formattedDate,
+        hour: eventHour,
+        creatorId: userId,
+        houseId: houseId,
+        // image: eventPicture,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("gelukttttttttttttttttt");
+        // Voer eventuele vervolgstappen uit na het opslaan van de gegevens
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   return (
     <View>
       <SaveAndCancel
@@ -143,7 +188,7 @@ export default function AddEvent() {
           onChangeText={setEventHour}
         />
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.buttonPicture}
           onPress={handleSelectPicture}
         >
@@ -158,7 +203,7 @@ export default function AddEvent() {
             </Text>
             <Image source={upload} style={{ width: 30, height: 30 }} />
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <View>
           <Text style={{ fontFamily: "manrope", paddingVertical: 10 }}>
@@ -172,9 +217,26 @@ export default function AddEvent() {
             onChangeText={setEventNote}
             multiline
           />
+          <View style={styles.buttoncontainer}>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                {
+                  opacity:
+                    isEventNameFilled && isEventDescriptionFilled ? 1 : 0.5,
+                },
+              ]}
+              onPress={addEventToList}
+              disabled={!isEventNameFilled || !isEventDescriptionFilled}
+            >
+              <Text style={styles.buttonText}>Save</Text>
+            </TouchableOpacity>
+          </View>
+
           <Image source={{ uri: eventPicture }} style={styles.picture} />
         </View>
       </View>
+
       {/* 
       <View style={styles.buttoncontainer}>
         <TouchableOpacity style={[styles.button]}>

@@ -21,7 +21,7 @@ import Moon from "../assets/fonts/Moon.otf";
 import Novatica from "../assets/fonts/Novatica-Bold.woff";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import close from "../assets/icons/close.svg";
-import arrow from "../assets/icons/Arrow-Right.svg";
+import arrow from "../assets/icons/arrowblue.svg";
 
 export default function Homescreen({ navigation }) {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -139,8 +139,10 @@ export default function Homescreen({ navigation }) {
   const createAnnouncement = async () => {
     const userId = await AsyncStorage.getItem("userId");
     const houseId = await AsyncStorage.getItem("houseId");
+    const currentDate = new Date(); // Huidige datum en tijd
     console.log(userId);
     const token = await AsyncStorage.getItem("token");
+
     fetch("http://localhost:3000/api/v1/anouncement", {
       method: "POST",
       headers: {
@@ -195,7 +197,7 @@ export default function Homescreen({ navigation }) {
             console.log(fetchedAnnouncements);
             setAnnouncements(fetchedAnnouncements);
             if (fetchedAnnouncements.length > 0) {
-              const dateCreated = new Date(fetchedAnnouncements[0].dateCreated);
+              const dateCreated = new Date(fetchedAnnouncements[1].dateCreated);
               setDataCreated(
                 dateCreated.toLocaleString("nl-NL", options).replace("om", "-")
               );
@@ -356,7 +358,7 @@ export default function Homescreen({ navigation }) {
                     </TouchableOpacity>
                     <Text style={styles.modalText}>NEW ANNOUNCEMENT</Text>
                     {dataCreated && (
-                      <Text style={styles.dateTime}>{dataCreated}</Text>
+                      <Text style={styles.dateTime}> {formattedDate}</Text>
                     )}
                     <TextInput
                       style={styles.input}
@@ -431,7 +433,9 @@ export default function Homescreen({ navigation }) {
                       <Text style={announcementTextStyle}>
                         {item.description}
                       </Text>
-                      <Text style={styles.announcementTime}>{dataCreated}</Text>
+                      <Text style={styles.announcementTime}>
+                        {formattedDate}
+                      </Text>
                     </View>
                   );
                 })}
@@ -467,8 +471,8 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   arrow: {
-    width: 15,
-    height: 15,
+    width: 8,
+    height: 12,
   },
   imageContainer: {
     position: "absolute",
